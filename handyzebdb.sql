@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2017 at 12:38 PM
+-- Generation Time: Apr 27, 2017 at 01:47 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -105,24 +105,25 @@ CREATE TABLE `service_provider` (
   `password` varchar(20) NOT NULL,
   `email` varchar(30) DEFAULT NULL,
   `contactNumber` varchar(11) NOT NULL,
-  `availability` tinyint(1) NOT NULL DEFAULT '1'
+  `availability` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `service_provider`
 --
 
-INSERT INTO `service_provider` (`spNumber`, `firstName`, `lastName`, `userName`, `password`, `email`, `contactNumber`, `availability`) VALUES
-(1, 'James', 'Deen', 'jaaaaaymes', 'password', NULL, '1', 1),
-(2, 'Mick', 'Blue', 'blubols29', 'password', NULL, '5', 1),
-(3, 'Mr', 'Pete', 'asspire', 'password', NULL, '545', 1),
-(4, 'Mr', 'Marcus', 'marcusindahouse', 'password', NULL, '6549', 1),
-(5, 'Peter', 'North', 'pyter', 'password', NULL, '69', 1),
-(6, 'Evan', 'Stone', 'mercurydrug', 'password', NULL, '89', 1),
-(7, 'Rocco', 'Siffredi', 'RoccoLocco', 'password', NULL, '465987', 1),
-(8, 'Lexington', 'Steele', 'daddysteele', 'password', NULL, '321', 1),
-(9, 'Zebedee', 'Jimenez', 'bhosx_zeb', 'password', NULL, '78985612', 1),
-(10, 'Johnny', 'Sins', 'heresjohny61', 'password', NULL, '09991234567', 1);
+INSERT INTO `service_provider` (`spNumber`, `firstName`, `lastName`, `userName`, `password`, `email`, `contactNumber`, `availability`, `status`) VALUES
+(1, 'James', 'Deen', 'jaaaaaymes', 'password', NULL, '1', 1, 1),
+(2, 'Mick', 'Blue', 'blubols29', 'password', NULL, '5', 1, 1),
+(3, 'Mr', 'Pete', 'asspire', 'password', NULL, '545', 1, 1),
+(4, 'Mr', 'Marcus', 'marcusindahouse', 'password', NULL, '6549', 1, 1),
+(5, 'Peter', 'North', 'pyter', 'password', NULL, '69', 1, 1),
+(6, 'Evan', 'Stone', 'mercurydrug', 'password', NULL, '89', 1, 1),
+(7, 'Rocco', 'Siffredi', 'RoccoLocco', 'password', NULL, '465987', 1, 1),
+(8, 'Lexington', 'Steele', 'daddysteele', 'password', NULL, '321', 1, 1),
+(9, 'Zebedee', 'Jimenez', 'bhosx_zeb', 'password', NULL, '78985612', 1, 1),
+(10, 'Johnny', 'Sins', 'heresjohny61', 'password', NULL, '09991234567', 1, 1);
 
 -- --------------------------------------------------------
 
