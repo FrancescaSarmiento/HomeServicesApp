@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandyZeb Admin</title>
+</head>
+<body>
+	<div class="container">
+		<% include partials/nav %>
+		<h2>Customers</h2>
+		<table>
+			<tr>
+				<th>First name</th>
+				<th>Last name</th>
+				<th>Username</th>
+				<th>Contact number</th>
+				<th>Address</th>
+			</tr>
+			<% customers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.firstName %></td>
+					<td><%= item.lastName %></td>
+					<td><%= item.userName %></td>
+					<td><%= item.contactNumber %></td>
+					<td><%= item.address %></td>
+				</tr>
+			<% }) %>
+		</table>
+	</div>
+</body>
+</html>

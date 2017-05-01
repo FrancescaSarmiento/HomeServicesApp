@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandyZeb Admin</title>
+</head>
+<body>
+	<div class="container">
+		<% include partials/nav %>
+		<h2>Services</h2>
+		<table>
+			<tr>
+				<th>Service</th>
+			</tr>
+			<% services.forEach(function(item){ %>
+				<tr>
+					<td><%= item.service %></td>
+				</tr>
+			<% }) %>
+		</table>
+	</div>
+</body>
+</html>
