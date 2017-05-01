@@ -8,29 +8,25 @@
         <h1>Service Provider Functions</h1>
         
         <hr>
-        <h2>Account Registration</h2>
-        <form action="RegisterSpServlet" method="POST" enctype="multipart/form-data">
-            <p>First Name:<br>
-                <input type="text" name="first" required>
+        <h2>Registration</h2>
+        <form action="SaveProductServlet" method="POST" enctype="multipart/form-data">
+            <p>Product ID:<br>
+                <input type="text" name="id" required>
             </p>
-            <p>Last Name:<br>
-                <input type="text" name="last" required>
+            <p>Description:<br>
+                <input type="text" name="desc" required>
             </p>
-            <p>Username:<br>
-                <input type="text" name="user" required>
+            <p>Price:<br>
+                <input type="number" step="0.01" name="price" required>
             </p>
-            <p>Password:<br>
-                <input type="password" name="pass" required>
+            <p>Product Image:<br>
+                <input type="file" name="image" required>
             </p>
-            <p>e-mail:<br>
-                <input type="text" name="mail">
-            </p>
-            <p>Contact Number:<br>
-                <input type="text" name="contact" required>
-            </p>
-            <p><input type="submit" value="Register!"></p>
+            <p><input type="submit" value="Save Product"></p>
         </form>
+        
         <hr>
-
+        <h2>Request Dispatching</h2>
+        <p>Display <a href="ProductListServlet?format=html">Product List (as HTML page)</a></p>
     </body>
 </html>
