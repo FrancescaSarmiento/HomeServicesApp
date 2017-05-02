@@ -1,0 +1,11 @@
+TODO:
+
+-index queries (summaries)
+-delete for the sp, s, c
+-edit, add s
+
+-register
+-acceptance of new sp, new c 
+-email verification
+
+-login
