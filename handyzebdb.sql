@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2017 at 01:47 PM
+-- Generation Time: May 04, 2017 at 12:43 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -23,35 +23,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `adminId` int(11) NOT NULL,
+  `firstName` varchar(30) NOT NULL,
+  `lastName` varchar(30) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `contactNumber` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customer`
 --
 
 CREATE TABLE `customer` (
-  `customerNumber` int(11) NOT NULL,
+  `custId` int(11) NOT NULL,
   `firstName` varchar(30) NOT NULL,
   `lastName` varchar(30) NOT NULL,
-  `userName` varchar(15) NOT NULL,
-  `password` varchar(20) NOT NULL,
   `address` varchar(50) NOT NULL,
-  `email` varchar(30) DEFAULT NULL,
-  `contactNumber` varchar(11) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0'
+  `email` varchar(30) NOT NULL,
+  `contactNumber` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `customer`
---
-
-INSERT INTO `customer` (`customerNumber`, `firstName`, `lastName`, `userName`, `password`, `address`, `email`, `contactNumber`, `status`) VALUES
-(1, 'Jerome', 'Del Rosario', 'Muzhnik', 'password', 'City Camp Alley, Baguio City', 'jeromed.pepper@gmail.com', '09153478922', 1),
-(2, 'Jay', 'Dadula', 'Jay', 'password', 'Baguio City', NULL, '09123456789', 1),
-(3, 'Michael', 'Rivera', 'Shiru', 'password', 'Baguio City', NULL, '09098765432', 1),
-(4, 'Rio Vann', 'Kolodzik', 'MVLE', 'password', 'Baguio City', NULL, '09090909090', 1),
-(5, 'Josepablo', 'David', 'PPJJ', 'password', 'Baguio City', NULL, '09154893264', 1),
-(6, 'David Wyatt', 'Cardenas', 'Moo Man', 'password', 'Baguio City', NULL, '09053216547', 1),
-(7, 'Hiromi', 'Uematsu', 'Japan420', 'password', 'Ching Chong, Japan', '', '09156669999', 1),
-(8, 'Samantha', 'Lopez', 'samiam', 'password', 'Baguio City', NULL, '09124563219', 1),
-(9, 'Miggy', 'Sarmiento', 'Miggy2321241', 'password', 'Baguio City', NULL, '09159874561', 1);
 
 -- --------------------------------------------------------
 
@@ -60,11 +56,13 @@ INSERT INTO `customer` (`customerNumber`, `firstName`, `lastName`, `userName`, `
 --
 
 CREATE TABLE `message` (
-  `messageNumber` int(11) NOT NULL,
+  `messageId` int(11) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `receiverId` int(11) NOT NULL,
   `messageBody` text NOT NULL,
-  `customerNumber` int(11) NOT NULL,
-  `spNumber` int(11) NOT NULL,
-  `sendTo` enum('cust','sp') NOT NULL
+  `timeSent` datetime NOT NULL,
+  `timeReceived` datetime DEFAULT NULL,
+  `timeRead` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -74,22 +72,9 @@ CREATE TABLE `message` (
 --
 
 CREATE TABLE `service` (
-  `serviceNumber` int(11) NOT NULL,
+  `serviceId` int(11) NOT NULL,
   `serviceType` enum('Assembly/Installation','Repair','Plumbing','Electrical','Painting','Carpentry','Remodeling') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `service`
---
-
-INSERT INTO `service` (`serviceNumber`, `serviceType`) VALUES
-(1, 'Assembly/Installation'),
-(2, 'Repair'),
-(3, 'Plumbing'),
-(4, 'Electrical'),
-(5, 'Painting'),
-(6, 'Carpentry'),
-(7, 'Remodeling');
 
 -- --------------------------------------------------------
 
@@ -98,32 +83,14 @@ INSERT INTO `service` (`serviceNumber`, `serviceType`) VALUES
 --
 
 CREATE TABLE `service_provider` (
-  `spNumber` int(11) NOT NULL,
+  `spId` int(11) NOT NULL,
   `firstName` varchar(30) NOT NULL,
   `lastName` varchar(30) NOT NULL,
-  `userName` varchar(15) NOT NULL,
-  `password` varchar(20) NOT NULL,
-  `email` varchar(30) DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
   `contactNumber` varchar(11) NOT NULL,
-  `availability` tinyint(1) NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '0'
+  `rating` enum('1','2','3','4','5') DEFAULT NULL,
+  `availability` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `service_provider`
---
-
-INSERT INTO `service_provider` (`spNumber`, `firstName`, `lastName`, `userName`, `password`, `email`, `contactNumber`, `availability`, `status`) VALUES
-(1, 'James', 'Deen', 'jaaaaaymes', 'password', NULL, '1', 1, 1),
-(2, 'Mick', 'Blue', 'blubols29', 'password', NULL, '5', 1, 1),
-(3, 'Mr', 'Pete', 'asspire', 'password', NULL, '545', 1, 1),
-(4, 'Mr', 'Marcus', 'marcusindahouse', 'password', NULL, '6549', 1, 1),
-(5, 'Peter', 'North', 'pyter', 'password', NULL, '69', 1, 1),
-(6, 'Evan', 'Stone', 'mercurydrug', 'password', NULL, '89', 1, 1),
-(7, 'Rocco', 'Siffredi', 'RoccoLocco', 'password', NULL, '465987', 1, 1),
-(8, 'Lexington', 'Steele', 'daddysteele', 'password', NULL, '321', 1, 1),
-(9, 'Zebedee', 'Jimenez', 'bhosx_zeb', 'password', NULL, '78985612', 1, 1),
-(10, 'Johnny', 'Sins', 'heresjohny61', 'password', NULL, '09991234567', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -132,44 +99,9 @@ INSERT INTO `service_provider` (`spNumber`, `firstName`, `lastName`, `userName`,
 --
 
 CREATE TABLE `sp_service` (
-  `spNumber` int(11) NOT NULL,
-  `serviceNumber` int(11) NOT NULL
+  `serviceId` int(11) NOT NULL,
+  `spId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `sp_service`
---
-
-INSERT INTO `sp_service` (`spNumber`, `serviceNumber`) VALUES
-(1, 1),
-(1, 3),
-(1, 4),
-(1, 7),
-(2, 5),
-(2, 1),
-(2, 4),
-(3, 6),
-(4, 5),
-(4, 4),
-(5, 7),
-(5, 1),
-(5, 2),
-(6, 6),
-(6, 1),
-(6, 3),
-(7, 2),
-(7, 1),
-(7, 3),
-(7, 4),
-(7, 5),
-(7, 6),
-(7, 7),
-(8, 2),
-(8, 1),
-(8, 4),
-(9, 2),
-(9, 5),
-(9, 4);
 
 -- --------------------------------------------------------
 
@@ -178,14 +110,28 @@ INSERT INTO `sp_service` (`spNumber`, `serviceNumber`) VALUES
 --
 
 CREATE TABLE `transaction` (
-  `transactionNumber` int(11) NOT NULL,
-  `customerNumber` int(11) NOT NULL,
-  `spNumber` int(11) DEFAULT NULL,
-  `serviceNumber` int(11) NOT NULL,
+  `transactionId` int(11) NOT NULL,
+  `customerId` int(11) NOT NULL,
+  `spId` int(11) NOT NULL,
+  `serviceId` int(11) NOT NULL,
   `specification` text NOT NULL,
-  `status` enum('Request Pending','Ongoing','Finished') NOT NULL,
-  `date_started` timestamp NOT NULL,
-  `date_finished` timestamp NULL DEFAULT NULL
+  `status` enum('Assembly/Installation','Repair','Plumbing','Electrical','Painting','Carpentry','Remodeling') NOT NULL,
+  `date_started` datetime NOT NULL,
+  `date_finished` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `idNum` int(11) NOT NULL,
+  `userName` varchar(15) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `userType` enum('Administrator','Customer','Service Provider') NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -193,106 +139,135 @@ CREATE TABLE `transaction` (
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `contactNumber` (`contactNumber`),
+  ADD KEY `adminId` (`adminId`);
+
+--
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
-  ADD PRIMARY KEY (`customerNumber`),
-  ADD UNIQUE KEY `USERNAME` (`userName`),
-  ADD UNIQUE KEY `CONTACTNUMBER` (`contactNumber`);
+  ADD UNIQUE KEY `email_2` (`email`),
+  ADD UNIQUE KEY `CONTACTNUMBER` (`contactNumber`),
+  ADD KEY `CUSTOMERID` (`custId`),
+  ADD KEY `EMAIL` (`email`);
 
 --
 -- Indexes for table `message`
 --
 ALTER TABLE `message`
-  ADD PRIMARY KEY (`messageNumber`),
-  ADD KEY `customerNumber` (`customerNumber`),
-  ADD KEY `spNumber` (`spNumber`);
+  ADD PRIMARY KEY (`messageId`),
+  ADD KEY `senderId` (`senderId`),
+  ADD KEY `receiverId` (`receiverId`);
 
 --
 -- Indexes for table `service`
 --
 ALTER TABLE `service`
-  ADD PRIMARY KEY (`serviceNumber`),
-  ADD UNIQUE KEY `TYPE` (`serviceType`);
+  ADD PRIMARY KEY (`serviceId`),
+  ADD UNIQUE KEY `serviceType` (`serviceType`);
 
 --
 -- Indexes for table `service_provider`
 --
 ALTER TABLE `service_provider`
-  ADD PRIMARY KEY (`spNumber`),
-  ADD UNIQUE KEY `USERNAME` (`userName`),
-  ADD UNIQUE KEY `CONTACTNUMBER` (`contactNumber`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `contactNumber` (`contactNumber`),
+  ADD KEY `spId` (`spId`);
 
 --
 -- Indexes for table `sp_service`
 --
 ALTER TABLE `sp_service`
-  ADD KEY `spNumber` (`spNumber`),
-  ADD KEY `serviceNumber` (`serviceNumber`);
+  ADD KEY `serviceId` (`serviceId`),
+  ADD KEY `spId` (`spId`);
 
 --
 -- Indexes for table `transaction`
 --
 ALTER TABLE `transaction`
-  ADD PRIMARY KEY (`transactionNumber`),
-  ADD KEY `customerNumber` (`customerNumber`),
-  ADD KEY `spNumber` (`spNumber`),
-  ADD KEY `serviceNumber` (`serviceNumber`);
+  ADD PRIMARY KEY (`transactionId`),
+  ADD KEY `customerId` (`customerId`),
+  ADD KEY `spId` (`spId`),
+  ADD KEY `serviceId` (`serviceId`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`idNum`),
+  ADD UNIQUE KEY `USERNAME` (`userName`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `customer`
---
-ALTER TABLE `customer`
-  MODIFY `customerNumber` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
---
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `messageNumber` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
-  MODIFY `serviceNumber` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `service_provider`
---
-ALTER TABLE `service_provider`
-  MODIFY `spNumber` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `serviceId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionNumber` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `idNum` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `admin`
+--
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_user_fk` FOREIGN KEY (`adminId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `customer`
+--
+ALTER TABLE `customer`
+  ADD CONSTRAINT `customer_user_fk` FOREIGN KEY (`custId`) REFERENCES `user` (`idNum`);
+
+--
 -- Constraints for table `message`
 --
 ALTER TABLE `message`
-  ADD CONSTRAINT `message_customer_fk` FOREIGN KEY (`customerNumber`) REFERENCES `customer` (`customerNumber`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `message_sp_fk` FOREIGN KEY (`spNumber`) REFERENCES `service_provider` (`spNumber`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `msg_rec_fk` FOREIGN KEY (`receiverId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `msg_sender_fk` FOREIGN KEY (`senderId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `service_provider`
+--
+ALTER TABLE `service_provider`
+  ADD CONSTRAINT `sp_user_fk` FOREIGN KEY (`spId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sp_service`
 --
 ALTER TABLE `sp_service`
-  ADD CONSTRAINT `spserv_service_fk` FOREIGN KEY (`serviceNumber`) REFERENCES `service` (`serviceNumber`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `spserv_sp_fk` FOREIGN KEY (`spNumber`) REFERENCES `service_provider` (`spNumber`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `spserv_service_fk` FOREIGN KEY (`serviceId`) REFERENCES `service` (`serviceId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `spserv_sp_fk` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `transaction`
 --
 ALTER TABLE `transaction`
-  ADD CONSTRAINT `transaction_cust_fk` FOREIGN KEY (`customerNumber`) REFERENCES `customer` (`customerNumber`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_service_fk` FOREIGN KEY (`serviceNumber`) REFERENCES `service` (`serviceNumber`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_sp_fk` FOREIGN KEY (`spNumber`) REFERENCES `service_provider` (`spNumber`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tran_cust_fk` FOREIGN KEY (`customerId`) REFERENCES `customer` (`custId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `tran_serv_fk` FOREIGN KEY (`serviceId`) REFERENCES `service` (`serviceId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `tran_sp_fk` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
