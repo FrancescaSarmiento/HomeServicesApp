@@ -1,41 +1,51 @@
 <?php 
 
-include '../includes/header.php';
+require '../includes/header.php';
+require '../includes/db_connect.php';
 
 session_start();
-    
-//checks if the user loggedin
-if (!loggedin()){
-    echo "<script>alert('Please log in');window.location.assign('login.php')</script>";
-}
-    
-$user = $_SESSION['user'];
 
-include 'nav.php';
+//retrieve's user's idNum
+$userID = $_SESSION['userID'];
+
+//checks if session expired
+if($_SESSION['last_activity'] < time()-$_SESSION['expire_time']){
+    echo "<script>alert('Your session has expired, please login again');window.location.assign('../login.php')</script>";
+} else {
+    $_SESSION['last_activity'] = time();
+}
+
+//checks if the user's session exists
+ if (empty($userID)){
+    echo "<script>alert('Please login');window.location.assign('../login.php')</script>";
+ }
 
 //checks url input from navigation
 $page = filter_input(INPUT_GET, 'page');
 
+require 'nav.php';
+
+//checks which page to display, if not included, will redirect to login
+
 switch ($page){
     case "home":
-        include_once 'home.php';
+        require_once 'home.php';
         break;
     case "about":
-        include_once 'about.php';
+        require_once 'about.php';
         break;
     case "services";
-        include_once 'services.php';
+        require_once 'services.php';
         break;
     case "messages";
-        include_once 'messages.php';
+        require_once 'messages.php';
         break;
     case "acctInfo":
-        include_once 'acctInfo.php';
+        require_once 'acctInfo.php';
         break;
     case "transHist":
-        include_once 'transHist.php';
+        require_once 'transHist.php';
         break;
 }
-?>
-    
-<?php include '../includes/footer.php';
+
+require '../includes/footer.php';

@@ -3,7 +3,7 @@
 define('DBHOST', 'localhost');
 define('DBUSER', 'root');
 define('DBPASS', '');
-define('DBNAME', 'handyzeb');
+define('DBNAME', 'handyzebdb');
 
 $conn = mysqli_connect(DBHOST, DBUSER, DBPASS, DBNAME);
 
