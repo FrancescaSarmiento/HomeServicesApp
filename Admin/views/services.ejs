@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>HandyZeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
 	<div class="container">
@@ -17,6 +18,12 @@
 				</tr>
 			<% }) %>
 		</table>
+		
+		<form action="/serviceregister" method="post">
+			<label for="serviceType">Service:</label>
+			<input type="text" name="serviceType"><br>
+			<input type="submit">
+		</form>
 	</div>
 </body>
 </html>

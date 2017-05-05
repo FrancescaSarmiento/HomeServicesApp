@@ -2,12 +2,37 @@
 <html>
 <head>
 	<title>HandyZeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
 	<div class="container">
 		<% include partials/nav %>
 		<h1>Welcome, HandyZeb Admin</h1>
-		<p> - something here - </p>
+		<h2>Pending Customers</h2>
+		<table>
+			<tr>
+				<th>Username</th>
+				<th>Password</th>
+				<th>firstName</th>
+				<th>lastName</th>
+				<th>address</th>
+				<th>email</th>
+				<th>contactNumber</th>
+				
+			</tr>
+			<% customerUsers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.userName %></td>
+					<td><%= item.password %></td>
+					<td><%= item.firstName %></td>
+					<td><%= item.lastName %></td>
+					<td><%= item.address %></td>
+					<td><%= item.email %></td>
+					<td><%= item.contactNumber %></td>
+					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Reject"></form></td>
+				</tr>
+			<% }) %>
+		</table>
 	</div>
 </body>
 </html>

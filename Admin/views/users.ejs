@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandyZeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+	<div class="container">
+		<% include partials/nav %>
+		<h2>Users</h2>
+		<table>
+			<tr>
+				<th>User Name</th>
+				<th>Password</th>
+				<th>User Type</th>
+				<th>Status</th>
+				<th></th>
+			</tr>
+			<% users.forEach(function(item){ %>
+				<tr>
+					<td><%= item.userName %></td>
+					<td><%= item.password %></td>
+					<td><%= item.userType %></td>
+					<td><%= item.status %></td>
+				</tr>
+			<% }) %>
+		</table>
+		<br>
+		<form action="/test-add-user" method="post">
+			<label for="userName">Username: </label>
+			<input type="text" name="userName">
+			<label for="password">Password: </label>
+			<input type="text" name="password">
+			<label for="userType">Type: </label>
+			<input type="text" name="userType">
+
+			<label for="status">status: </label>
+			<input type="text" name="status">
+
+			<input type="submit">
+		</form>
+	</div>
+</body>
+</html>
