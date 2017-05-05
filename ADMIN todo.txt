@@ -1,11 +1,20 @@
 TODO:
 
 -index queries (summaries)
--delete for the sp, s, c
--edit, add s
+-delete sp
+-registration of sp
+      -generated password
 
--register
--acceptance of new sp, new c 
+-delete c
+
+-edit s
+-delete s
+
 -email verification
+    -https://nodemailer.com/about/
 
 -login
+
+PROBABLE FEATURES:
+-Paypal
+    -https://github.com/paypal/PayPal-node-SDK
