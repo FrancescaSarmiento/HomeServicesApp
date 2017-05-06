@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>HandyZeb Admin</title>
+	<title>Handy Zeb Admin</title>
 	<link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="container">
 		<% include partials/nav %>
-		<h1>Welcome, HandyZeb Admin</h1>
+        <div class="container">
+        <div class="page-header">
+		<h1>Welcome, Handy Zeb Admin</h1>
 		<h2>Pending Customers</h2>
-		<table>
+        </div>
+		<table class="table table-hover">
 			<tr>
 				<th>Username</th>
 				<th>Password</th>
-				<th>firstName</th>
-				<th>lastName</th>
-				<th>address</th>
-				<th>email</th>
-				<th>contactNumber</th>
-				
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Address</th>
+				<th>E-mail</th>
+				<th>Contact Number</th>
 			</tr>
 			<% customerUsers.forEach(function(item){ %>
 				<tr>
@@ -32,7 +36,7 @@
 					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Reject"></form></td>
 				</tr>
 			<% }) %>
-		</table>
-	</div>
+        </table>
+    </div>    
 </body>
 </html>

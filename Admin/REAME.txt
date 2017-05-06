@@ -11,6 +11,6 @@ Instructions:
 			password: '',
 			database: 'handyzebdb'
 		});	
-4. Run the index.js by running a command promt on the folder where the index.js is and type in node index.js
+4. Run the app.js by running a command promt on the folder where the app.js is and type in node index.js
 	NOTE: "Listening to port 3000" will be printed in the command prompt
 5. Open your browser and type in 127.0.0.1:3000 or localhost:3000

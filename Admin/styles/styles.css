@@ -1,3 +1,21 @@
 body{
 	font: courier;
 }
+
+nav .nav-pills{
+    background-color: #212e42;
+}
+
+nav .nav-pills li a{
+    color: white;
+}
+
+nav .nav-pills li a:hover{
+    background-color: white;
+}
+
+nav .nav-pills li a:hover{
+    color: black;
+}
+
+
