@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2017 at 12:43 PM
+-- Generation Time: May 07, 2017 at 03:26 AM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -34,6 +34,25 @@ CREATE TABLE `admin` (
   `contactNumber` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`adminId`, `firstName`, `lastName`, `email`, `contactNumber`) VALUES
+(1, 'Jerome', 'Del Rosario', '2150536@slu.edu.ph', '09153478922');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `bookingId` int(11) NOT NULL,
+  `transactionNumber` int(11) NOT NULL,
+  `reserved_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 --
@@ -48,6 +67,21 @@ CREATE TABLE `customer` (
   `email` varchar(30) NOT NULL,
   `contactNumber` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`custId`, `firstName`, `lastName`, `address`, `email`, `contactNumber`) VALUES
+(4, 'Wyatt', 'Cardenas', 'Baguio City', 'email1@slu.edu.ph', '1'),
+(5, 'Josepablo', 'David', 'Baguio City', 'email2@slu.edu.ph', '2'),
+(6, 'Hiromi', 'Uematsu', 'Sunrise Land', 'email3@slu.edu.ph', '3'),
+(7, 'Samantha', 'Lopez', 'Baguio City', 'email4@slu.edu.ph', '4'),
+(8, 'Frachesca', 'Sarmiento', 'Baguio City', 'email5@slu.edu.ph', '5'),
+(9, 'Rio Vann', 'Kolodzik', 'Boundary ng Poland ken nu Germany', 'email6@slu.edu.ph', '6'),
+(10, 'Jay', 'Dadula', 'Baguio City', 'email7@slu.edu.ph', '7'),
+(3, 'Michael', 'Rivera', 'Baguio City', 'email@slu.edu.ph', '0'),
+(2, 'Jerome', 'Del Rosario', 'Baguio City', 'jeromed.pepper@gmail.com', '09153478922');
 
 -- --------------------------------------------------------
 
@@ -76,6 +110,19 @@ CREATE TABLE `service` (
   `serviceType` enum('Assembly/Installation','Repair','Plumbing','Electrical','Painting','Carpentry','Remodeling') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`serviceId`, `serviceType`) VALUES
+(1, 'Assembly/Installation'),
+(2, 'Repair'),
+(3, 'Plumbing'),
+(4, 'Electrical'),
+(5, 'Painting'),
+(6, 'Carpentry'),
+(7, 'Remodeling');
+
 -- --------------------------------------------------------
 
 --
@@ -88,9 +135,20 @@ CREATE TABLE `service_provider` (
   `lastName` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
   `contactNumber` varchar(11) NOT NULL,
+  `shift_start` time NOT NULL,
+  `shift_end` time NOT NULL,
+  `working_days` varchar(20) NOT NULL,
   `rating` enum('1','2','3','4','5') DEFAULT NULL,
   `availability` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `service_provider`
+--
+
+INSERT INTO `service_provider` (`spId`, `firstName`, `lastName`, `email`, `contactNumber`, `shift_start`, `shift_end`, `working_days`, `rating`, `availability`) VALUES
+(11, 'Zebedee', 'Jimenez', 'email10@slu.edu.ph', '10', '07:30:00', '18:00:00', 'Su,M,T,W,Th,F,Sa', '1', 1),
+(12, 'Johnny', 'Sins', 'email12@slu.edu.ph', '11', '09:00:00', '20:00:00', 'M,W,F', '5', 1);
 
 -- --------------------------------------------------------
 
@@ -102,6 +160,21 @@ CREATE TABLE `sp_service` (
   `serviceId` int(11) NOT NULL,
   `spId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sp_service`
+--
+
+INSERT INTO `sp_service` (`serviceId`, `spId`) VALUES
+(1, 11),
+(6, 11),
+(1, 12),
+(2, 12),
+(3, 12),
+(4, 12),
+(5, 12),
+(6, 12),
+(7, 12);
 
 -- --------------------------------------------------------
 
@@ -131,8 +204,26 @@ CREATE TABLE `user` (
   `userName` varchar(15) NOT NULL,
   `password` varchar(20) NOT NULL,
   `userType` enum('Administrator','Customer','Service Provider') NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`idNum`, `userName`, `password`, `userType`, `status`) VALUES
+(1, 'jeddeh', 'password', 'Administrator', 0),
+(2, 'muzhnik', 'password', 'Customer', 1),
+(3, 'shiru', 'password', 'Customer', 1),
+(4, 'moo_man', 'password', 'Customer', 1),
+(5, 'pjd', 'password', 'Customer', 1),
+(6, 'japan', 'password', 'Customer', 1),
+(7, 'samiam', 'password', 'Customer', 1),
+(8, 'miggy', 'password', 'Customer', 1),
+(9, 'rvk', 'password', 'Customer', 1),
+(10, 'prodijay', 'password', 'Customer', 1),
+(11, 'bhosx_zeb', 'password', 'Service Provider', 1),
+(12, 'papa_johnny', 'password', 'Service Provider', 1);
 
 --
 -- Indexes for dumped tables
@@ -145,6 +236,13 @@ ALTER TABLE `admin`
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `contactNumber` (`contactNumber`),
   ADD KEY `adminId` (`adminId`);
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`bookingId`),
+  ADD KEY `transactionNumber` (`transactionNumber`);
 
 --
 -- Indexes for table `customer`
@@ -206,6 +304,11 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
@@ -214,7 +317,7 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
-  MODIFY `serviceId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `serviceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `transaction`
 --
@@ -224,7 +327,7 @@ ALTER TABLE `transaction`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idNum` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idNum` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- Constraints for dumped tables
 --
@@ -234,6 +337,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_user_fk` FOREIGN KEY (`adminId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `booking_transaction_fk` FOREIGN KEY (`transactionNumber`) REFERENCES `transaction` (`transactionId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `customer`
