@@ -23,7 +23,7 @@ function getMessages($conn, $spId, $userId){
     $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     while ($rows = mysqli_fetch_assoc($result)){    
-        if($rows['receiverId'] == $spId){
+        if($rows['receiverId'] == $spId && $rows['senderId'] == $userId){
             
             echo "<p class='chat right'>{$rows['messageBody']}</p>";
             echo "<div class='space'></div>";        
@@ -53,4 +53,29 @@ function getTransHist($conn, $userId){
     $query = "SELECT * FROM transaction t join customer c on t.customerId = c.custId join service_provider sp on t.spId = sp.spId WHERE c.custId = $userId order by date_finished desc";
     $result = mysqli_query($conn, $query);
     return $result;
+}
+
+function getService($conn){
+    $query = "SELECT serviceType from service";
+    $result = mysqli_query($conn, $query);
+    return $result;
+}
+
+function getServiceProviders($conn, $servtype){
+    $query = "SELECT DISTINCT serviceType, concat(firstName,' ', lastName) as name from service_provider join sp_service using(spId) join service using(serviceId) where serviceType='$servtype'";
+    $result = mysqli_query($conn, $query);
+    return $result;
+}
+
+function getBooking($conn){
+    $query = "SELECT * from transaction t join service_provider sp on t.spId = sp.spId join service s on t.serviceId = s.serviceId where date_started is null or date_finished is null";
+    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+    $row = mysqli_num_rows($result);
+    if($row > 0){
+        echo "<h2>Your current bookings:</h2>";
+        return $result;
+    } else {
+        echo "<h2>No current bookings atm</h2>";
+        return false;
+    }
 }

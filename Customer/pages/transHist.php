@@ -7,10 +7,12 @@
 <?php $transHist =  getTransHist($conn, $userID) ?>
 <table>
     <tr>
-        <td>Transaction Id</td>
-        <td>Date Start</td>
-        <td>Date Finish</td>
-        <td>Service Provider</td>
+        <th>Transaction ID</th>
+        <th>Transaction Details</th>
+        <th>Amount</th>
+        <th>Date Start</th>
+        <th>Date Finish</th>
+        <th>Service Provider</th>
     </tr>
         <?php
             while($row = mysqli_fetch_array($transHist, MYSQLI_ASSOC)){
@@ -19,13 +21,29 @@
                 $dateFinish = $row['date_finished'];
                 $spFName = $row['firstName'];
                 $spLName = $row['lastName'];
-                echo <<<table
+                $specifications = $row['specification'];
+                var_dump($specifications);
+                $divide = explode(';',$specifications);
+                var_dump($divide);
+                $split = explode(',',$divide[0]);
+                var_dump($split);
+                
+                echo <<<acctInfo
                 <tr>
                     <td>$transId</td>
+acctInfo;
+                for($i = 0; $i < count($row['specification']); $i++){
+                echo <<<details
+                    <td></td>
+                    <td></td>
+details;
+                }
+
+                echo <<<acctInfo
                     <td>$dateStart</td>
                     <td>$dateFinish</td>
                     <td>$spFName $spLName</td>
-table;
+acctInfo;
             }
         ?>
     </tr>
