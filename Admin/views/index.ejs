@@ -9,11 +9,11 @@
 </head>
 <body>
 		<% include partials/nav %>
-        <div class="container">
+    <div class="container">
         <div class="page-header">
-		<h1>Welcome, Handy Zeb Admin</h1>
-		<h2>Pending Customers</h2>
+			<h1>Welcome, Handy Zeb Admin</h1>
         </div>
+        <h2>Pending Customers</h2>
 		<table class="table table-hover">
 			<tr>
 				<th>Username</th>
@@ -34,6 +34,50 @@
 					<td><%= item.email %></td>
 					<td><%= item.contactNumber %></td>
 					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input type="submit" value="Reject"></form></td>
+				</tr>
+			<% }) %>
+        </table>
+		
+		<h2>Top service providers</h2>
+        <table class="table table-hover">
+        	<tr>
+        		<th>Username</th>
+        		<th>Service Provider Name</th>
+        		<th>Rating</th>
+        	</tr>
+			<% topSp.forEach(function(item){ %>
+				<tr>
+					<td><%= item.userName %></td>
+					<td><%= item.spName %></td>
+					<td><%= item.rating %></td>
+				</tr>
+			<% }) %>
+        </table>
+
+        <h2>Most active customers</h2>
+        <table class="table table-hover">
+        	<tr>
+        		<th>Customer Name</th>
+        		<th>Number of Bookings</th>
+        	</tr>
+        	<% topCustomers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.cName %></td>
+					<td><%= item.bookCount %></td>
+				</tr>
+			<% }) %>
+        </table>
+
+        <h2>Top services booked</h2>
+        <table class="table table-hover">
+        	<tr>
+        		<th>Service</th>
+        		<th>Number of bookings</th>
+        	</tr>
+        	<% topServices.forEach(function(item){ %>
+				<tr>
+					<td><%= item.serviceType %></td>
+					<td><%= item.serviceCount %></td>
 				</tr>
 			<% }) %>
         </table>

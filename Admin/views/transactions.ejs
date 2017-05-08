@@ -8,32 +8,27 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-		<% include partials/nav %>
-        <div class="container">
+	<% include partials/nav %>
+	<div class="container">
 		<h2>Transactions</h2>
+
 	<% if (transactions.length !=0 ){ %>
-		<table>
+		<table class="table table-hover">
 			<tr>
 				<th>Transaction Number</th>
-				<th>Customer Number</th>
-				<th>Service Provider ID</th>
-				<th>Service Number</th>
+				<th>Customer Name</th>
+				<th>Service Provider Name</th>
+				<th>Service</th>
 				<th>Specification</th>
-				<th>Status</th>
-				<th>Date Started</th>
-				<th>Date Finished</th>
 			</tr>
 
 			<% transactions.forEach(function(item){ %>
 				<tr>
-					<td><%= item.transactionNumber %></td>
-					<td><%= item.customerNumber %></td>
-					<td><%= item.spNumber %></td>
-					<td><%= item.service %></td>
+					<td><%= item.transactionId %></td>
+					<td><%= item.customerName %></td>
+					<td><%= item.spName %></td>
+					<td><%= item.serviceType %></td>
 					<td><%= item.specification %></td>
-					<td><%= item.status %></td>
-					<td><%= item.dateStart %></td>
-					<td><%= item.dateFinished %></td>
 				</tr>
 			<%	}) %>
 

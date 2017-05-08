@@ -1,9 +1,10 @@
 TODO:
 
--index queries (summaries)
+-weekly trasaction query in index
+
 -delete sp
 -registration of sp
-      -generated password
+	-generated password
 
 -delete c
 
@@ -11,10 +12,10 @@ TODO:
 -delete s
 
 -email verification
-    -https://nodemailer.com/about/
+	-https://nodemailer.com/about/
 
 -redirection after login
 
 PROBABLE FEATURES:
 -Paypal
-    -https://github.com/paypal/PayPal-node-SDK
+	-https://github.com/paypal/PayPal-node-SDK
