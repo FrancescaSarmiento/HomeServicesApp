@@ -13,7 +13,7 @@ TODO:
 -email verification
     -https://nodemailer.com/about/
 
--login
+-redirection after login
 
 PROBABLE FEATURES:
 -Paypal
