@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2017 at 03:26 AM
+-- Generation Time: May 08, 2017 at 12:50 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -49,9 +49,19 @@ INSERT INTO `admin` (`adminId`, `firstName`, `lastName`, `email`, `contactNumber
 
 CREATE TABLE `booking` (
   `bookingId` int(11) NOT NULL,
-  `transactionNumber` int(11) NOT NULL,
-  `reserved_date` datetime NOT NULL
+  `bookingStatus` enum('pending','ongoing','done','cancelled','accepted','rejected') NOT NULL DEFAULT 'pending',
+  `reserved_date` datetime NOT NULL,
+  `dateStarted` datetime NOT NULL,
+  `dateFinished` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`bookingId`, `bookingStatus`, `reserved_date`, `dateStarted`, `dateFinished`) VALUES
+(1, 'done', '2017-05-17 06:00:00', '2017-05-17 09:00:00', '2017-05-17 15:00:00'),
+(2, 'pending', '2017-05-17 06:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -99,6 +109,13 @@ CREATE TABLE `message` (
   `timeRead` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `message`
+--
+
+INSERT INTO `message` (`messageId`, `senderId`, `receiverId`, `messageBody`, `timeSent`, `timeReceived`, `timeRead`) VALUES
+(1, 7, 11, 'I would like to inquire more specifically on the services you can provide', '2017-05-08 06:00:00', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -137,7 +154,7 @@ CREATE TABLE `service_provider` (
   `contactNumber` varchar(11) NOT NULL,
   `shift_start` time NOT NULL,
   `shift_end` time NOT NULL,
-  `working_days` varchar(20) NOT NULL,
+  `working_days` varchar(27) NOT NULL,
   `rating` enum('1','2','3','4','5') DEFAULT NULL,
   `availability` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -147,8 +164,8 @@ CREATE TABLE `service_provider` (
 --
 
 INSERT INTO `service_provider` (`spId`, `firstName`, `lastName`, `email`, `contactNumber`, `shift_start`, `shift_end`, `working_days`, `rating`, `availability`) VALUES
-(11, 'Zebedee', 'Jimenez', 'email10@slu.edu.ph', '10', '07:30:00', '18:00:00', 'Su,M,T,W,Th,F,Sa', '1', 1),
-(12, 'Johnny', 'Sins', 'email12@slu.edu.ph', '11', '09:00:00', '20:00:00', 'M,W,F', '5', 1);
+(11, 'Zebedee', 'Jimenez', 'email10@slu.edu.ph', '10', '07:30:00', '18:00:00', 'Sun,Mon,Tue,Wed,Thu,Fri,Sat', '1', 1),
+(12, 'Johnny', 'Sins', 'email12@slu.edu.ph', '11', '09:00:00', '20:00:00', 'Mon,Wed,Fri', '5', 1);
 
 -- --------------------------------------------------------
 
@@ -184,14 +201,19 @@ INSERT INTO `sp_service` (`serviceId`, `spId`) VALUES
 
 CREATE TABLE `transaction` (
   `transactionId` int(11) NOT NULL,
+  `bookingId` int(11) NOT NULL,
   `customerId` int(11) NOT NULL,
   `spId` int(11) NOT NULL,
   `serviceId` int(11) NOT NULL,
-  `specification` text NOT NULL,
-  `status` enum('Assembly/Installation','Repair','Plumbing','Electrical','Painting','Carpentry','Remodeling') NOT NULL,
-  `date_started` datetime NOT NULL,
-  `date_finished` datetime NOT NULL
+  `specification` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`transactionId`, `bookingId`, `customerId`, `spId`, `serviceId`, `specification`) VALUES
+(1, 1, 7, 11, 1, 'some services, 200');
 
 -- --------------------------------------------------------
 
@@ -241,8 +263,7 @@ ALTER TABLE `admin`
 -- Indexes for table `booking`
 --
 ALTER TABLE `booking`
-  ADD PRIMARY KEY (`bookingId`),
-  ADD KEY `transactionNumber` (`transactionNumber`);
+  ADD PRIMARY KEY (`bookingId`);
 
 --
 -- Indexes for table `customer`
@@ -290,7 +311,8 @@ ALTER TABLE `transaction`
   ADD PRIMARY KEY (`transactionId`),
   ADD KEY `customerId` (`customerId`),
   ADD KEY `spId` (`spId`),
-  ADD KEY `serviceId` (`serviceId`);
+  ADD KEY `serviceId` (`serviceId`),
+  ADD KEY `transaction_ibfk_1` (`bookingId`);
 
 --
 -- Indexes for table `user`
@@ -307,12 +329,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `service`
 --
@@ -322,7 +344,7 @@ ALTER TABLE `service`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `user`
 --
@@ -337,12 +359,6 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_user_fk` FOREIGN KEY (`adminId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
-
---
--- Constraints for table `booking`
---
-ALTER TABLE `booking`
-  ADD CONSTRAINT `booking_transaction_fk` FOREIGN KEY (`transactionNumber`) REFERENCES `transaction` (`transactionId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `customer`
@@ -376,7 +392,8 @@ ALTER TABLE `sp_service`
 ALTER TABLE `transaction`
   ADD CONSTRAINT `tran_cust_fk` FOREIGN KEY (`customerId`) REFERENCES `customer` (`custId`) ON UPDATE CASCADE,
   ADD CONSTRAINT `tran_serv_fk` FOREIGN KEY (`serviceId`) REFERENCES `service` (`serviceId`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tran_sp_fk` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tran_sp_fk` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `booking` (`bookingId`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
