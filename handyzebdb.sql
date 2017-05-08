@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2017 at 01:11 PM
+-- Generation Time: May 08, 2017 at 01:49 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -50,11 +50,20 @@ INSERT INTO `admin` (`adminId`, `firstName`, `lastName`, `email`, `contactNumber
 CREATE TABLE `booking` (
   `bookingId` int(11) NOT NULL,
   `custId` int(11) NOT NULL,
+  `spId` int(11) NOT NULL,
+  `serviceId` int(11) NOT NULL,
   `bookingStatus` enum('pending','ongoing','done','cancelled','accepted','rejected') NOT NULL DEFAULT 'pending',
   `reserved_date` datetime NOT NULL,
   `dateStarted` datetime DEFAULT NULL,
   `dateFinished` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`bookingId`, `custId`, `spId`, `serviceId`, `bookingStatus`, `reserved_date`, `dateStarted`, `dateFinished`) VALUES
+(3, 7, 12, 3, 'pending', '2017-05-08 10:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -85,6 +94,28 @@ INSERT INTO `customer` (`custId`, `firstName`, `lastName`, `address`, `email`, `
 (10, 'Jay', 'Dadula', 'Baguio City', 'email7@slu.edu.ph', '7'),
 (3, 'Michael', 'Rivera', 'Baguio City', 'email@slu.edu.ph', '0'),
 (2, 'Jerome', 'Del Rosario', 'Baguio City', 'jeromed.pepper@gmail.com', '09153478922');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedback`
+--
+
+CREATE TABLE `feedback` (
+  `feedbackId` int(11) NOT NULL,
+  `bookingId` int(11) NOT NULL,
+  `custId` int(11) NOT NULL,
+  `spId` int(11) NOT NULL,
+  `rating` enum('1','2','3','4','5') NOT NULL,
+  `remarks` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `feedback`
+--
+
+INSERT INTO `feedback` (`feedbackId`, `bookingId`, `custId`, `spId`, `rating`, `remarks`) VALUES
+(1, 3, 7, 11, '5', NULL);
 
 -- --------------------------------------------------------
 
@@ -148,7 +179,7 @@ CREATE TABLE `service_provider` (
   `shift_start` time NOT NULL,
   `shift_end` time NOT NULL,
   `working_days` varchar(27) NOT NULL,
-  `rating` enum('1','2','3','4','5') DEFAULT NULL,
+  `rating` int(11) DEFAULT NULL,
   `availability` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -157,8 +188,8 @@ CREATE TABLE `service_provider` (
 --
 
 INSERT INTO `service_provider` (`spId`, `firstName`, `lastName`, `email`, `contactNumber`, `shift_start`, `shift_end`, `working_days`, `rating`, `availability`) VALUES
-(11, 'Zebedee', 'Jimenez', 'email10@slu.edu.ph', '10', '07:30:00', '18:00:00', 'Sun,Mon,Tue,Wed,Thu,Fri,Sat', '1', 1),
-(12, 'Johnny', 'Sins', 'email12@slu.edu.ph', '11', '09:00:00', '20:00:00', 'Mon,Wed,Fri', '5', 1);
+(11, 'Zebedee', 'Jimenez', 'email10@slu.edu.ph', '10', '07:30:00', '18:00:00', 'Sun,Mon,Tue,Wed,Thu,Fri,Sat', 1, 1),
+(12, 'Johnny', 'Sins', 'email12@slu.edu.ph', '11', '09:00:00', '20:00:00', 'Mon,Wed,Fri', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -194,12 +225,19 @@ INSERT INTO `sp_service` (`serviceId`, `spId`) VALUES
 
 CREATE TABLE `transaction` (
   `transactionId` int(11) NOT NULL,
-  `bookingId` int(11) NOT NULL,
-  `customerId` int(11) NOT NULL,
+  `custId` int(11) NOT NULL,
   `spId` int(11) NOT NULL,
-  `serviceId` int(11) NOT NULL,
+  `bookingId` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `specification` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`transactionId`, `custId`, `spId`, `bookingId`, `timestamp`, `specification`) VALUES
+(2, 7, 11, 3, '2017-05-08 13:46:04', 'some services, 200');
 
 -- --------------------------------------------------------
 
@@ -250,7 +288,9 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`bookingId`),
-  ADD KEY `custId` (`custId`);
+  ADD KEY `custId` (`custId`),
+  ADD KEY `spId` (`spId`),
+  ADD KEY `serviceId` (`serviceId`);
 
 --
 -- Indexes for table `customer`
@@ -260,6 +300,15 @@ ALTER TABLE `customer`
   ADD UNIQUE KEY `CONTACTNUMBER` (`contactNumber`),
   ADD KEY `CUSTOMERID` (`custId`),
   ADD KEY `EMAIL` (`email`);
+
+--
+-- Indexes for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD PRIMARY KEY (`feedbackId`),
+  ADD KEY `custId` (`custId`),
+  ADD KEY `spId` (`spId`),
+  ADD KEY `bookingId` (`bookingId`);
 
 --
 -- Indexes for table `message`
@@ -296,10 +345,9 @@ ALTER TABLE `sp_service`
 --
 ALTER TABLE `transaction`
   ADD PRIMARY KEY (`transactionId`),
-  ADD KEY `customerId` (`customerId`),
-  ADD KEY `spId` (`spId`),
-  ADD KEY `serviceId` (`serviceId`),
-  ADD KEY `transaction_ibfk_1` (`bookingId`);
+  ADD KEY `transaction_ibfk_1` (`bookingId`),
+  ADD KEY `custId` (`custId`),
+  ADD KEY `spId` (`spId`);
 
 --
 -- Indexes for table `user`
@@ -316,7 +364,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `feedback`
+--
+ALTER TABLE `feedback`
+  MODIFY `feedbackId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `message`
 --
@@ -331,7 +384,7 @@ ALTER TABLE `service`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `user`
 --
@@ -351,13 +404,23 @@ ALTER TABLE `admin`
 -- Constraints for table `booking`
 --
 ALTER TABLE `booking`
-  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`);
+  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`),
+  ADD CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`),
+  ADD CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`serviceId`) REFERENCES `service` (`serviceId`);
 
 --
 -- Constraints for table `customer`
 --
 ALTER TABLE `customer`
   ADD CONSTRAINT `customer_user_fk` FOREIGN KEY (`custId`) REFERENCES `user` (`idNum`);
+
+--
+-- Constraints for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`),
+  ADD CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`),
+  ADD CONSTRAINT `feedback_ibfk_3` FOREIGN KEY (`bookingId`) REFERENCES `booking` (`bookingId`);
 
 --
 -- Constraints for table `message`
@@ -383,10 +446,9 @@ ALTER TABLE `sp_service`
 -- Constraints for table `transaction`
 --
 ALTER TABLE `transaction`
-  ADD CONSTRAINT `tran_cust_fk` FOREIGN KEY (`customerId`) REFERENCES `customer` (`custId`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tran_serv_fk` FOREIGN KEY (`serviceId`) REFERENCES `service` (`serviceId`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tran_sp_fk` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `booking` (`bookingId`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `booking` (`bookingId`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`),
+  ADD CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`spId`) REFERENCES `service_provider` (`spId`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
