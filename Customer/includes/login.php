@@ -13,24 +13,19 @@ if(!empty(filter_input(INPUT_POST, 'login'))){
     session_start();
 
     if($row == 1){
-        if($rows['userType'] == 'Customer'){
-            if($rows['status'] == 1){
-                $_SESSION['last_activity'] = time();
-                $_SESSION['expire_time'] = 30 * 60; //30min
-                $_SESSION['userID'] = $rows['idNum'];
-                $_SESSION['firstName'] = $rows['firstName'];
-                header('Location: ../pages/main.php?page=home');
-            } else {
-                echo '<div class="alert alert-danger">Your account has not yet been validated.</div>';
-                echo '<script>window.location.assign(../pages/login.php)</script>';
-            }
+        if($rows['status'] == 1){
+            $_SESSION['last_activity'] = time();
+            $_SESSION['expire_time'] = 30*60; //30min
+            $_SESSION['userID'] = $rows['idNum'];
+            $_SESSION['firstName'] = $rows['firstName'];
+            header('Location: ../pages/main.php?page=home');
         } else {
-            echo '<div class="alert alert-danger">You are trying to login as a customer.</div>';
-            echo '<script>window.location.assign(../pages/login.php)</script>';
-            }
+            echo '<div class="alert alert-danger">Your account has not yet been validated.</div>';
+            echo '<script>window.location.assign(../login.php)</script>';
+        }
     } else {
             echo '<div class="alert alert-danger">Username or password was incorrect, please try again.</div>';
-            echo '<script>window.location.assign(../pages/login.php)</script>';
+            echo '<script>window.location.assign(../login.php)</script>';
     }
     
     mysqli_free_result($result);
