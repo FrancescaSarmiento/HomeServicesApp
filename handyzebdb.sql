@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2017 at 12:50 PM
+-- Generation Time: May 08, 2017 at 01:11 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -49,19 +49,12 @@ INSERT INTO `admin` (`adminId`, `firstName`, `lastName`, `email`, `contactNumber
 
 CREATE TABLE `booking` (
   `bookingId` int(11) NOT NULL,
+  `custId` int(11) NOT NULL,
   `bookingStatus` enum('pending','ongoing','done','cancelled','accepted','rejected') NOT NULL DEFAULT 'pending',
   `reserved_date` datetime NOT NULL,
-  `dateStarted` datetime NOT NULL,
-  `dateFinished` datetime NOT NULL
+  `dateStarted` datetime DEFAULT NULL,
+  `dateFinished` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `booking`
---
-
-INSERT INTO `booking` (`bookingId`, `bookingStatus`, `reserved_date`, `dateStarted`, `dateFinished`) VALUES
-(1, 'done', '2017-05-17 06:00:00', '2017-05-17 09:00:00', '2017-05-17 15:00:00'),
-(2, 'pending', '2017-05-17 06:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -208,13 +201,6 @@ CREATE TABLE `transaction` (
   `specification` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `transaction`
---
-
-INSERT INTO `transaction` (`transactionId`, `bookingId`, `customerId`, `spId`, `serviceId`, `specification`) VALUES
-(1, 1, 7, 11, 1, 'some services, 200');
-
 -- --------------------------------------------------------
 
 --
@@ -263,7 +249,8 @@ ALTER TABLE `admin`
 -- Indexes for table `booking`
 --
 ALTER TABLE `booking`
-  ADD PRIMARY KEY (`bookingId`);
+  ADD PRIMARY KEY (`bookingId`),
+  ADD KEY `custId` (`custId`);
 
 --
 -- Indexes for table `customer`
@@ -359,6 +346,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_user_fk` FOREIGN KEY (`adminId`) REFERENCES `user` (`idNum`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `booking`
+--
+ALTER TABLE `booking`
+  ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`custId`) REFERENCES `customer` (`custId`);
 
 --
 -- Constraints for table `customer`
