@@ -3,8 +3,6 @@ TODO:
 -weekly trasaction query in index
 
 -delete sp
--registration of sp
-	-generated password
 
 -delete c
 
