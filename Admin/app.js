@@ -3,12 +3,19 @@ var express = require('express');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var generator = require('generate-password');
+var session = require('express-session');
+
 
 var app = express();
 
 app.set('view engine', 'ejs');
 app.use('/styles', express.static('styles'));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+	secret: 'lmao',
+	resave: false,
+	saveUninitialized: true,
+}));
 
 app.listen(3000, function(){
 	console.log("listening to port 3000");
@@ -32,66 +39,70 @@ app.get('/', function(req, res){
 });
 
 app.get('/main', function(req, res){
-	connection.query("SELECT * FROM user JOIN customer ON custId=idNum WHERE status='0'  ", function(err, rows1){
-		if (err){ console.log(err);	return }
+	if(req.session.username){
+		connection.query("SELECT * FROM user JOIN customer ON custId=idNum WHERE status='0'  ", function(err, rows1){
+			if (err){ console.log(err);	return }
 
-		var customerUsers = [];
-		rows1.forEach(function(item){
-			//console.log(item);
-			customerUsers.push({
-				idNum: item.idNum,
-				userName: item.userName,
-				password: item.password,
-				userType: item.userType,
-				status: item.status,
-				custId: item.custId,
-				firstName: item.firstName,
-				lastName: item.lastName,
-				address: item.address,
-				email: item.email,
-				contactNumber: item.contactNumber
-			});
-		});
-
-		connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId ORDER BY rating DESC LIMIT 5;", function(err, rows2){
-			if (err) { console.error(err); return }
-
-			var topSp = [];
-			rows2.forEach(function(item){
-				topSp.push({
+			var customerUsers = [];
+			rows1.forEach(function(item){
+				//console.log(item);
+				customerUsers.push({
+					idNum: item.idNum,
 					userName: item.userName,
-					spName: `${item.firstName} ${item.lastName}`,
-					rating: item.rating	
+					password: item.password,
+					userType: item.userType,
+					status: item.status,
+					custId: item.custId,
+					firstName: item.firstName,
+					lastName: item.lastName,
+					address: item.address,
+					email: item.email,
+					contactNumber: item.contactNumber
 				});
 			});
 
-			connection.query("SELECT COUNT(bookingId) 'bookCount', firstName, lastName FROM customer JOIN booking USING (custId) GROUP BY 2,3 LIMIT 5", function(err, rows3){
+			connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId ORDER BY rating DESC LIMIT 5;", function(err, rows2){
 				if (err) { console.error(err); return }
 
-				var topCustomers = [];
-				rows3.forEach(function(item){
-					topCustomers.push({
-						cName: `${item.firstName} ${item.lastName}`,
-						bookCount: item.bookCount
+				var topSp = [];
+				rows2.forEach(function(item){
+					topSp.push({
+						userName: item.userName,
+						spName: `${item.firstName} ${item.lastName}`,
+						rating: item.rating	
 					});
 				});
 
-				connection.query("SELECT COUNT(serviceId) 'serviceCount', serviceType FROM transaction NATURAL JOIN service GROUP BY 2 ORDER BY 1 DESC LIMIT 3", function(err, rows4){
+				connection.query("SELECT COUNT(bookingId) 'bookCount', firstName, lastName FROM customer JOIN booking USING (custId) GROUP BY 2,3 LIMIT 5", function(err, rows3){
 					if (err) { console.error(err); return }
 
-					var topServices = [];
-					rows4.forEach(function(item){
-						topServices.push({
-							serviceCount: item.serviceCount,
-							serviceType: item.serviceType
+					var topCustomers = [];
+					rows3.forEach(function(item){
+						topCustomers.push({
+							cName: `${item.firstName} ${item.lastName}`,
+							bookCount: item.bookCount
 						});
 					});
 
-					res.render('main', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices});	
+					connection.query("SELECT COUNT(serviceId) 'serviceCount', serviceType FROM transaction NATURAL JOIN service GROUP BY 2 ORDER BY 1 DESC LIMIT 3", function(err, rows4){
+						if (err) { console.error(err); return }
+
+						var topServices = [];
+						rows4.forEach(function(item){
+							topServices.push({
+								serviceCount: item.serviceCount,
+								serviceType: item.serviceType
+							});
+						});
+
+						res.render('main', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices});	
+					});
 				});
 			});
 		});
-	});
+	}else{
+		res.redirect('/login');
+	}
 });
 
 app.get('/login', function(req, res){
@@ -99,7 +110,10 @@ app.get('/login', function(req, res){
 });
 
 app.get('/logout', function(req, res){
-	res.render('index');
+	req.session.destroy(function(err){
+		if (err){ console.error(err); return }
+		res.redirect('/');	
+	});
 });
 
 app.get('/error', function(req, res){
@@ -124,6 +138,7 @@ app.post('/login', function(req, res){
 				}else if(userType == "Service Provider"){
 					res.redirect('/main');
 				}else{
+					req.session.username = userName;
 					res.redirect('/main');
 				}
 			}
@@ -140,11 +155,11 @@ app.get('/register', function(req, res){
 });
 
 app.get('/spregister', function(req, res){
-	res.render('spregister');
-});
-
-app.get('/serviceregister', function(req, res){
-	res.render('serviceregister');
+	if(req.session.username){
+		res.render('spregister');
+	}else{
+		res.redirect('/login');
+	}
 });
 
 app.post('/register', function(req, res){
@@ -206,136 +221,141 @@ app.post('/serviceregister', function(req, res){
 });
 
 app.get('/users', function(req, res){
-	var users = [];
-	connection.query("SELECT * FROM user", function(err, rows){
-		if (err){ console.log("Error in query"); return; }
+	if(req.session.username){
+		var users = [];
+		connection.query("SELECT * FROM user", function(err, rows){
+			if (err){ console.log("Error in query"); return; }
 
-		rows.forEach(function(item){
-			//console.log(item);
-			users.push({
-				idNum: item.idNum,
-				userName: item.userName,
-				password: item.password,
-				userType: item.userType,
-				status: item.status
+			rows.forEach(function(item){
+				//console.log(item);
+				users.push({
+					idNum: item.idNum,
+					userName: item.userName,
+					password: item.password,
+					userType: item.userType,
+					status: item.status
+				});
 			});
+			res.render('users', {users: users});
 		});
-		res.render('users', {users: users});
-	});
+	}else{
+		res.redirect('/login');
+	}
 });
 
 app.get('/customers', function(req, res){
-	var customers = [];
-	connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1'", function(err, rows){
-		if (err){ console.log("Error in query"); return; }
+	if(req.session.username){
+		var customers = [];
+		connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1'", function(err, rows){
+			if (err){ console.log("Error in query"); return; }
 
 
-		rows.forEach(function(item){
-			//console.log(item);
-			customers.push({
-				custId: item.custId,
-				firstName: item.firstName,
-				userName: item.userName,
-				lastName: item.lastName,
-				address: item.address,
-				email: item.email,
-				contactNumber: item.contactNumber
+			rows.forEach(function(item){
+				//console.log(item);
+				customers.push({
+					custId: item.custId,
+					firstName: item.firstName,
+					userName: item.userName,
+					lastName: item.lastName,
+					address: item.address,
+					email: item.email,
+					contactNumber: item.contactNumber
+				});
 			});
-		});
 
-		res.render('customers', {customers: customers});
-	});
+			res.render('customers', {customers: customers});
+		});
+	}else{
+		res.redirect('/login');
+	}
+	
 });
 
 app.get('/service-providers', function(req, res){
-	var serviceProviders = [];
-	connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId", function(err, rows){
-		if (err){ console.log("Error in query"); return; }
+	if(req.session.username){
+		var serviceProviders = [];
+		connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId", function(err, rows){
+			if (err){ console.log("Error in query"); return; }
 
 
-		rows.forEach(function(item){
-			var availability;
-			if (item.availability == 1){
-				availability = "available";
-			}else{
-				availability = "unavailable";
-			}
-			
-			serviceProviders.push({
-				spId: item.spId,
-				userName: item.userName,
-				firstName: item.firstName,
-				lastName: item.lastName,
-				email: item.email,
-				contactNumber: item.contactNumber,
-				shiftStart: item.shift_start,
-				shiftEnd: item.shift_end,
-				workingDays: item.working_days,
-				rating: item.rating,
-				availability: availability
+			rows.forEach(function(item){
+				var availability;
+				if (item.availability == 1){
+					availability = "available";
+				}else{
+					availability = "unavailable";
+				}
+				
+				serviceProviders.push({
+					spId: item.spId,
+					userName: item.userName,
+					firstName: item.firstName,
+					lastName: item.lastName,
+					email: item.email,
+					contactNumber: item.contactNumber,
+					shiftStart: item.shift_start,
+					shiftEnd: item.shift_end,
+					workingDays: item.working_days,
+					rating: item.rating,
+					availability: availability
+				});
 			});
-		});
 
-		res.render('service-providers', {serviceProviders: serviceProviders});
-	});
+			res.render('service-providers', {serviceProviders: serviceProviders});
+		});
+	}else{
+		res.redirect('/login');
+	}
 });
 
 app.get('/services', function(req, res){
-	var services = [];	
+	if(req.session.username){
+		var services = [];	
 
-	connection.query("SELECT * FROM service", function(err, rows){
-		if (err){ console.log("Error in query"); return; }
+		connection.query("SELECT * FROM service", function(err, rows){
+			if (err){ console.log("Error in query"); return; }
 
-		rows.forEach(function(item){
-			//console.log(item);
-			services.push({
-				serviceId: item.serviceId,
-				service: item.serviceType
+			rows.forEach(function(item){
+				//console.log(item);
+				services.push({
+					serviceId: item.serviceId,
+					service: item.serviceType
+				});
 			});
+			res.render('services', {services: services});
 		});
-		res.render('services', {services: services});
-	});
+	}else{
+		res.redirect('/login');
+	}
 });
-
-/*
-app.post('/add-service', function(req, res){
-	var service = req.body.service;
-	console.log(typeof(service));
-
-	connection.query(`INSERT INTO service (serviceType) VALUES('Assembly')`, function(err, result){
-		if (err) { console.error(err); return };
-		console.log(result);
-
-		res.render(services, {services: services});
-	});
-
-});
-
-*/
 
 app.get('/transactions', function(req, res){
-	var transactions = [];
-	connection.query("SELECT transactionId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, specification FROM transaction JOIN customer c ON c.custId = transaction.customerId JOIN service_provider sp USING(spId) JOIN service USING(serviceId)", function(err, rows){
-		if (err){
-			console.log("Error in query");
-			return;
-		}
+	if(req.session.username){
+		var transactions = [];
+		connection.query("SELECT transactionId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, specification FROM transaction JOIN customer c ON c.custId = transaction.customerId JOIN service_provider sp USING(spId) JOIN service USING(serviceId)", function(err, rows){
+			if (err){
+				console.log("Error in query");
+				return;
+			}
 
-		rows.forEach(function(item){
-			//console.log(item);
-			transactions.push({
-				transactionId: item.transactionId,
-				customerName: item.customerName,
-				spName: item.spName,
-				serviceType: item.serviceType,
-				specification: item.specification,
-				status: item.status,
-				dateStarted: item.date_started,
-				dateFinished: item.date_finished
+			rows.forEach(function(item){
+				//console.log(item);
+				transactions.push({
+					transactionId: item.transactionId,
+					customerName: item.customerName,
+					spName: item.spName,
+					serviceType: item.serviceType,
+					specification: item.specification,
+					status: item.status,
+					dateStarted: item.date_started,
+					dateFinished: item.date_finished
+				});
 			});
+			res.render('transactions', {transactions: transactions});
 		});
-		res.render('transactions', {transactions: transactions});
-	});
+	}else{
+		res.redirect('/login');
+	}
 });
 
 
