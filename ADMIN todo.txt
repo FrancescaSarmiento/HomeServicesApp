@@ -9,10 +9,13 @@ TODO:
 -edit s
 -delete s
 
+-session
 -email verification
 	-https://nodemailer.com/about/
 
 -redirection after login
+
+
 
 PROBABLE FEATURES:
 -Paypal
