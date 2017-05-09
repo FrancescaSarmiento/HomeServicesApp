@@ -6,7 +6,7 @@
     if(empty($queryString)){
         $split = strval(explode('.',explode('/', $requestURI, 4)[1],3)[0]);
     } else {
-        $split = strval(explode('=', $queryString,3)[1]);
+        $split = strval(explode('&',explode('=', $queryString,3)[1],2)[0]);
     }
     
 ?>

@@ -1,3 +1,16 @@
+body {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#test{
+    font-size: 80px;
+}
+
+#bookingDetails {
+    font-size: 17px;
+}
+
 .chat {
     max-width: 300px;
     background-color: white;

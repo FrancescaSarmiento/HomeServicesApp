@@ -1,6 +1,6 @@
 <?php require '../includes/blockedPages.php' ?>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header navbar-right">
             <ul class="nav navbar-nav navbar-right">

@@ -8,15 +8,13 @@
 <?php $acctInfo = getAcctInfo($conn, $userID) ?>
 <div>
     <?php 
-        $rows = mysqli_fetch_row($acctInfo);
+        $rows = mysqli_fetch_assoc($acctInfo);
     ?>
             
-            <p>First Name: <input type="text" name="fname" disabled="disabled" value="<?php echo $rows[0] ?>"></p>
-            <p>Last Name: <input type="text" name="lname" disabled="disabled" value="<?php echo $rows[1] ?>"></p>
-            <p>Address: <input type="text" name="address" disabled="disabled" value="<?php echo $rows[2] ?>"></p>
-            <p>Email: <input type="email" name="email" disabled="disabled" value="<?php echo $rows[3] ?>"></p>
-            <p>Contact Number: <input type='text' name="cnumber" disabled="disabled" value="<?php echo $rows[4] ?>"></p>
-            <p>Handy Zeb <?php echo $rows[5] ?> ID number and username: <?php echo $userID.' '.$rows[6] ?></p>
-            
-            <button name="toggle" value="toggle">Edit Account Information</button>
+            <p>First Name: <?php echo $rows['firstName'] ?></p>
+            <p>Last Name: <?php echo $rows['lastName'] ?></p>
+            <p>Address: <?php echo $rows['address'] ?></p>
+            <p>Email: <?php echo $rows['email'] ?></p>
+            <p>Contact Number: <?php echo $rows['contactNumber'] ?></p>
+            <p>Handy Zeb ID number and username: <?php echo $userID.' '.$rows['userName'] ?></p>
 </div>

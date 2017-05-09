@@ -15,7 +15,7 @@
     <div class="col-md-9" id="right-side">
         <div >
             <?php 
-                $spId= filter_input(INPUT_GET, 'id');
+                $spId = filter_input(INPUT_GET, 'id');
                 getMessages($conn, $spId, $userID)
             ?>
 

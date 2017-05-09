@@ -5,7 +5,7 @@ if(!empty(filter_input(INPUT_POST, 'login'))){
     $username = filter_input(INPUT_POST, 'username');
     $pass = filter_input(INPUT_POST, 'pass');
 
-    $query = "SELECT idNum, userType, status, firstName from user join customer on user.idNum=customer.custId WHERE userName = '$username' AND password = '$pass'";
+    $query = "SELECT * from user join customer on user.idNum=customer.custId WHERE userName = '$username' AND password = '$pass'";
     $result = mysqli_query($conn, $query); 
     $row = mysqli_num_rows($result);
     $rows = mysqli_fetch_assoc($result);
@@ -18,6 +18,7 @@ if(!empty(filter_input(INPUT_POST, 'login'))){
             $_SESSION['expire_time'] = 30*60; //30min
             $_SESSION['userID'] = $rows['idNum'];
             $_SESSION['firstName'] = $rows['firstName'];
+            $_SESSION['lastName'] = $rows['lastName'];
             header('Location: ../pages/main.php?page=home');
         } else {
             echo '<div class="alert alert-danger">Your account has not yet been validated.</div>';
