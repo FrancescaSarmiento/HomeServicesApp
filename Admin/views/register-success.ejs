@@ -3,16 +3,104 @@
 <head>
 	<meta charset="UTF-8">
 	<title>HandyZeb</title>
-	<link rel="stylesheet" href="/styles/styles.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/styles/index.css">
 </head>
 <body>
-	<% include partials/nav %>
-    <div class="page-header">
-	<h1>Registration Success</h1>
-    </div>
-	<p>An email confirmation will be sent after the admin has verified your request.</p>
+	<header class="site-header">
+		<div class="headerRow">
+			<div class="headerContents">
+				<h1>Handy Zeb</h1>
+
+				<div class="headerContainer left">
+					<ul class="navContainer">
+						<li><a href="">Home</a></li>
+						<li><a href="">About</a></li>
+						<li><a href="">Services</a></li>
+						<li><a href="">Help</a></li>
+					</ul>
+				</div>
+				<div class="headerContainer right">
+					
+					<ul class="navContainer">
+							<li><a href="login">Log In</a></li>
+							<li><a href="register">Register</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</header>
+
+    <div class="container">
+		<h1>Registration Success</h1>
+		<p>An email confirmation will be sent after the admin has verified your request.</p>
+		<a href="/" id="okay">Okay</a>
+	</div>
+
+	<footer class="site-footer">
+		<div class="row">
+			<nav class="footerOne columns">
+				<ul class="footerLink" id="mainFooterLinks">
+					<li>Home</li>
+					<li>Help</li>
+					<li>About</li>
+					<li>Services</li>
+					<li>Contact Us</li>
+				</ul>
+			</nav>
+
+			<nav class="footerTwo columns">
+				<p class="footerHeader">Locations</p>
+				<ul class="footerLink">
+					<li>Bahay mo</li>
+					<li>Yer Mum</li>
+					<li>Mars</li>
+					<li>Earth</li>
+					<li>Sa puso mo</li>
+					<li>kill me</li>
+				</ul>
+			</nav>
+
+			<nav class="footerThree columns">
+				<p class="footerHeader">Popular Services</p>
+				<ul class="footerLink">
+					<li>Cleaning</li>
+					<li>Handyman</li>
+					<li>Plumbing</li>
+					<li>Electrical</li>
+					<li>Moving Help</li>
+					<li>Painting</li>
+					<li>Furniture Assembly</li>
+					<li>See all services</li>
+				</ul>
+			</nav>
+		</div>
+
+		<div class="row">
+			<div class="socialMediaIcons">
+				<a class="icon-link"><img class="socialmed" src="styles/icons/fbicon.png" alt="icon"></a>
+				<a class="icon-link"><img class="socialmed" src="styles/icons/twittericon.png" alt="icon"></a>
+				<a class="icon-link"><img class="socialmed" src="styles/icons/igicon.png" alt="icon"></a>
+				<a class="icon-link">deez</a>
+				<a class="icon-link">nutz</a>
+			</div>
+			<div class="footer-divider"></div>
+		</div>
+
+		<div class="row pad-top">
+
+			<div class="left">
+				<ul class="footerLast">
+					<li>Privacy</li>
+					<li>Cookies</li>
+					<li>Terms</li>
+					<li>Policy</li>
+				
+				</ul>
+			</div>
+			<div class="right">© 2017 Handy Zeb. All rights reserved.</div>
+			
+		</div>
+	</footer>
 </body>
 </html>

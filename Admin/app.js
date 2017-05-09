@@ -27,8 +27,11 @@ connection.connect(function(err){
 	console.log('Connection to database successful!');
 });
 
-
 app.get('/', function(req, res){
+	res.render('index');
+});
+
+app.get('/main', function(req, res){
 	connection.query("SELECT * FROM user JOIN customer ON custId=idNum WHERE status='0'  ", function(err, rows1){
 		if (err){ console.log(err);	return }
 
@@ -84,10 +87,51 @@ app.get('/', function(req, res){
 						});
 					});
 
-					res.render('index', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices});	
+					res.render('main', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices});	
 				});
 			});
 		});
+	});
+});
+
+app.get('/login', function(req, res){
+	res.render('login');
+});
+
+app.get('/logout', function(req, res){
+	res.render('index');
+});
+
+app.get('/error', function(req, res){
+	res.render('error');
+});
+
+app.post('/login', function(req, res){
+	var userName = req.body.userName;
+	var password = req.body.password;
+
+	connection.query("SELECT userName, userType, password FROM user WHERE status = 1", function(err, rows){
+		if (err) { console.error(err); return }
+
+		var valid = false;
+		rows.forEach(function(item){
+			if(item.userName == userName && item.password == password){
+				var userType = item.userType;
+				valid = true;
+
+				if(userType == "Customer"){
+					res.redirect('/main');
+				}else if(userType == "Service Provider"){
+					res.redirect('/main');
+				}else{
+					res.redirect('/main');
+				}
+			}
+		});
+
+		if(!valid){
+			res.redirect('/error');
+		}
 	});
 });
 
@@ -182,7 +226,7 @@ app.get('/users', function(req, res){
 
 app.get('/customers', function(req, res){
 	var customers = [];
-	connection.query("SELECT * FROM customer", function(err, rows){
+	connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1'", function(err, rows){
 		if (err){ console.log("Error in query"); return; }
 
 
@@ -191,6 +235,7 @@ app.get('/customers', function(req, res){
 			customers.push({
 				custId: item.custId,
 				firstName: item.firstName,
+				userName: item.userName,
 				lastName: item.lastName,
 				address: item.address,
 				email: item.email,
@@ -235,8 +280,9 @@ app.get('/service-providers', function(req, res){
 	});
 });
 
-var services = [];
 app.get('/services', function(req, res){
+	var services = [];	
+
 	connection.query("SELECT * FROM service", function(err, rows){
 		if (err){ console.log("Error in query"); return; }
 
@@ -297,10 +343,10 @@ app.post('/accept', function(req, res){
 	connection.query("UPDATE user SET status = '1' WHERE userName = '" + req.body.userName +"'", function(err, rows){
 		if (err){ console.error(err); return}
 
-		res.redirect('/');
+		res.redirect('/main');
 	});
 });
 
 app.post('/reject', function(req, res){
-
+	//DELETE FROM table_name [WHERE Clause]
 });
