@@ -1,9 +1,9 @@
 <?php require '../includes/blockedPages.php' ?>
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top font">
     <div class="container-fluid">
         <div class="navbar-header navbar-right">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav">
                 <li class="<?php if($page == 'home'){ echo 'active'; }?>"><a href="?page=home">Home</a></li>
                 <li class="<?php if($page == 'about'){ echo 'active'; }?>"><a href="?page=about">About</a></li>
                 <li class="<?php if($page == 'services'){ echo 'active'; }?>"><a href="?page=services">Services</a></li>

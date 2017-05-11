@@ -3,7 +3,7 @@
     require '../includes/functions.php';
 ?>
 
-<h1>Welcome <?php echo "{$_SESSION['firstName']}  {$_SESSION['lastName']}" ?></h1>
+<h1>Welcome <?php echo "{$_SESSION['firstName']}  {$_SESSION['lastName']}" ?>!</h1>
 
 <?php 
     $bookings = getBooking($conn, $userID);
@@ -71,9 +71,9 @@
     
     //make cal table
 ?>
-        <table border=1 style="float: left">
+        <table border=1 id="left-side">
             <tr height="50px">
-                <th style="text-align: center">
+                <th class="center">
                     <?php 
                         if (!filter_input(INPUT_GET, 'value') == null && filter_input(INPUT_GET, 'value') !== 'current'){
                         echo <<<frag
@@ -84,8 +84,8 @@ frag;
                         }
                     ?>
                 </th>
-                <th colspan=5 style="text-align: center"><?php echo "$monthName $year" ?></th>
-                <th style="text-align: center">
+                <th colspan=5 class="center"><?php echo "$monthName $year" ?></th>
+                <th class="center">
                     <?php 
                      //   var_dump(filter_input(INPUT_GET,'value'));
                         if (!isset($_GET['value']) || $_GET['value'] == 'current'){
@@ -98,7 +98,7 @@ frag;
                     ?>
                 </th>
             </tr>
-            <tr style="background-color: lightblue; text-align: center;" height="100px">
+            <tr class="home-calendar" height=60px;>
                 <td width = 110px>Sun</td>
                 <td width = 110px>Mon</td>
                 <td width = 110px>Tue</td>
