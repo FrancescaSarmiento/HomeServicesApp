@@ -11,20 +11,23 @@
 <body>
 	<!-- probably an include statement here for the header of the  -->
 	<% include partials/nav %>
+    <div class="container">
 	<h1>Register</h1>
+    <div class="form-group">
 	<form action="/spregister" method="post">
 		<label for="userName">Username:</label>
-		<input type="text" name="userName"><br>
+		<input class="form-control" type="text" name="userName" placeholder="Username" required><br>
 		<label for="firstName">First Name:</label>
-		<input type="text" name="firstName"><br>
+		<input class="form-control" type="text" name="firstName" placeholder="First Name" required><br>
 		<label for="lastName">Last Name:</label>
-		<input type="text" name="lastName"><br>
+		<input class="form-control" type="text" name="lastName" placeholder="Last Name" required><br>
 		<label for="email">Email:</label>
-		<input type="text" name="email"><br>
+		<input class="form-control" type="email" name="email" placeholder="Email" required><br>
 		<label for="contactNumber">Contact Number:</label>
-		<input type="text" name="contactNumber"><br>
+		<input class="form-control" type="text" name="contactNumber" placeholder="Contact Number" required><br>
 		<input type="text" name="userType" value="Service Provider" hidden>
-		<input type="submit">
+		<input type="submit" class="btn">
 	</form>
+    </div>
 </body>
 </html>

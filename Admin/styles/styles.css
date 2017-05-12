@@ -12,10 +12,21 @@ nav .nav-pills li a{
 
 nav .nav-pills li a:hover{
     background-color: white;
+    color: black;
 }
 
-nav .nav-pills li a:hover{
-    color: black;
+input, btn .btn-info{
+    color: green;
+}
+
+.btn{
+    color: white;
+    background-color: #212e42;
+}
+
+.btn:hover{
+    background-color: white;
+    border-color: #212e42;
 }
 
 

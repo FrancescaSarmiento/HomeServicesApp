@@ -11,6 +11,25 @@
 	<% include partials/nav %>
 	<div class="container">
 		<h2>Transactions</h2>
+		<form action="/search-transaction-on-name" method="post">
+			<input type="text" placeholder="Customers/SP" name="searchItem"><input type="submit" value="Search">
+		</form>
+		<form action="/search-transaction-on-status" method="post">
+			<select name="status">
+				<option value="">Choose Status</option>
+				<option value="done">Done</option>
+				<option value="ongoing">Ongoing</option>
+				<option value="pending">Pending</option>
+			</select>
+			<input type="submit" value="Search">
+		</form>
+		
+		<form action="/search-transaction-on-date" method="post">
+			<label>From:</label>
+			<input type="date" name="from">
+			<label>To:</label>
+			<input type="date" name="to"><input type="submit" value="Search">
+		</form>
 
 	<% if (transactions.length !=0 ){ %>
 		<table class="table table-hover">
@@ -19,16 +38,20 @@
 				<th>Customer Name</th>
 				<th>Service Provider Name</th>
 				<th>Service</th>
-				<th>Specification</th>
+                <th>Status</th>
+                <th>Date Started</th>
+                <th>Date Finished</th>
 			</tr>
 
 			<% transactions.forEach(function(item){ %>
 				<tr>
-					<td><%= item.transactionId %></td>
+					<td><%= item.bookingId %></td>
 					<td><%= item.customerName %></td>
 					<td><%= item.spName %></td>
 					<td><%= item.serviceType %></td>
-					<td><%= item.specification %></td>
+                    <td><%= item.bookingStatus %></td>
+                    <td><%= item.dateStarted %></td>
+                    <td><%= item.dateFinished %></td>
 				</tr>
 			<%	}) %>
 

@@ -33,18 +33,18 @@
 		<h1>Register</h1>
 		<form class="form-inline" action="/register" method="post">
 			<label for="userName">Username:</label>
-			<input type="text" name="userName"><br>
+			<input type="text" name="userName" required><br>
 			<label for="password">Password:</label>
-			<input type="password" name="password"><br>
+			<input type="password" name="password" required><br>
 			<label for="firstName">First Name:</label>
-			<input type="text" name="firstName"><br>
+			<input type="text" name="firstName" required><br>
 			<label for="lastName">Last Name:</label>
-			<input type="text" name="lastName"><br>
+			<input type="text" name="lastName" required><br>
 			<label for="address">Address:</label>
-			<input type="text" name="address"><br>
+			<input type="text" name="address" required><br>
 			<label for="email">Email:</label>
-			<input type="text" name="email"><br>
-			<label for="contactNumber">Contact Number:</label>
+			<input type="email" name="email" required><br>
+			<label for="contactNumber" required>Contact Number:</label>
 			<input type="text" name="contactNumber"><br>
 			<input type="text" name="userType" value="Customer" hidden>
 			<input type="submit">

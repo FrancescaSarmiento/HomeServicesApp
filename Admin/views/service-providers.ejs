@@ -11,6 +11,18 @@
 		<% include partials/nav %>
         <div class="container">
 		<h2>Service Providers</h2>
+		<form action="/search-sp" method="post">
+			<input type="text" placeholder="First Name/Last Name" name="searchItem"><input type="submit" value="Search">
+		</form>
+
+		<form action="/search-sp-on-status" method="post">
+			<select name="status">
+				<option value="">Choose Account Type</option>
+				<option value="suspended">Suspended</option>
+				<option value="unsuspended">Unsuspended</option>
+			</select>
+			<input type="submit" value="Search">
+		</form>
 		<table class="table table-hover">
 			<tr>
 				<th>Username</th>
@@ -20,7 +32,8 @@
 				<th>Shift start</th>
 				<th>Shift end</th>
 				<th>Working Days</th>
-				<th>Availability</th>
+				<th>Rating</th>
+				<th>Earnings</th>
 			</tr>
 			<% serviceProviders.forEach(function(item){ %>
 				<tr>
@@ -31,7 +44,17 @@
 					<td><%= item.shiftStart %></td>
 					<td><%= item.shiftEnd %></td>
 					<td><%= item.workingDays %></td>
-					<td><%= item.availability %></td>
+					<td><%= item.rating %></td>
+					<td><%= item.earnings %></td>
+					<td>
+
+					<% if(item.status == '1'){ %>
+					<form action="/suspend" method="post"><input name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Suspend"></form>
+					<% }else{ %>
+					<form action="/unsuspend" method="post"><input name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
+					<% } %>
+
+					</td>
 				</tr>
 			<% }) %>
 		</table>

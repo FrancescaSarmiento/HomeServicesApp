@@ -1,3 +1,5 @@
+'use strict';
+
 Object.values = Object.values || (obj => Object.keys(obj).map(key => obj[key]));
 var express = require('express');
 var mysql = require('mysql');
@@ -61,7 +63,7 @@ app.get('/main', function(req, res){
 				});
 			});
 
-			connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId ORDER BY rating DESC LIMIT 5;", function(err, rows2){
+			connection.query("SELECT feedback.spId, userName, firstName, lastName, AVG(rating) 'rating' FROM service_provider JOIN USER ON idNum = spId JOIN feedback ON service_provider.spId = feedback.spId GROUP BY 1,3,4 ORDER BY 5 DESC LIMIT 5;", function(err, rows2){
 				if (err) { console.error(err); return }
 
 				var topSp = [];
@@ -69,7 +71,7 @@ app.get('/main', function(req, res){
 					topSp.push({
 						userName: item.userName,
 						spName: `${item.firstName} ${item.lastName}`,
-						rating: item.rating	
+						rating: item.rating
 					});
 				});
 
@@ -95,7 +97,37 @@ app.get('/main', function(req, res){
 							});
 						});
 
-						res.render('main', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices});	
+						connection.query(`SELECT bookingId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, amount, bookingStatus, dateFinished 
+							FROM booking b JOIN customer c ON c.custId = b.custId JOIN service_provider sp USING(spId) JOIN service USING(serviceId) JOIN transaction USING(bookingId) JOIN paymentdetails pd USING(transactionId)  
+							WHERE bookingStatus = 'done' ORDER BY dateFinished ASC LIMIT 10;`, function(err, rows4){
+							if (err){
+								console.log("Error in query" + err);
+								return;
+							}
+
+							var transactions = [];
+							rows4.forEach(function(item){
+								//console.log(item);
+								transactions.push({
+									bookingId: item.bookingId,
+									customerName: item.customerName,
+									spName: item.spName,
+									serviceType: item.serviceType,
+									amount: item.amount,
+									dateFinished: item.dateFinished
+								});
+							});
+
+							connection.query("SELECT SUM(amount) 'sum' from paymentdetails", function(err, rows5){
+								var sum = [];
+								rows5.forEach(function(item){
+									sum.push({sum: item.sum});
+								});
+
+								res.render('main', {customerUsers: customerUsers, topSp: topSp, topCustomers: topCustomers, topServices: topServices, transactions: transactions, sum: sum});		
+							});
+							
+						});
 					});
 				});
 			});
@@ -122,9 +154,43 @@ app.get('/error', function(req, res){
 
 app.post('/login', function(req, res){
 	var userName = req.body.userName;
-	var password = req.body.password;
 
-	connection.query("SELECT userName, userType, password FROM user WHERE status = 1", function(err, rows){
+	connection.query("SELECT userType, userName FROM user WHERE status = 1", function(err, rows){
+		if (err) { console.error(err); return }
+
+		var valid = false;
+		rows.forEach(function(item){
+			if(item.userName == userName){
+				valid = true;
+				var userType = item.userType;
+
+				if(userType == "Customer"){
+					res.redirect('http://127.0.0.1:80/login.php?userName='+req.body.userName);
+				}else if(userType == "Service Provider"){
+					res.redirect('http://127.0.0.1:8086/splogin.jsp?userName='+req.body.userName);
+				}else{
+					res.redirect('/password?userName='+req.body.userName);
+				}
+			}
+		});
+
+		if(!valid){
+			res.redirect('/error');
+		}
+	});
+});
+
+var uName = null;
+app.get('/password', function(req, res){
+	uName = req.query.userName;
+	res.render('password');
+});
+
+app.post('/password', function(req, res){
+	var password = req.body.password; 
+	var userName = uName;
+
+	connection.query("SELECT userName, password FROM user WHERE status = 1", function(err, rows){
 		if (err) { console.error(err); return }
 
 		var valid = false;
@@ -133,14 +199,8 @@ app.post('/login', function(req, res){
 				var userType = item.userType;
 				valid = true;
 
-				if(userType == "Customer"){
-					res.redirect('/main');
-				}else if(userType == "Service Provider"){
-					res.redirect('/main');
-				}else{
-					req.session.username = userName;
-					res.redirect('/main');
-				}
+				req.session.username = userName;
+				res.redirect('/main');
 			}
 		});
 
@@ -166,13 +226,24 @@ app.post('/register', function(req, res){
 	var userColumns = ['userName', 'password', 'userType', 'status']
 	var userValues = [req.body.userName, req.body.password, req.body.userType, 0];
 	connection.query("INSERT INTO user (??) VALUES (?)", [userColumns, userValues], function(err, results){
-		if (err) { console.error(err); return }
+		if (err) { 
+			console.error(err);
+
+			var message = {
+				text: "Username has been taken"
+			}
+			res.render('register', message);
+			return;
+		}
 
 		var customerColumns = ['custId', 'address', 'contactNumber', 'email', 'firstName', 'lastName'];
 		var customerValues = [results.insertId, req.body.address, req.body.contactNumber, req.body.email, req.body.firstName, req.body.lastName];
 		
 		connection.query("INSERT INTO customer (??) VALUES (?)", [customerColumns, customerValues], function(err, results){
-			if (err) { console.error(err); return }	
+			if (err) { 
+				console.error(err); 
+				return;
+			}	
 
 			res.render('register-success', customerValues);
 		});
@@ -191,13 +262,44 @@ app.post('/spregister', function(req, res){
 	var userColumns = ['userName', 'password', 'userType', 'status'];
 	var userValues = [req.body.userName, randomPassword, req.body.userType, 1];
 	connection.query("INSERT INTO user (??) VALUES (?)", [userColumns, userValues], function(err, results){
-		if (err) { console.error(err); return }
+		if (err) { 
+			console.error(err); 
+			
+			var message = {
+				text: "Username has been taken"
+			}
 
-		var spColumns = ['spId', 'rating', 'contactNumber', 'email', 'firstName', 'lastName', 'shift_start', 'shift_end', 'working_days'];
-		var spValues = [results.insertId, req.body.rating, req.body.contactNumber, req.body.email, req.body.firstName, req.body.lastName, '00:00:00', '00:00:00', ''];
+			res.render('spregister', message);
+			return;	
+		}
+
+		var spColumns = ['spId', 'contactNumber', 'email', 'firstName', 'lastName', 'shift_start', 'shift_end', 'working_days'];
+		var spValues = [results.insertId, req.body.contactNumber, req.body.email, req.body.firstName, req.body.lastName, '00:00:00', '00:00:00', ''];
 		
 		connection.query("INSERT INTO service_provider (??) VALUES (?)", [spColumns, spValues], function(err, results){
 			if (err) { console.error(err); return }	
+
+			var spEmail = req.body.email;
+
+			var nodemailer = require('nodemailer')
+			var transport = nodemailer.createTransport({
+			  service: 'gmail',
+			  auth: {
+			    user: 'riovannkolodzik@gmail.com',
+			    pass: 'RV.Kolodzik25'
+			  }
+			});
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: spEmail,
+		   		subject: 'Account',
+				text: 'You now have an account for Handy Zeb!' + 
+					' Your User Name is: ' + req.body.userName +
+					' Your Password is: ' + randomPassword +
+					' Try logging in to our site now! ' +
+					'www.handyzeb.org'
+			});
 
 			res.redirect('/service-providers');
 		});
@@ -274,18 +376,20 @@ app.get('/customers', function(req, res){
 app.get('/service-providers', function(req, res){
 	if(req.session.username){
 		var serviceProviders = [];
-		connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId", function(err, rows){
-			if (err){ console.log("Error in query"); return; }
+		connection.query("SELECT service_provider.spId, userName, firstName, lastName, email, contactNumber, shift_start, shift_end, status, working_days, AVG(rating) 'rating', SUM(amount) 'earnings' FROM service_provider LEFT JOIN USER ON idNum = spId LEFt JOIN booking USING(spId) LEFT JOIN TRANSACTION USING (bookingId) LEFT JOIN paymentdetails USING(transactionId) LEFT JOIN feedback USING(transactionId) GROUP BY 1, 3, 4, 5", function(err, rows){
+			if (err){ console.error(err); return; }
 
 
 			rows.forEach(function(item){
-				var availability;
-				if (item.availability == 1){
-					availability = "available";
-				}else{
-					availability = "unavailable";
+				var earnings = item.earnings;
+				var rating = item.rating;
+				if(item.earnings == null){
+					earnings = 0.00;
 				}
-				
+				if(item.rating == null){
+					rating = 0;
+				}
+
 				serviceProviders.push({
 					spId: item.spId,
 					userName: item.userName,
@@ -296,8 +400,9 @@ app.get('/service-providers', function(req, res){
 					shiftStart: item.shift_start,
 					shiftEnd: item.shift_end,
 					workingDays: item.working_days,
-					rating: item.rating,
-					availability: availability
+					rating: rating,
+					earnings: earnings,
+					status: item.status
 				});
 			});
 
@@ -332,23 +437,22 @@ app.get('/services', function(req, res){
 app.get('/transactions', function(req, res){
 	if(req.session.username){
 		var transactions = [];
-		connection.query("SELECT transactionId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, specification FROM transaction JOIN customer c ON c.custId = transaction.customerId JOIN service_provider sp USING(spId) JOIN service USING(serviceId)", function(err, rows){
+		connection.query("SELECT bookingId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, bookingStatus, dateStarted, dateFinished FROM booking b JOIN customer c ON c.custId = b.custId JOIN service_provider sp USING(spId) JOIN service USING(serviceId);", function(err, rows){
 			if (err){
-				console.log("Error in query");
+				console.log("Error in query" + err);
 				return;
 			}
 
 			rows.forEach(function(item){
 				//console.log(item);
 				transactions.push({
-					transactionId: item.transactionId,
+					bookingId: item.bookingId,
 					customerName: item.customerName,
 					spName: item.spName,
 					serviceType: item.serviceType,
-					specification: item.specification,
-					status: item.status,
-					dateStarted: item.date_started,
-					dateFinished: item.date_finished
+					bookingStatus: item.bookingStatus,
+					dateStarted: item.dateStarted,
+					dateFinished: item.dateFinished
 				});
 			});
 			res.render('transactions', {transactions: transactions});
@@ -363,10 +467,332 @@ app.post('/accept', function(req, res){
 	connection.query("UPDATE user SET status = '1' WHERE userName = '" + req.body.userName +"'", function(err, rows){
 		if (err){ console.error(err); return}
 
+		var customer = [];
+		connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE userName = '" + req.body.userName +"'", function(err, rows){
+			if (err){ console.error(err); return}
+
+			var customerEmail = null;
+			rows.forEach(function(item){
+				customerEmail = item.email;
+			});
+
+			//console.log(customerEmail);
+
+			var nodemailer = require('nodemailer')
+			var transport = nodemailer.createTransport({
+			  service: 'gmail',
+			  auth: {
+			    user: 'riovannkolodzik@gmail.com',
+			    pass: 'RV.Kolodzik25'
+			  }
+			});
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: customerEmail,
+		   		subject: 'Account',
+				text: 'Congrationlations, you can now use your Handy Zeb account! ' +
+				'Thank you for registering to our Home Service Application. Please use the link below to try loging in to our site. ' +
+				'www.handyzeb.org/login'
+			});
+		});
+
 		res.redirect('/main');
 	});
 });
 
 app.post('/reject', function(req, res){
 	//DELETE FROM table_name [WHERE Clause]
+	var values = [req.body.userId];
+	connection.query("DELETE FROM customer WHERE custId = ?", [values], function(err, rows){
+		if (err){ console.error(err); return }
+
+		connection.query("DELETE FROM user WHERE idNum = ?", [values], function(err, rows1){
+			if (err){ console.error(err); return }
+
+			var customer = [];
+			connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE userName = '" + req.body.userName +"'", function(err, rows){
+				if (err){ console.error(err); return}
+
+				var customerEmail = null;
+				rows.forEach(function(item){
+					customerEmail = item.email;
+				});
+
+				//console.log(customerEmail);
+
+				var nodemailer = require('nodemailer')
+				var transport = nodemailer.createTransport({
+				  service: 'gmail',
+				  auth: {
+				    user: 'riovannkolodzik@gmail.com',
+				    pass: 'RV.Kolodzik25'
+				  }
+				});
+
+			  	transport.sendMail({
+			    	from: 'Handy Zeb!',
+			    	to: customerEmail,
+			   		subject: 'Account',
+					text: 'We are so sorry, but your account has been rejected by the administrator. Please try again some other time.'
+				});
+			});
+
+			res.redirect('/main');
+		});
+	});
+});
+
+app.post('/suspend', function(req, res){
+	//DELETE FROM table_name [WHERE Clause]
+	connection.query("UPDATE user SET status = '0' WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+		if (err){ console.error(err); return}
+
+		var user = [];
+		connection.query("SELECT email FROM service_provider JOIN user ON idNum = spId WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+			if (err){ console.error(err); return}
+
+			var spEmail = null;
+			rows.forEach(function(item){
+				spEmail = item.email;
+			});
+
+			//console.log(customerEmail);
+
+			var nodemailer = require('nodemailer')
+			var transport = nodemailer.createTransport({
+			  service: 'gmail',
+			  auth: {
+			    user: 'riovannkolodzik@gmail.com',
+			    pass: 'RV.Kolodzik25'
+			  }
+			});
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: spEmail,
+		   		subject: 'Account',
+				text: 'We are so sorry, but your account has been suspended by the administrator. Please contact a HandyZeb Admin for clarifications.'
+			});
+		});
+
+		res.redirect('/service-providers');
+	});
+});
+
+app.post('/unsuspend', function(req, res){
+	//DELETE FROM table_name [WHERE Clause]
+	connection.query("UPDATE user SET status = '1' WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+		if (err){ console.error(err); return}
+
+		connection.query("SELECT email FROM service_provider JOIN user ON idNum = spId WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+			if (err){ console.error(err); return}
+
+			var spEmail = null;
+			rows.forEach(function(item){
+				spEmail = item.email;
+			});
+
+			//console.log(customerEmail);
+
+			var nodemailer = require('nodemailer')
+			var transport = nodemailer.createTransport({
+			  service: 'gmail',
+			  auth: {
+			    user: 'riovannkolodzik@gmail.com',
+			    pass: 'RV.Kolodzik25'
+			  }
+			});
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: spEmail,
+		   		subject: 'Account',
+				text: 'Your account has been unsuspended.' +
+					' You can now again use your account with your previous credentials. ' + 
+					'www.handyzeb.org'
+			});
+		});
+
+		res.redirect('/service-providers');
+	});
+});
+
+app.post('/search-customer', function(req, res){
+	var values = [req.body.searchItem];
+	var customers = [];
+	connection.query(`SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1' AND lastName LIKE '%${req.body.searchItem}%' OR firstName LIKE '%${req.body.searchItem}%'`, function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+			//console.log(item);
+			customers.push({
+				custId: item.custId,
+				firstName: item.firstName,
+				userName: item.userName,
+				lastName: item.lastName,
+				address: item.address,
+				email: item.email,
+				contactNumber: item.contactNumber
+			});
+		});
+
+		res.render('customers', {customers: customers});
+	});
+});
+
+app.post('/search-sp', function(req, res){
+	var values = [req.body.searchItem];
+	var sp = [];
+	connection.query(`SELECT booking.spId, userName, firstName, lastName, email, contactNumber, shift_start, shift_end, status, working_days, AVG(rating) 'rating', SUM(amount) 'earnings' FROM service_provider LEFT JOIN USER ON idNum = spId LEFt JOIN booking USING(spId) LEFT JOIN TRANSACTION USING (bookingId) LEFT JOIN paymentdetails USING(transactionId) LEFT JOIN feedback USING(transactionId) WHERE status = '1' AND lastName LIKE '%${req.body.searchItem}%' OR firstName LIKE '%${req.body.searchItem}%' GROUP BY 1, 3, 4, 5`, function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+			var earnings = item.earnings;
+			var rating = item.rating;
+			if(item.earnings == null){
+				earnings = 0.00;
+			}
+			if(item.rating == null){
+				rating = 0;
+			}
+
+			sp.push({
+				spId: item.spId,
+				userName: item.userName,
+				firstName: item.firstName,
+				lastName: item.lastName,
+				email: item.email,
+				contactNumber: item.contactNumber,
+				shiftStart: item.shift_start,
+				shiftEnd: item.shift_end,
+				workingDays: item.working_days,
+				rating: rating,
+				earnings: earnings,
+				status: item.status
+			});
+		});
+
+		res.render('service-providers', {serviceProviders: sp});
+	});
+});
+
+app.post('/search-sp-on-status', function(req, res){
+	var status = [req.body.status];
+	var sp = [];
+
+	if(status == 'suspended'){
+		status = 0;
+	}else{
+		status = 1;
+	}
+
+	connection.query(`SELECT booking.spId, userName, firstName, lastName, email, contactNumber, shift_start, shift_end, status, working_days, AVG(rating) 'rating', SUM(amount) 'earnings' FROM service_provider LEFT JOIN USER ON idNum = spId LEFt JOIN booking USING(spId) LEFT JOIN TRANSACTION USING (bookingId) LEFT JOIN paymentdetails USING(transactionId) LEFT JOIN feedback USING(transactionId) WHERE status = '${status}' GROUP BY 1, 3, 4, 5`, function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+				var earnings = item.earnings;
+				var rating = item.rating;
+				if(item.earnings == null){
+					earnings = 0.00;
+				}
+				if(item.rating == null){
+					rating = 0;
+				}
+
+				sp.push({
+					spId: item.spId,
+					userName: item.userName,
+					firstName: item.firstName,
+					lastName: item.lastName,
+					email: item.email,
+					contactNumber: item.contactNumber,
+					shiftStart: item.shift_start,
+					shiftEnd: item.shift_end,
+					workingDays: item.working_days,
+					rating: rating,
+					earnings: earnings,
+					status: item.status
+				});
+			});
+
+		res.render('service-providers', {serviceProviders: sp});
+	});
+});
+
+app.post('/search-transaction-on-date', function(req, res){
+
+	var values = [req.body.searchItem];
+	var status = [req.body.status];
+	var trans = [];
+	connection.query(`SELECT bookingId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, bookingStatus, dateStarted, dateFinished FROM booking b JOIN customer c ON c.custId = b.custId JOIN service_provider sp USING(spId) JOIN service USING(serviceId) 
+		WHERE dateFinished BETWEEN '${req.body.from}%' AND '${req.body.to}%'`, function(err, rows){
+		
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+			//console.log(item);
+			trans.push({
+				bookingId: item.bookingId,
+				customerName: item.customerName,
+				spName: item.spName,
+				serviceType: item.serviceType,
+				bookingStatus: item.bookingStatus,
+				dateStarted: item.dateStarted,
+				dateFinished: item.dateFinished
+			});
+		});
+
+		res.render('transactions', {transactions: trans});
+	});
+});
+
+app.post('/search-transaction-on-name', function(req, res){
+
+	var values = [req.body.searchItem];
+	var status = [req.body.status];
+	var trans = [];
+	connection.query(`SELECT bookingId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, bookingStatus, dateStarted, dateFinished FROM booking b JOIN customer c ON c.custId = b.custId JOIN service_provider sp USING(spId) JOIN service USING(serviceId) WHERE c.lastName LIKE '%${req.body.searchItem}%' OR c.firstName LIKE '%${req.body.searchItem}%' OR sp.lastName LIKE '%${req.body.searchItem}%' OR sp.firstName LIKE '%${req.body.searchItem}%'`, function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+			//console.log(item);
+			trans.push({
+				bookingId: item.bookingId,
+				customerName: item.customerName,
+				spName: item.spName,
+				serviceType: item.serviceType,
+				bookingStatus: item.bookingStatus,
+				dateStarted: item.dateStarted,
+				dateFinished: item.dateFinished
+			});
+		});
+
+		res.render('transactions', {transactions: trans});
+	});
+});
+
+app.post('/search-transaction-on-status', function(req, res){
+
+	var values = [req.body.searchItem];
+	var status = [req.body.status];
+	var trans = [];
+	connection.query(`SELECT bookingId, CONCAT(sp.firstName, ' ', sp.lastName) 'spName', CONCAT(c.firstName, ' ', c.lastName) 'customerName', serviceType, bookingStatus, dateStarted, dateFinished FROM booking b JOIN customer c ON c.custId = b.custId JOIN service_provider sp USING(spId) JOIN service USING(serviceId) WHERE bookingStatus = '${req.body.status}'`, function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+			//console.log(item);
+			trans.push({
+				bookingId: item.bookingId,
+				customerName: item.customerName,
+				spName: item.spName,
+				serviceType: item.serviceType,
+				bookingStatus: item.bookingStatus,
+				dateStarted: item.dateStarted,
+				dateFinished: item.dateFinished
+			});
+		});
+
+		res.render('transactions', {transactions: trans});
+	});
 });

@@ -1,21 +1,4 @@
 TODO:
 
--weekly trasaction query in index
-
--delete sp
-
--delete c
-
--edit s
--delete s
-
--email verification
-	-https://nodemailer.com/about/
-
--Client side validations
-
-
-
-PROBABLE FEATURES:
--Paypal
-	-https://github.com/paypal/PayPal-node-SDK
+-edit s ?
+-delete s ?
