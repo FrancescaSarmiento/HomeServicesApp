@@ -1,6 +1,8 @@
 package edu.slu.scis.webtek.demo.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +19,10 @@ public class Logout extends HttpServlet {
         
         HttpSession session = request.getSession();
         session.invalidate();
+        PrintWriter out = response.getWriter();
         
-        response.sendRedirect("CheckOut.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("SpLogin.jsp");  
+        rd.include(request,response);
+        out.print("You've successfully logged out.");
     }
 }

@@ -11,6 +11,17 @@ public class ServiceProvider {
     private byte rating;
     private boolean availability;
 
+    public ServiceProvider(){
+        idNum = 0;
+        userName = "GenericUser";
+        firstName = "First";
+        lastName = "Last";
+        email = "sample@email.com";
+        contactNumber = "09153478922";
+        workingDays = "Sun,Mon,Tue,Wed,Thu,Fri,Sat";
+        rating = 5;
+        availability = true;
+    }
     public ServiceProvider(int idNum, String userName, String firstName, String lastName, String email, String contactNumber, String workingDays, byte rating, boolean availability) {
         this.idNum = idNum;
         this.userName = userName;
@@ -97,6 +108,6 @@ public class ServiceProvider {
 
     @Override
     public String toString() {
-        return idNum+" "+userName+" "+firstName+" "+lastName+" "+contactNumber+" "+email+" "+workingDays+" "+rating+" "+email+" "+availability;
+        return userName+" "+firstName+" "+lastName+" "+contactNumber+" "+email+" "+workingDays+" "+rating+" "+email+" "+availability;
     }
 }

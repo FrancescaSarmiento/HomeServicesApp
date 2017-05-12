@@ -14,6 +14,6 @@
         <h2>You are not logged in yet.</h2>
         <p>You have to be logged in to shop in the store.</p>
 
-        <p>Please <a href="ShopLogin.jsp">log in</a> first.</p>
+        <p>Please <a href="SpLogin.jsp">log in</a> first.</p>
     </body>
 </html>

@@ -12,11 +12,11 @@
     <c:redirect url="NoSession.jsp"/>
 </c:if>
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>HandyZeb - Profile Page</title>
+        <title>Handy Zeb - Profile Page</title>
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="styles.css">
     </head>
@@ -24,7 +24,7 @@
         <jsp:include page="WEB-INF/fragments/banner.html"/>
         
         <p>Today is <%= new Date() %>.</p>
-        <h2>Hello, <b>${user}</b>!</h2>
+        <h2>Hello, <b>${spInfo.firstName}</b>!</h2>
         
         <div id="schedule">
             <h3>Schedule</h3>
@@ -33,8 +33,8 @@
         <div id="cart">
             <h3>Profile</h3>
             
-            <p><a href="AddServices">Add Services to Your Arsenal</a></p>
-            <p><a href="ChangePassword">Edit Your Profile</a></p>
+            <p><a href="UpdateInfo.jsp">Edit Your Profile</a></p>
+            <p><a href="Message">Check your messages</a></p>
             <p><a href="Logout">Logout</a></p>
         </div>
     </body>

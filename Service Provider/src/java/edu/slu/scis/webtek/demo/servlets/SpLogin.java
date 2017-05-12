@@ -37,6 +37,8 @@ public class SpLogin extends HttpServlet {
             ServiceProvider sp = buildSP(user);
             session.setAttribute("user", user);
             session.setAttribute("spInfo", sp);
+            RequestDispatcher rd = request.getRequestDispatcher("SpLogin.jsp");  
+            rd.include(request,response);
             String url = response.encodeRedirectURL("Profile.jsp");
             response.sendRedirect(url);
         }
@@ -50,7 +52,7 @@ public class SpLogin extends HttpServlet {
             String connUrl = "jdbc:mysql://localhost:3306/handyzebdb?user=root&password=";
             Connection conn = DriverManager.getConnection(connUrl);
             
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE userName=? AND password=? AND userType='Service Provider'");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE userName=? AND password=? AND userType='Service Provider' AND status='1'");
             ps.setString(1,user);  
             ps.setString(2,pass);  
 
@@ -74,26 +76,25 @@ public class SpLogin extends HttpServlet {
             String connUrl = "jdbc:mysql://localhost:3306/handyzebdb?user=root&password=";
             Connection conn = DriverManager.getConnection(connUrl);
             
-            PreparedStatement ps = conn.prepareStatement("SELECT idNum, userName, firstName, lastName, email, contactNumber, working_days, rating, availability "
-                    + "FROM user INNER JOIN service_provider "
-                    + "ON user.idNum = service_provider.spId WHERE userName=?");
+            PreparedStatement ps = conn.prepareStatement("SELECT user.idNum, user.userName, service_provider.firstName, service_provider.lastName, service_provider.email, service_provider.contactNumber, service_provider.working_days, service_provider.rating, service_provider.availability FROM user INNER JOIN service_provider ON user.idNum = service_provider.spId WHERE userName=?");
             ps.setString(1,user);  
 
             ResultSet rs = ps.executeQuery();
+            rs.first();
             
-            int id = Integer.parseInt(rs.getString("idNum"));
-            String userName = rs.getString("userName");
-            String first = rs.getString("firstName");
-            String last = rs.getString("lastName");
-            String email = rs.getString("email");
-            String contact = rs.getString("contactNumber");
-            String days = rs.getString("working_days");
-            byte rating = Byte.parseByte(rs.getString("rating"));
+            int id = Integer.parseInt(rs.getString(1));
+            String userName = rs.getString(2);
+            String first = rs.getString(3);
+            String last = rs.getString(4);
+            String email = rs.getString(5);
+            String contact = rs.getString(6);
+            String days = rs.getString(7);
+            byte rating = Byte.parseByte(rs.getString(8));
             boolean avail = false;
-            if(rs.getString("availability").equalsIgnoreCase("1"))
+            if(rs.getString(9).equalsIgnoreCase("1"))
                 avail = true;
-            
-            sp = new ServiceProvider(id,userName,first,last,email,contact,days,rating,avail);
+           
+            sp = new ServiceProvider(id, userName, first, last, email, contact, days, rating, avail);
             
             rs.close();
             ps.close();
@@ -102,7 +103,6 @@ public class SpLogin extends HttpServlet {
         }catch(ClassNotFoundException | SQLException e){
             System.out.println(e);
         }  
-        
         return sp;
     }
 }
