@@ -7,8 +7,9 @@
 
 <?php 
     $bookings = getBooking($conn, $userID);
-    $currentMonthBookings = [];
-    $nextMonthBookings = [];
+if(!empty($bookings)){
+    $currentbooking = [];
+    $nextbooking = [];
     //gets today's date
     $date = time();
  
@@ -18,22 +19,21 @@
     
     while($rows = mysqli_fetch_assoc($bookings)){
         $dateTime = new DateTime($rows['reserved_date']);
-        if($dateTime->format('m') == $month){
-            $id = $rows['bookingId'];
-            $currentMonthBookings[$id] = $dateTime->format('d');
-        } elseif ($dateTime->format('m') > $month ){
-            $id = $rows['bookingId'];
-            $nextMonthBookings[$id] = $dateTime->format('d');
+        $m = $dateTime->format('m');
+        $d = $dateTime->format('d');
+        if ($m == date('m',$date)){
+            $currentbooking[] = array('month'=>$m, 'day'=>$d);
+        } else {
+            $nextbooking[] = array('month'=>$m, 'day'=>$d);
         }
     }
     
     if(filter_input(INPUT_GET, 'value') == "current"){
         $month;
     } elseif (filter_input(INPUT_GET, 'value') == "next"){
-        $month++;
+        $month+=1;
     }
-    
-    
+       
     //first day of the month
     $firstDay = mktime(0,0,0,$month,1,$year);
 
@@ -86,8 +86,7 @@ frag;
                 </th>
                 <th colspan=5 class="center"><?php echo "$monthName $year" ?></th>
                 <th class="center">
-                    <?php 
-                     //   var_dump(filter_input(INPUT_GET,'value'));
+                    <?php
                         if (!isset($_GET['value']) || $_GET['value'] == 'current'){
                         echo <<<frag
                             <a class="btn btn-default btn-sm" href="?page=home&value=next">
@@ -127,14 +126,38 @@ frag;
     
     //count up the days, until the end of month
     for ($i = $dayNum; $i <= $daysInMonth; $i++ ){
-        if($day == $i && $month == date('m',$date)){
-            echo "<td style='background-color: #ff9b9b'><span class='calNum'>$i</span> </td>";
-        } elseif ($month == date('m',$date) && in_array($i, $currentMonthBookings)) {
-            $key = array_search($i, $currentMonthBookings);
-            echo "<td style='background-color: yellow'>$i <a class='btn btn-default' href='?page=home&value=current&id=$key'>Booking Details</a></td>";
-        } elseif ($month !== date('m',$date) && in_array ($i, $nextMonthBookings)){
-            $key = array_search($i, $nextMonthBookings);
-            echo "<td style='background-color: yellow'>$i <a class='btn btn-default' href='?page=home&value=next&id=$key'>Booking Details</a></td>";
+        if($day == $i && $month == date('m',$date) && in_array($i, array_column($currentbooking, 'day'))){
+            echo <<<frag
+                <td style='background-color: #ff9b9b'>$i
+                    <form method="post" action="">
+                        <input type="hidden" name="month" value="$month">
+                        <input type="hidden" name="id" value="$i">      
+                        <input class="btn btn-default" type="submit" value="Booking Details"/>
+                    </form>
+                </td>
+frag;
+        } elseif ($day == $i && $month == date('m',$date)) {
+            echo "<td style='background-color: #ff9b9b'>$i </td>";    
+        } elseif (in_array($i, array_column($currentbooking,'day')) && $month == date('m', $date)) {
+            echo <<<frag
+                <td style='background-color: yellow'>$i 
+                    <form method="post" action="">
+                        <input type="hidden" name="month" value="$month">
+                        <input type="hidden" name="id" value="$i">      
+                        <input class="btn btn-default" type="submit" value="Booking Details"/>
+                    </form>
+                </td>
+frag;
+        } elseif ($month !== date('m',$date) && in_array($i, array_column($nextbooking,'day'))){
+            echo <<<frag
+                <td style='background-color: yellow'>$i 
+                    <form method="post" action="">
+                        <input type="hidden" name="month" value="$month">
+                        <input type="hidden" name="id" value="$i">      
+                        <input class="btn btn-default" type="submit" value="Booking Details"/>
+                    </form>
+                </td>
+frag;
         } else {
             echo "<td>$i</td>"; 
         }
@@ -154,6 +177,6 @@ frag;
     }
     
     echo "</tr></table>";
-    if(filter_input(INPUT_GET, 'id') !== null){
-        getBookingDetails($conn, filter_input(INPUT_GET, 'id'));
-    }
+
+require 'bookings.php';
+}

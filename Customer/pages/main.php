@@ -7,7 +7,7 @@ session_start();
 
 //checks if session expired
 if($_SESSION['last_activity'] < time()-$_SESSION['expire_time']){
-    echo "<script>alert('Your session has expired, please login again');window.location.assign('../login.php')</script>";
+    header('Location: expire.php');
 } else {
     $_SESSION['last_activity'] = time();
 }
@@ -29,34 +29,25 @@ require 'nav.php';
 
 switch ($page){
     case "home":
-        echo "<div class='container'>";
         require_once 'home.php';
-        echo "</div>";
         break;
     case "about":
-        echo "<div class='container'>";
         require_once 'about.php';
-        echo "</div>";
         break;
     case "services";
-        echo "<div class='container'>";
         require_once 'services.php';
-        echo "</div>";
         break;
     case "messages";
-        echo "<div class='container'>";
         require_once 'messages.php';
-        echo "</div>";
         break;
     case "acctInfo":
-        echo "<div class='container'>";
         require_once 'acctInfo.php';
-        echo "</div>";
         break;
     case "transHist":
-        echo "<div class='container'>";
         require_once 'transHist.php';
-        echo "</div>";
+        break;
+    case "notifications":
+        require_once 'notifications.php';
         break;
 }
 

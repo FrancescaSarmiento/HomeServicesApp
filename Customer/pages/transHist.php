@@ -12,31 +12,32 @@
     while($rows = mysqli_fetch_assoc($transHist)){
         $dateTime = new DateTime($rows['timestamp']);
         $id = $rows['transactionId'];
-        $transactionHist[$id] = array('month' => $dateTime->format('m'), 'day' => $dateTime->format('d'), 'year' => $dateTime->format('Y'));
+        $transId = $rows['transactionId'];
+        $info = array('month' => $dateTime->format('m'), 'day' => $dateTime->format('d'), 'year' => $dateTime->format('Y'), 'transactionId' => $transId);
+        $transactionHist[] = $info;
     }
     
-    var_dump($transactionHist);
     //gets today's date
-    $date = time();
+    $date = new DateTime('now');
 ?>
-    <form method="get" action="../includes/genCal.php">
+    <form method="post" action="">
         <select name="month">
-            <option value="<?php echo date('m',$date) ?>"><?php echo date('F',$date) ?></option>
+            <option value="<?php echo $date->format('m') ?>"><?php echo $date->format('F') ?></option>
             <option disabled="disabled">------------</option>
             <?php 
             for($i = 1; $i <= 12; $i++){
                 $monthName = DateTime::createFromFormat('m', $i)->format('F'); 
-                echo "<option>$monthName</option>";
+                echo "<option value='$i'>$monthName</option>";
             }
             ?>
         </select>
         <select name="year">
-            <option value="<?php echo date('Y',$date) ?>"><?php echo date('Y',$date) ?></option>
+            <option value="<?php echo $date->format('Y') ?>"><?php echo $date->format('Y') ?></option>
             <option disabled="disabled">------------</option>
             <?php
-            for($i = date('Y',$date); $i > date('Y',$date)-10; $i--){
+            for($i = $date->format('Y'); $i > $date->format('Y')-10; $i--){
                 if($i >= 2008){
-                    echo "<option>$i</option>";
+                    echo "<option value='$i'>$i</option>";
                 }
             }
             ?>
@@ -44,16 +45,16 @@
         <button type="submit">Filter</button>
     </form>
 <?php
-    if(filter_input(INPUT_GET, 'month') == null){
-        $month = date('m',$date);
-        $year = date('Y',$date);
+    if(filter_input(INPUT_POST, 'month') == null){
+        $month = $date->format('m');
+        $year = $date->format('Y');
     } else {
-        $month = filter_input(INPUT_GET, 'month');
-        $year = filter_input(INPUT_GET, 'year');
+        $month = filter_input(INPUT_POST, 'month');
+        $year = filter_input(INPUT_POST, 'year');
     }
 
     //first day of the month
-    $firstDay = mktime(0,0,0, $month,1,$year);
+    $firstDay = mktime(0,0,0, intval($month),1,$year);
 
     //month name
     $monthName = date('F', $firstDay);
@@ -85,22 +86,18 @@
     }
     
     //determine how many days in current month
-    $daysInMonth = cal_days_in_month(0, date('m',$date), date('Y',$date));
+    $daysInMonth = cal_days_in_month(0, $date->format('m'), $date->format('Y'));
     
     //make cal table
 ?>
         <table border=1 style="float: left">
             <tr height="50px">
-                <th></th>
-                <th colspan=5 style="text-align: center">
-                    <?php  
-                    $mName = date('F', mktime(0, 0, 0, $month, 1,0));
-                    $yName = date('Y', mktime(0, 0, 0, 0, 0, $year+1));
-                    echo "$mName $yName";
+                <th colspan=7 style="text-align: center">
+                    <?php 
+                    echo "$monthName $year";
                     ?></th>
-                <th></th>
             </tr>
-            <tr style="background-color: lightblue; text-align: center;" height="100px">
+            <tr class="home-calendar" height="100px">
                 <td width = 110px>Sun</td>
                 <td width = 110px>Mon</td>
                 <td width = 110px>Tue</td>
@@ -115,6 +112,7 @@
     //count days in the week, up to 7
     $dayCount = 1;
     echo "<tr height = 100px>";
+    
     //blank days before beginning of first month
     while ( $start > 0 ) {
         echo "<td style='background-color: lightgrey'></td>"; 
@@ -124,14 +122,30 @@
     
     //sets first day of the month to 1
     $dayNum = 1;
-    
+
     //count up the days, until the end of month
     for ($i = $dayNum; $i <= $daysInMonth; $i++ ){
-        if(date('d', $date) == $i && $month == date('m',$date)){
-            echo "<td style='background-color: #ff9b9b'><span class='calNum'>$i</span> </td>";
-        } elseif($month == $transactionHist[3]['month'] && in_array($i, $transactionHist)){
-            $key = array_search($i, $transactionHist);
-            echo "<td style='background-color: yellow'>$i <a class='btn btn-default' href='?page=home&value=current&id=$key'>Booking Details</a></td>";
+        if($date->format('d') == $i && $month == $date->format('m') && $year == $date->format('Y')){
+            echo "<td style='background-color: #ff9b9b'>$i</span> </td>";
+        } elseif (in_array($month,array_column($transactionHist, 'month')) && in_array($i,array_column($transactionHist, 'day')) && in_array($year,array_column($transactionHist, 'year'))) {
+            for ($a = 0; $a < count($transactionHist); $a++){
+                if($transactionHist[$a]['month'] == $month && $transactionHist[$a]['day'] == $i){
+                    $key = $transactionHist[$a]['transactionId'];
+                }
+            }
+            
+            echo <<<frag
+                <td style='background-color: yellow'>$i 
+                    <form method="post" action="">
+                        <input type="hidden" name="transId" value="$key">    
+                        <input type="hidden" name="month" value="$month">
+                        <input type="hidden" name="day" value="$i">
+                        <input type="hidden" name="year" value="$year">
+                        <input class="btn btn-default" type="submit" value="More details"/>
+                    </form>
+                </td>
+frag;
+
         } else {
             echo "<td>$i</td>";
         }
@@ -150,6 +164,5 @@
     }
     
     echo "</tr></table>";
-    if(filter_input(INPUT_GET, 'id') !== null){
-        getTransactionDetails($conn, filter_input(INPUT_GET, 'id'));
-    }
+    
+require 'transactionHist.php';
