@@ -17,8 +17,9 @@ function insertBooking($service, $userID, $spId,$bookdate, $conn){
     $null = null;
     $pending='pending';
     $serviceid = "SELECT serviceId from service where servicetype='$service';";
-        $serviceidresult=mysqli_query($conn, $serviceid) or die();
-        $s = mysqli_fetch_assoc($serviceidresult);
+    $serviceidresult=mysqli_query($conn, $serviceid) or die();
+    $s = mysqli_fetch_assoc($serviceidresult);
+
     $sid = $s['serviceId'];
     $insertquery = "INSERT INTO booking (bookingId, custId, spId, serviceId, bookingStatus, reserved_date, dateStarted, dateFinished) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_stmt_init($conn);
@@ -31,21 +32,34 @@ function insertBooking($service, $userID, $spId,$bookdate, $conn){
     return;
 }
 
-function getUserProfile($spId, $conn){
+function checkBookingIfValid($service, $useID, $spId, $bookdate){
+global $conn;
+
+$query = "SELECT spId, name from (SELECT concat(firstName,' ', lastName) as name, spId from service_provider join sp_service using(spId) join service using(serviceId) where serviceType='$service') as sps where spId NOT IN(SELECT spId FROM booking join service_provider  using(spId) where reserved_date like '$bookdate %' and bookingStatus NOT IN('done','cancelled')) and spId = '$spId'";
+    $result = mysqli_query($conn, $query) or die();
+
+    if (mysqli_num_rows($result)>0){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getUserProfile($spId, $service, $conn){
     $query1 = "SELECT spId, firstName, lastName, avg(rating) as rating from service_provider join feedback using(spId) group by 1, 2, 3";
     $result1 = mysqli_query($conn, $query1) or die(mysqli_error($conn));
-    $query2 = "SELECT concat(firstName,' ',lastName) as name, servicetype from service_provider join sp_service using(spId) join service using(serviceId) where spId=$spId";
+    $query2 = "SELECT concat(firstName,' ',lastName) as name, servicetype from service_provider join sp_service using(spId) join service using(serviceId) where spId='$spId'";
     $result2 = mysqli_query($conn, $query2) or die(mysqli_error($conn));
 
     while($row = mysqli_fetch_assoc($result1)){
-        echo <<<sp
+        echo <<<spinfo
         <div>
             <p> {$row['firstName']} {$row['lastName']}
             </p>
             <p> Rating: {$row['rating']}</p>
         </div>
 
-sp;
+spinfo;
     }
 }
 
