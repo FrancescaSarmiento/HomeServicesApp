@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2017 at 08:56 AM
+-- Generation Time: May 13, 2017 at 03:56 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -55,19 +55,25 @@ CREATE TABLE `booking` (
   `bookingStatus` enum('pending','ongoing','done','cancelled','accepted','rejected') NOT NULL DEFAULT 'pending',
   `reserved_date` datetime NOT NULL,
   `dateStarted` datetime DEFAULT NULL,
-  `dateFinished` datetime DEFAULT NULL
+  `dateFinished` datetime DEFAULT NULL,
+  `notifTimestamp` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`bookingId`, `custId`, `spId`, `serviceId`, `bookingStatus`, `reserved_date`, `dateStarted`, `dateFinished`) VALUES
-(3, 7, 11, 3, 'pending', '2017-05-12 10:00:00', NULL, NULL),
-(4, 7, 12, 4, 'pending', '2017-05-10 10:00:00', NULL, NULL),
-(5, 7, 12, 6, 'ongoing', '2017-05-11 08:00:00', '2017-05-09 09:30:00', NULL),
-(6, 7, 11, 5, 'pending', '2017-06-02 13:00:00', NULL, NULL),
-(7, 7, 11, 5, 'done', '2017-05-07 14:00:00', '2017-05-07 15:30:00', '2017-05-07 18:51:00');
+INSERT INTO `booking` (`bookingId`, `custId`, `spId`, `serviceId`, `bookingStatus`, `reserved_date`, `dateStarted`, `dateFinished`, `notifTimestamp`) VALUES
+(3, 7, 11, 3, 'pending', '2017-05-12 10:00:00', NULL, NULL, '2017-05-11 17:13:33'),
+(4, 7, 12, 4, 'ongoing', '2017-05-10 10:00:00', '2017-05-10 15:00:00', NULL, '2017-05-11 17:11:03'),
+(5, 7, 12, 6, 'ongoing', '2017-05-11 08:00:00', '2017-05-09 09:30:00', NULL, '2017-05-11 17:11:03'),
+(7, 7, 11, 5, 'done', '2017-05-07 14:00:00', '2017-05-07 15:30:00', '2017-05-07 18:51:00', '2017-05-11 17:11:03'),
+(8, 7, 12, 2, 'accepted', '2017-05-23 00:00:00', NULL, NULL, '2017-05-11 17:11:03'),
+(9, 7, 12, 5, 'rejected', '2017-05-22 00:00:00', NULL, NULL, '2017-05-11 17:11:03'),
+(11, 7, 11, 6, 'pending', '2017-06-02 08:00:00', NULL, NULL, NULL),
+(12, 7, 12, 6, 'ongoing', '2017-05-09 00:00:00', '2017-05-09 11:00:00', '2017-05-09 16:00:00', NULL),
+(13, 7, 12, 6, 'ongoing', '2017-05-13 03:00:00', NULL, NULL, NULL),
+(14, 7, 11, 4, 'pending', '2017-05-14 00:00:00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -142,7 +148,14 @@ CREATE TABLE `message` (
 --
 
 INSERT INTO `message` (`messageId`, `senderId`, `receiverId`, `messageBody`, `timeSent`, `timeReceived`, `timeRead`) VALUES
-(1, 7, 11, 'I would like to inquire more specifically on the services you can provide', '2017-05-08 06:00:00', NULL, NULL);
+(1, 7, 11, 'I would like to inquire more specifically on the services you can provide', '2017-05-08 06:00:00', NULL, NULL),
+(45, 7, 11, 'asdfasdfasdf', '2017-05-11 13:46:16', NULL, NULL),
+(46, 7, 11, 'asdf', '2017-05-11 13:50:28', NULL, NULL),
+(47, 7, 11, 'asdf', '2017-05-11 13:51:13', NULL, NULL),
+(48, 7, 11, 'asdf', '2017-05-11 13:51:19', NULL, NULL),
+(49, 7, 11, 'asdfsd', '2017-05-11 13:53:37', NULL, NULL),
+(62, 12, 7, 'asdfsdfasdf', '2017-05-11 11:00:00', NULL, NULL),
+(63, 7, 12, 'wadfasd', '2017-05-11 06:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -154,7 +167,7 @@ CREATE TABLE `paymentdetails` (
   `invoiceId` int(11) NOT NULL,
   `transactionId` int(11) NOT NULL,
   `serviceMade` mediumtext NOT NULL,
-  `amount` decimal(8,3) NOT NULL
+  `amount` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -162,7 +175,9 @@ CREATE TABLE `paymentdetails` (
 --
 
 INSERT INTO `paymentdetails` (`invoiceId`, `transactionId`, `serviceMade`, `amount`) VALUES
-(1, 3, 'Painted three rooms', '200.000');
+(1, 3, 'Painted three rooms', '200.00'),
+(2, 3, 'painted the garage', '500.00'),
+(3, 4, 'Fixed doorway', '300.00');
 
 -- --------------------------------------------------------
 
@@ -222,23 +237,24 @@ INSERT INTO `service_provider` (`spId`, `firstName`, `lastName`, `email`, `conta
 
 CREATE TABLE `sp_service` (
   `serviceId` int(11) NOT NULL,
-  `spId` int(11) NOT NULL
+  `spId` int(11) NOT NULL,
+  `fixedRate` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `sp_service`
 --
 
-INSERT INTO `sp_service` (`serviceId`, `spId`) VALUES
-(1, 11),
-(6, 11),
-(1, 12),
-(2, 12),
-(3, 12),
-(4, 12),
-(5, 12),
-(6, 12),
-(7, 12);
+INSERT INTO `sp_service` (`serviceId`, `spId`, `fixedRate`) VALUES
+(1, 11, '0.00'),
+(6, 11, '0.00'),
+(1, 12, '0.00'),
+(2, 12, '0.00'),
+(3, 12, '0.00'),
+(4, 12, '0.00'),
+(5, 12, '0.00'),
+(6, 12, '0.00'),
+(7, 12, '0.00');
 
 -- --------------------------------------------------------
 
@@ -259,7 +275,8 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`transactionId`, `bookingId`, `timestamp`, `spStatus`, `custStatus`) VALUES
-(3, 7, '2017-05-07 09:50:00', 'pending', 'pending');
+(3, 7, '2017-05-07 09:50:00', 'approved', 'approved'),
+(4, 12, '2017-05-09 01:13:08', 'approved', 'approved');
 
 -- --------------------------------------------------------
 
@@ -272,26 +289,27 @@ CREATE TABLE `user` (
   `userName` varchar(15) NOT NULL,
   `password` varchar(20) NOT NULL,
   `userType` enum('Administrator','Customer','Service Provider') NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0'
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `balance` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`idNum`, `userName`, `password`, `userType`, `status`) VALUES
-(1, 'jeddeh', 'password', 'Administrator', 0),
-(2, 'muzhnik', 'password', 'Customer', 1),
-(3, 'shiru', 'password', 'Customer', 1),
-(4, 'moo_man', 'password', 'Customer', 1),
-(5, 'pjd', 'password', 'Customer', 1),
-(6, 'japan', 'password', 'Customer', 1),
-(7, 'samiam', 'password', 'Customer', 1),
-(8, 'miggy', 'password', 'Customer', 1),
-(9, 'rvk', 'password', 'Customer', 1),
-(10, 'prodijay', 'password', 'Customer', 1),
-(11, 'bhosx_zeb', 'password', 'Service Provider', 1),
-(12, 'papa_johnny', 'password', 'Service Provider', 1);
+INSERT INTO `user` (`idNum`, `userName`, `password`, `userType`, `status`, `balance`) VALUES
+(1, 'jeddeh', 'password', 'Administrator', 0, '0.00'),
+(2, 'muzhnik', 'password', 'Customer', 1, '0.00'),
+(3, 'shiru', 'password', 'Customer', 1, '0.00'),
+(4, 'moo_man', 'password', 'Customer', 1, '0.00'),
+(5, 'pjd', 'password', 'Customer', 1, '0.00'),
+(6, 'japan', 'password', 'Customer', 1, '0.00'),
+(7, 'samiam', 'password', 'Customer', 1, '0.00'),
+(8, 'miggy', 'password', 'Customer', 1, '0.00'),
+(9, 'rvk', 'password', 'Customer', 1, '0.00'),
+(10, 'prodijay', 'password', 'Customer', 1, '0.00'),
+(11, 'bhosx_zeb', 'password', 'Service Provider', 1, '0.00'),
+(12, 'papa_johnny', 'password', 'Service Provider', 1, '0.00');
 
 --
 -- Indexes for dumped tables
@@ -391,7 +409,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `bookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `feedback`
 --
@@ -401,12 +419,12 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `messageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 --
 -- AUTO_INCREMENT for table `paymentdetails`
 --
 ALTER TABLE `paymentdetails`
-  MODIFY `invoiceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `invoiceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `service`
 --
@@ -416,7 +434,7 @@ ALTER TABLE `service`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `user`
 --
