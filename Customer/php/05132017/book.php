@@ -16,8 +16,8 @@ echo "Service: $service <br>";?>
 <html>
 <body>
     <form action="" method="post">
-<button type="submit" name="confirm">Confirm</button></form>
-<a href="spservice.php?type=<?php echo $service ?>" type="button">Cancel</a>
+        <button type="submit" name="confirm">Confirm</button></form>
+        <a href="spservice.php?type=<?php echo $service ?>" type="button">Cancel</a>
 </body>
 </html>
 
@@ -26,15 +26,18 @@ echo "Service: $service <br>";?>
    
     #function insertinto($bookdate, $spname, $service, $spId, $userID, $conn){
    if(isset( $_POST['confirm'])){
+       $validBooking = checkBookingIfValid($service, $userID, $spId, $bookdate);
         
-        insertBooking($service, $userID, $spId,$bookdate, $conn);
-        header('Location: booksuccessful.php');
-    } else {
-        echo "";
+        if ($validBooking == true){
+            insertBooking($service, $userID, $spId, $bookdate, $conn);
+            header ('Location: booksuccessful.php');
+        } else {
+            header ('Location: bookfail.php');
+        }
     }
 
     if(isset($_POST['cancel'])){
-        header('Location: spservice.php?type='.$service.'' );
+       header('Location: spservice.php?type='.$service.'' );
     }
 /*
 function insertbooking($date, $spname, $service, $userid, $spId, $conn){

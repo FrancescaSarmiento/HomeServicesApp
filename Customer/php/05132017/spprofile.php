@@ -11,7 +11,8 @@ require '../includes/functions.php';
 <?php
 
 $spId = $_GET['spid'];
-getUserProfile($spId, $conn);
+$service = $_GET['type'];
+getUserProfile($spId, $service, $conn);
 ?>
 
 </body>
