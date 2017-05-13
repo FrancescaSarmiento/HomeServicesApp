@@ -5,7 +5,62 @@
 
 <h1>Welcome <?php echo "{$_SESSION['firstName']}  {$_SESSION['lastName']}" ?>!</h1>
 
-<?php 
+<?php
+    $confirm = getConfirm($conn, $userID);
+    
+if(!empty($confirm)){
+    
+    while ($rows = $confirm->fetch_assoc()){
+        $detail = mysqli_prepare($conn, "select * from paymentdetails join transaction using(transactionId) where transactionId = ?");
+        $detail->bind_param('i', $rows['transactionId']);
+        $detail->execute();
+        $detailResult = $detail->get_result();
+        
+        $amt = mysqli_prepare($conn, "select sum(amount) as total from paymentdetails join transaction using(transactionId) where transactionId = ?");
+        $amt->bind_param('i', $rows['transactionId']);
+        $amt->execute();
+        $total = $amt->get_result()->fetch_assoc();
+        
+        $mD = new DateTime($rows['timestamp']);
+        $dateOfTrans = $mD->format('h:i a');
+        $tranid = $rows['transactionId'];
+                echo <<<frag
+                    <div id="bookingDetails">
+                        <div style='border-top: solid;'></div>
+                        <p>Service Provider: {$rows['firstName']} {$rows['lastName']}</p>
+                        <p>Service Type: {$rows['serviceType']}</p>
+                        <p>Timestamp: $dateOfTrans</p>
+                        <p>Transaction Details:
+                            <table>
+                                <tr>
+                                    <th>Service Details:</th>
+                                    <th>Amount (&#8369;)</th>
+                                </tr>
+frag;
+                        
+                while ($rR = $detailResult->fetch_assoc()){
+                    echo "<tr>";
+                    echo "<td>{$rR['serviceMade']}</td>";
+                    echo "<td>{$rR['amount']}</td>";
+                    echo "</tr>";
+                }
+                $row = $detailResult->fetch_assoc();
+                echo <<<frag
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>{$total['total']}</td>
+                                    
+                            </table>
+frag;
+                echo <<<frag
+                            <form action="../includes/confirm.php" method="post">
+                                <input type="hidden" value="$tranid" name="transid">
+                                <input class="btn btn-primary" type="submit" value="Confirm payment" name="confirm">
+                            </form>
+                        </p>
+frag;
+    }
+}   
     $bookings = getBooking($conn, $userID);
 if(!empty($bookings)){
     $currentbooking = [];

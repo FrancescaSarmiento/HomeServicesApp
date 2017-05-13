@@ -177,3 +177,16 @@ function getUserProfile($spId, $conn){
 sp;
     }
 }
+
+function getConfirm($conn, $userId){
+    $query = mysqli_prepare($conn, "select * from transaction t join booking b using(bookingId) join service_provider sp using(spId) join service using(serviceId) where custId = ? and custStatus = 'pending'");
+    $query->bind_param('i', $userId);
+    $query->execute();
+    $result = $query->get_result();
+    if(!empty($result)){
+        echo "<h2>Transactions that needs confirmation:</h2>";
+        return $result;
+    } else {
+        return false;
+    }
+}

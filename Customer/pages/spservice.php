@@ -1,6 +1,5 @@
 <?php
 
-
 $availday = isset($_GET['dayis'])? $_GET['dayis'] : null;
 $dayExtract = strtotime($availday);
 $dayOfWeek = date('D', $dayExtract);
