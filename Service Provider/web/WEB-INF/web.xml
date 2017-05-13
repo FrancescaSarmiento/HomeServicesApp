@@ -30,6 +30,71 @@
         <url-pattern>/EditProfile</url-pattern>
     </servlet-mapping>
     <session-config>
+        
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updateInfoServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.updateInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AcceptServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.AcceptServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.CancelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StartServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.StartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FinishServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.FinishServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RejectServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.RejectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ApproveServlet</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.servlets.ApproveServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateInfoServlet</servlet-name>
+        <url-pattern>/updateInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AcceptServlet</servlet-name>
+        <url-pattern>/AcceptServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelServlet</servlet-name>
+        <url-pattern>/CancelServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StartServlet</servlet-name>
+        <url-pattern>/StartServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinishServlet</servlet-name>
+        <url-pattern>/FinishServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RejectServlet</servlet-name>
+        <url-pattern>/RejectServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ApproveServlet</servlet-name>
+        <url-pattern>/ApproveServlet</url-pattern>
+    </servlet-mapping>
         <session-timeout>
             30
         </session-timeout>
