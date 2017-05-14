@@ -7,6 +7,11 @@ html, body{
 
 /**all header things**/
 
+.headerContents img{
+	float: left;
+	width: 4em;
+}
+
 .site-header{
 	height: 3em;
 	background-color: #34495e;
@@ -109,7 +114,7 @@ ul{
 
 .bannerButtons{
 	margin-top: 2em;
-	width: 100%;
+	width: 97%;
 }
 
 .bigButton{
@@ -137,7 +142,7 @@ ul{
 }
 
 .one{
-	margin-left: 35%;
+	margin-left: 31%;
 
 }
 
@@ -298,7 +303,7 @@ ul{
     background-image: url("bg2.jpg");
    
     /* Full height */
-    height: 800px; 
+    height: 1100px; 
 
     /* Create the parallax scrolling effect */
     background-attachment: fixed;
@@ -315,11 +320,238 @@ ul{
 	color: white;
 	font-size: 1.30em;
 	margin: 0 150px;
+	text-indent: 70px;
 	text-align: justify;
-	text-indent: 50px;
 	line-height: 1.70em;
 }
 
+/**services**/
+
+.sList{
+	width: 21%;
+	text-align: center;
+
+}
+
+.sHeader{
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 1.20em;
+
+}
+
+.serviceList li{
+	padding: 0.6em 0;
+
+}
+
+#help{
+	overflow: hidden;
+}
+
+.helppara{
+	text-align: justify;
+}
+
+a:hover{
+	text-decoration: underline;
+}
 /**references, credits to
 
-social media icons - http://azmind.com/free-social-icons-biggest-list/	  	
+social media icons - http://azmind.com/free-social-icons-biggest-list/	  	***/
+
+
+@media only screen and (max-width: 1024px){
+	.one{
+		margin-left: 25%;
+	}
+
+}
+
+@media only screen and (max-width: 768px){
+
+
+	.bannerHeader{
+		width: 95%;
+	}
+	.bg2{
+		height: 1400px;
+	}
+
+	.one{
+		margin-left: 15%;
+	}
+
+	.popService{
+		height: 13em;
+		width: 13em;	
+	}
+
+	.service-title{
+		font-size: 1.40em;
+		font-weight: 700;
+		margin-top: 70%;
+	}
+
+	.helppara{
+		padding: 0 5% 0 5%;
+	}
+
+	.navContainer{
+		padding-left: 0;
+	}
+
+}
+
+@media only screen and (max-width: 665px){
+
+	.bannerHeader{
+		width: 95%;
+	}
+
+	header h1{
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 635px){
+
+	.bannerHeader{
+		width: 92%;
+	}
+
+	.one{
+		margin-left: 28%;
+
+	}
+
+	.two{
+		margin-top: 5px;
+		margin-left: 28%;
+
+	}
+
+	.bannerButtons{
+		margin-top: 0;
+	}
+
+	.popService{
+		height: 12em;
+		width: 12em;
+		margin: 1em 0 0 1em;
+	}
+
+}
+
+@media only screen and (max-width: 425px){
+	.bg2{
+		height: 1100px;
+	}
+
+	.one{
+
+	}
+
+	.popService{
+		height: 8em;
+		width: 8em;
+		margin: 0.7em 0 0 0.7em;
+	}
+
+	.service-title{
+		font-size: 1em;
+		font-weight: 500;
+		margin-top: 50%;
+	}
+
+	.aboutbanner p{
+		margin: 0 20px;
+		font-size: 1.10em;
+		text-indent: 40px;
+		line-height: 1.50em;
+	}
+
+	.site-header{
+		display: hidden;
+	}
+
+	.bannerButtons{
+		margin-top: 1em;
+	}
+
+	.bannerHeader p{
+		font-size: 1.40em;
+	}
+	.one{
+		margin-left: 17%;
+
+	}
+
+	.two{
+		margin-top: 5px;
+		margin-left: 17%;
+
+	}
+
+	.bg2{
+		margin-top: 10em;
+	}
+
+	header h1{
+		display: none;
+	}
+
+	.navContainer{
+		padding-left: 0;
+	}
+
+	.site-header li{
+		padding: 0 5px;
+	}
+}
+
+@media only screen and (max-width: 375px){
+	.one{
+		margin-left: 12%;
+	}
+
+	.two{
+		margin-left: 12%;
+	}
+
+	.popService{
+		height: 2em; 
+		width: 97%;
+	}
+
+	.service-title{
+		margin-top: 2%;	
+	}
+
+	.bg2{
+		height: 1250px;
+	}
+
+	.sHeader{
+		font-weight: 400;
+		font-size: 1.70em;
+		text-decoration: underline;
+	}
+
+	.sList{
+		font-size: 0.50em;
+	}
+
+	.serviceList li{
+		font-size: 1.50em;
+
+	}
+
+}
+
+@media only screen and (max-width: 320px){
+	.bg2{
+		height: 1400px;
+	}
+}
+

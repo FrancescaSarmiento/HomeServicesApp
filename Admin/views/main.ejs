@@ -13,35 +13,32 @@
         <div class="page-header">
 			<h1>Welcome, Handy Zeb Admin</h1>
         </div>
-        <div class="row">
-            <% if(customerUsers.length != 0) {%>
-            <h2>Pending Customers</h2>
-    		<table class="table table-hover">
-    			<tr>
-    				<th>Username</th>
-    				<th>Password</th>
-    				<th>First Name< /th>
-    				<th>Last Name</th>
-    				<th>Address</th>
-    				<th>E-mail</th>
-    				<th>Contact Number</th>
-    			</tr>
-    			<% customerUsers.forEach(function(item){ %>
-    				<tr>
-    					<td><%= item.userName %></td>
-    					<td><%= item.password %></td>
-    					<td><%= item.firstName %></td>
-    					<td><%= item.lastName %></td>
-    					<td><%= item.address %></td>
-    					<td><%= item.email %></td>
-    					<td><%= item.contactNumber %></td>
-    					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input class="btn" type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userId" type="text" value=<%= item.custId %> hidden><input class="btn" type="submit" value="Reject"></form></td>
-    				</tr>
-    			<% }) %>
-            </table>
-            <% } %>
-        </div>
-        
+      
+        <% if(customerUsers.length != 0) {%>
+        <h2>Pending Customers</h2>
+		<table class="table table-hover">
+			<tr>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Address</th>
+				<th>E-mail</th>
+				<th>Contact Number</th>
+			</tr>
+			<% customerUsers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.userName %></td>
+					<td><%= item.firstName %></td>
+					<td><%= item.lastName %></td>
+					<td><%= item.address %></td>
+					<td><%= item.email %></td>
+					<td><%= item.contactNumber %></td>
+					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input class="btn" type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userId" type="text" value=<%= item.custId %> hidden><input class="btn" type="submit" value="Reject"></form></td>
+				</tr>
+			<% }) %>
+        </table>
+        <% } %>
+           
         <h1>Weekly Transactions</h1>
         <table class="table table-hover">
             <tr>

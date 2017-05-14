@@ -2,26 +2,30 @@
 <html>
 <head>
 	<title>Handy Zeb | Service Provider  ( ͡° ͜ʖ ͡°)</title>
-	<link rel="stylesheet" type="text/css" href="styles/homeStyle.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image" href="styles/logo.png" />
+	<link rel="stylesheet" type="text/css" href="styles/homeStyle.css" media="screen">
 </head>
 <body>
-	<header class="site-header">
+	<header class="site-header" id="home">
 		<div class="headerRow">
 			<div class="headerContents">
+				<img src="styles/logo.png" alt="logo">
+
 				<h1>Handy Zeb</h1>
 
 				<div class="headerContainer left">
 					<ul class="navContainer">
-						<li><a href="">Home</a></li>
+						<li><a href="#home">Home</a></li>
 						<li><a href="#about">About</a></li>
 						<li><a href="#popularServ">Services</a></li>
-						<li><a href="#help">Help</a></li>
 					</ul>
 				</div>
 				<div class="headerContainer right">
 					
 					<ul class="navContainer">
-							<li><a href="login">Log In</a></li>
+							<li><a href="/login">Log In</a></li>
+							<li><a href="/register">Register</a></li>
 					</ul>
 				</div>
 			</div>
@@ -35,14 +39,15 @@
 		<div class="firstBanner">
 			<div class="overlay">
 				<div class="bannerHeader">
+
 					<h1>Handy Zeb</h1>
 					<p>Book your local, trusted service provider</p>
 					
 				</div>
 				<div class="bannerButtons columns">
-					<a href="register" class="bigButton action btn-secondary one">Sign In</a>
-					<a href="#popularServ" class="bigButton action btn-secondary two">See Services</a>
-				</div>
+						<a href="/register" class="bigButton action btn-secondary one">Sign Up</a>
+						<a href="#popularServ" class="bigButton action btn-secondary two">See Services</a>
+					</div>
 			</div>
 		</div>
 		<section class="row content">
@@ -61,9 +66,9 @@
 		<section class="row content aboutbanner" id="about">
 		<br>
 			<h2 class="bannerTitle">About</h2>
-			<p>Here at Handy Zeb, we're building a technology-enabled platform connecting customers with independent service provider professionals to foster a better home service experience. We were founded in 2017 in Baguio by Zebedee Jimenez and we're headquartered in Green Valley. Currently, Handy Zeb offers a range of services in most major cities across the Philippines.</p> <br><br>
+			<p> Handyzeb has been providing home owners, contractors and service providers with quality matching services and helpful resources since April 2017. We ourselves are homeowners, contractors and users of handyzeb.org to fill our own need to find quality contractors to do property management and home improvement with our commercial and residential real-estate holdings. We know how frustrating it can be in finding <strong>quality and respectable</strong> handyman contractors and will continue to bring new products and services to our site to make your experience an enjoyable one.</p><br><br>
 
-			<p>Our mission is to consistently bring you the best services with the best quality, by keeping up with the current trends and constantly educating ourselves about the best practices , keeping your home safe with the meh prices while still being able to do quality work for you to subscribe to us again.</p>
+			<p>Have you heard of instagram or facebook? Well forget social networking, we are focused on you, the consumer. We are becoming the industry standard "consumer networking" portal. We have recently introduced our customized web page offering, free for a limited time, to home owners, realtors and contractors. HandyZeb is becoming a catalyst product for our customers to help streamline communications, rate/review service providers, update and track work progress and much more. Handyzeb is your home improvement and property management best friend if you want to save time, frustration and get the job done. We have many exciting future developments planned. We are here to serve you and strive to bring products and service to market that make your life easier when trying to improve or maintain your most important asset, your property. Contact us webmaster at handyzeb dot org anytime with your comments or questions and please visit us on Saint Louis University, Bonifacio St. Baguio City. See you!</p>
 
 			
 		</section>
@@ -80,9 +85,50 @@
 			<div class="popService"><div class="service-title">Painting</div></div>			
 		</section>
 
-		<section class="row content">
+		<section class="row content" id="allservices">
 			<h2 class="bannerTitle">All Services</h2>
-			<img src="styles/placeholder.JPG">
+			<div class="columns sList">
+				<p class="sHeader">Handyman</p>
+				<ul class="serviceList">
+					<li>Pictures and Shelves</li>
+					<li>Air Conditioner</li>
+					<li>Curtains and Binds</li>
+					<li>Furniture Assembly</li>
+					<li>Interior Painting</li>
+					<li>Moving Help</li>
+					<li>TV Mounting</li>
+					<li>Other Handyman</li>
+					<li>Handy Helper</li>
+					<li>Knobs and Locks</li>
+				</ul>
+			</div>
+			<div class="columns sList">
+				<p class="sHeader">Plumbing</p>
+				<ul class="serviceList">
+					<li>Drains</li>
+					<li>Faucets</li>
+					<li>Other Plumbing</li>
+					<li>Toilet</li>
+					<li>Garbage Disposal</li>
+				</ul>
+			</div>
+			<div class="columns sList">
+				<p class="sHeader">Electrical</p>
+				<ul class="serviceList">
+					<li>Light Fixtures</li>
+					<li>Ceiling and Bath Fans</li>
+					<li>Oulets</li>
+					<li>Other Electrical Service</li>
+				</ul>
+			</div>
+			<div class="columns sList">
+				<p class="sHeader">Cleaning</p>
+				<ul class="serviceList">
+					<li>Home Cleaning</li>
+					<li>Office Cleaning</li>
+					<li>Vacation Rental Cleaning</li>
+				</ul>
+			</div>
 
 		</section>
 
@@ -92,7 +138,7 @@
 		
 		<section class="row content" id="help">
 			<h2 class="bannerTitle">Help</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum accumsan velit sodales, eleifend quam a, commodo neque. Maecenas eget tincidunt tortor. Donec laoreet libero sit amet ligula suscipit posuere. Morbi hendrerit magna id venenatis bibendum. Sed fermentum congue dapibus. Nunc est odio, elementum sed tincidunt a, facilisis vestibulum elit. Praesent elementum, metus convallis ultrices imperdiet, nisi eros ultricies justo, vitae mattis nulla nisl et orci. Donec nec suscipit erat, ac consectetur risus. In quis ex nec ipsum feugiat vestibulum. Nulla sit amet venenatis nibh, sit amet dictum augue. Suspendisse blandit augue ac luctus sollicitudin. Vestibulum sed lorem porttitor, lacinia nisi vel, rhoncus nulla. Maecenas at est non tortor auctor tincidunt. Morbi eu tincidunt lorem, sit amet fringilla ante. Pellentesque interdum sapien quis tempus blandit.</p>
+			<p class="helppara">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum accumsan velit sodales, eleifend quam a, commodo neque. Maecenas eget tincidunt tortor. Donec laoreet libero sit amet ligula suscipit posuere. Morbi hendrerit magna id venenatis bibendum. Sed fermentum congue dapibus. Nunc est odio, elementum sed tincidunt a, facilisis vestibulum elit. Praesent elementum, metus convallis ultrices imperdiet, nisi eros ultricies justo, vitae mattis nulla nisl et orci. Donec nec suscipit erat, ac consectetur risus. In quis ex nec ipsum feugiat vestibulum. Nulla sit amet venenatis nibh, sit amet dictum augue. Suspendisse blandit augue ac luctus sollicitudin. Vestibulum sed lorem porttitor, lacinia nisi vel, rhoncus nulla. Maecenas at est non tortor auctor tincidunt. Morbi eu tincidunt lorem, sit amet fringilla ante. Pellentesque interdum sapien quis tempus blandit.</p>
 
 			
 		</section>
@@ -107,23 +153,23 @@
 		<div class="row">
 			<nav class="footerOne columns">
 				<ul class="footerLink" id="mainFooterLinks">
-					<li>Home</li>
-					<li>Help</li>
-					<li>About</li>
-					<li>Services</li>
-					<li>Contact Us</li>
+					<li><a href="#home">Home</a></li>
+					<li><a href="#help">Help</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#popService">Service</a></li>
+					<li><a href=""></a>Contact Us</li>
 				</ul>
 			</nav>
 
 			<nav class="footerTwo columns">
 				<p class="footerHeader">Locations</p>
 				<ul class="footerLink">
-					<li>Bahay mo</li>
-					<li>Yer Mum</li>
-					<li>Mars</li>
-					<li>Earth</li>
-					<li>Sa puso mo</li>
-					<li>kill me</li>
+					<li>Session Road</li>
+					<li>Aurora Hill</li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
 				</ul>
 			</nav>
 
@@ -137,7 +183,7 @@
 					<li>Moving Help</li>
 					<li>Painting</li>
 					<li>Furniture Assembly</li>
-					<li>See all services</li>
+					<li><a href="#allservices">See all services</a></li>
 				</ul>
 			</nav>
 		</div>
@@ -147,8 +193,6 @@
 				<a class="icon-link"><img class="socialmed" src="styles/icons/fbicon.png" alt="icon"></a>
 				<a class="icon-link"><img class="socialmed" src="styles/icons/twittericon.png" alt="icon"></a>
 				<a class="icon-link"><img class="socialmed" src="styles/icons/igicon.png" alt="icon"></a>
-				<a class="icon-link">deez</a>
-				<a class="icon-link">nutz</a>
 			</div>
 			<div class="footer-divider"></div>
 		</div>
@@ -168,6 +212,5 @@
 			
 		</div>
 	</footer>
-
 </body>
 </html>

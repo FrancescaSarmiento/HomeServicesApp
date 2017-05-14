@@ -46,7 +46,7 @@ var transport = nodemailer.createTransport({
 });
 
 app.get('/', function(req, res){
-	res.render('index');
+	res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/main', function(req, res){
@@ -470,7 +470,7 @@ app.post('/accept', function(req, res){
 		if (err){ console.error(err); return}
 
 		var customer = [];
-		connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE userName = '" + req.body.userName +"'", function(err, rows){
+		connection.query("SELECT username, password, email FROM customer JOIN user ON idNum = custId WHERE userName = '" + req.body.userName +"'", function(err, rows){
 			if (err){ console.error(err); return}
 
 			var customerEmail = null;
@@ -484,9 +484,16 @@ app.post('/accept', function(req, res){
 		    	from: 'Handy Zeb!',
 		    	to: customerEmail,
 		   		subject: 'Account',
-				text: 'Congrationlations, you can now use your Handy Zeb account! ' +
-				'Thank you for registering to our Home Service Application. Please use the link below to try loging in to our site. ' +
-				'www.handyzeb.org/login'
+				text: `
+				Congrationlations, you can now use your Handy Zeb account!
+				You can login using your credentials:
+					Username: ${rows[0].username}
+					Password: ${rows[0].password}
+
+				Thank you for registering to our Home Service Application. Please use the link below to try loging in to our site.
+						
+						www.handyzeb.org/login
+				`
 			});
 		});
 
@@ -509,7 +516,7 @@ app.post('/reject', function(req, res){
 	    	from: 'Handy Zeb!',
 	    	to: customerEmail,
 	   		subject: 'Account',
-			text: 'We are so sorry, but your account has been rejected by the administrator. Please try again some other time.'
+			text: 'We are so sorry, but your account has been rejected by the administrator. You may have inapprorpiate information used in your credentials or another reason. Please try again some other time.'
 		});
 	});
 
