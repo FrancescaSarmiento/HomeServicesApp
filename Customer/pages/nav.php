@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="navbar-header navbar-right">
             <ul class="nav navbar-nav">
-                 <li class="btn-group dropdown dropdown-notifications sw-open">
+                <li class="btn-group dropdown dropdown-notifications sw-open">
                   <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" style="margin-top: 20%;">
                     <i class="glyphicon glyphicon-bell "></i>
                     <span class="caret"></span>

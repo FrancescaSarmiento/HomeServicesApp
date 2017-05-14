@@ -5,7 +5,7 @@ $query = "SELECT serviceType from service";
 $result = mysqli_query($conn, $query);
 ?>
 
-		<h1> Services </h1>
+		<h1><strong> Services </strong></h1>
 	
 <?php
 

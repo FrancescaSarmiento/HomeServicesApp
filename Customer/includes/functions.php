@@ -81,7 +81,7 @@ function getBooking($conn, $userId){
     $result = $query->get_result();
     $row = mysqli_num_rows($result);
     if($row > 0){
-        echo "<h2>Your current bookings:</h2>";
+        echo "<h4>Your current bookings:</h4>";
         return $result;
     } else {
         echo "<h2>No current bookings atm</h2>";

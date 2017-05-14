@@ -3,7 +3,7 @@
     require '../includes/functions.php';
 ?>
 
-<h1>Welcome <?php echo "{$_SESSION['firstName']}  {$_SESSION['lastName']}" ?>!</h1>
+<h1 id="homeName"><strong>Welcome <?php echo "{$_SESSION['firstName']}  {$_SESSION['lastName']}" ?>!</strong></h1>
 
 <?php
     $confirm = getConfirm($conn, $userID);
