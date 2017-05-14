@@ -26,8 +26,8 @@ app.listen(3000, function(){
 var connection = mysql.createConnection({
 	host: 'localhost',
 	port: 3306,
-	user: 'handyzeb',
-	password: 'webtek2017',
+	user: 'root',
+	password: '',
 	database: 'handyzebdb'
 });
 
@@ -46,7 +46,7 @@ var transport = nodemailer.createTransport({
 });
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname + '/index.html');
+	res.render('index');
 });
 
 app.get('/main', function(req, res){

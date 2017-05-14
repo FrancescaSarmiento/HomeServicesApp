@@ -9,28 +9,40 @@
 </head>
 <body>
 	<% include partials/nav %>
-	<div class="container">
+	<div class="container-fluid">
 		<h2>Transactions</h2>
-		<form action="/search-transaction-on-name" method="post">
-			<input type="text" placeholder="Customers/SP" name="searchItem"><input type="submit" value="Search">
+        <div class="row">
+        <div class="col-md-3">
+		<form class="form-inline" action="/search-transaction-on-name" method="post"><div class="form-group">
+            <input class="form-control" type="text" placeholder="Customers/SP" name="searchItem"></div>
+            <input class="btn" type="submit" value="Search">
 		</form>
-		<form action="/search-transaction-on-status" method="post">
-			<select name="status">
+            </div>
+        <div class=col-md-3>
+		<form class="form-inline" action="/search-transaction-on-status" method="post">
+            <div class="form-group">
+			<select class="form-control" name="status">
 				<option value="">Choose Status</option>
 				<option value="done">Done</option>
 				<option value="ongoing">Ongoing</option>
 				<option value="pending">Pending</option>
 			</select>
-			<input type="submit" value="Search">
+			<input class="btn" type="submit" value="Search">
+                </div>
 		</form>
-		
-		<form action="/search-transaction-on-date" method="post">
+            </div>
+		<div class="col-md-5">
+		<form class="form-inline" action="/search-transaction-on-date" method="post"> <div class="form-group">
 			<label>From:</label>
-			<input type="date" name="from">
+			<input class="form-control" type="date" name="from">
 			<label>To:</label>
-			<input type="date" name="to"><input type="submit" value="Search">
+            <input class="form-control" type="date" name="to">
+            </div>
+            <input class="btn" type="submit" value="Search">
 		</form>
-
+        </div>
+        </div>
+        <br>
 	<% if (transactions.length !=0 ){ %>
 		<table class="table table-hover">
 			<tr>
@@ -54,7 +66,6 @@
                     <td><%= item.dateFinished %></td>
 				</tr>
 			<%	}) %>
-
 		</table>
 	<% }else{ %>
 		<p>No Transactions yet</p>

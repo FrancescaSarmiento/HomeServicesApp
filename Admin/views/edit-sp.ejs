@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>HandyZeb Admin</title>
+	<title>Handy Zeb Admin</title>
 	<link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -11,24 +11,30 @@
 		<% include partials/nav %>
 	<div class="container">
 		<h2>Service Provider Email Edit</h2>
-		
 		<p>Caution! Only edit the email of the service provider if the provider asked the company for email issues.</p>
-
+        <div class="form-group">
 		<form action="/edit-sp?idnum=<%= user[0].idNum %>" method="post">
 			<label for="userName">Username:</label>
 			<input class="form-control" type="text" value="<%= user[0].userName %>" name="userName" disabled>
+            <br>
 			<label for="firstName">First name:</label>
 			<input class="form-control" type="text" value="<%= user[0].firstName %>" name="firstName" disabled>
+            <br>
 			<label for="lastName">Last Name:</label>
 			<input class="form-control" type="text" value="<%= user[0].lastName %>" name="lastName" disabled>
+            <br>
 			<label for="email">Email:</label>
 			<input class="form-control" type="text" value="<%= user[0].email %>" name="email">
+            <br>
 			<label for="contactNumber">Contact Number:</label>
 			<input class="form-control" type="text" value="<%= user[0].contactNumber %>" name="contactNumber" disabled>
+            <br>
+            <div class="form-group">
 			<input class="btn" type="submit" value="Save">
 		</form>
-
-		<a class="btn" href="/service-providers">Cancel</a>
-	</div>
+            <a class="btn" href="/service-providers">Cancel</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

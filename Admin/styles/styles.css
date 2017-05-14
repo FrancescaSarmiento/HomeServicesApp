@@ -15,10 +15,6 @@ nav .nav-pills li a:hover{
     color: black;
 }
 
-input, btn .btn-info{
-    color: green;
-}
-
 .btn{
     color: white;
     background-color: #212e42;

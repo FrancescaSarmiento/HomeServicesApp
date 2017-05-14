@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>HandyZeb Admin</title>
+	<title>Handy Zeb Admin</title>
 	<link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -9,26 +9,37 @@
 </head>
 <body>
 		<% include partials/nav %>
-        <div class="container">
+        <div class="container-fluid">
 		<h2>Service Providers</h2>
-		<form action="/search-sp" method="post">
-			<input type="text" placeholder="First Name/Last Name" name="searchItem"><input type="submit" value="Search">
-		</form>
-
-		<form action="/search-sp-on-status" method="post">
-			<select name="status">
-				<option value="">Choose Account Status</option>
+        <div class=row>
+            <div class="col-md-5">
+		<form class="form-inline" action="/search-sp" method="post">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="First Name/Last Name" name="searchItem">
+            </div>
+            <input class="btn" type="submit" value="Search">
+            </form>
+            </div>
+        <div class="col-md-3">
+		<form class="form-inline" action="/search-sp-on-status" method="post">
+            <div class="form-group">
+			<select class="form-control" name="status">
+				<option value="">Choose Account Type</option>
 				<option value="suspended">Suspended</option>
 				<option value="unsuspended">Unsuspended</option>
 			</select>
-			<input type="submit" value="Search">
+            </div>
+			<input class="btn" type="submit" value="Search">
 		</form>
+            </div>
+            </div>
+            <br>
 		<table class="table table-hover">
 			<tr>
 				<th>Username</th>
 				<th>First name</th>
 				<th>Last name</th>
-				<th>Email</th>
+                <th>Email</th>
 				<th>Contact number</th>
 				<th>Shift start</th>
 				<th>Shift end</th>
@@ -41,7 +52,7 @@
 					<td><%= item.userName %></td>
 					<td><%= item.firstName %></td>
 					<td><%= item.lastName %></td>
-					<td><%= item.email %> <a href="/edit-sp?userName=<%= item.userName %>">Edit</a></td>
+                    <td><%= item.email %> <a href="/edit-sp?userName=<%= item.userName %>">Edit</a></td>
 					<td><%= item.contactNumber %></td>
 					<td><%= item.shiftStart %></td>
 					<td><%= item.shiftEnd %></td>
@@ -51,9 +62,18 @@
 					<td>
 
 					<% if(item.status == '1'){ %>
-					<form action="/suspend" method="post"><input hidden name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Suspend"></form>
+                        <form class="form-inline" action="/suspend" method="post">
+                            <div class="form-group">
+                                <input hidden name="userId" type="text" value="<%= item.spId %>">
+                            </div>
+                        <input class="btn" type="submit" value="Suspend">
+                        </form>
 					<% }else{ %>
-					<form action="/unsuspend" method="post"><input hidden name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
+                        <form class="form-inline" action="/unsuspend" method="post"><div class="form-group">
+                            <input hidden name="userId" type="text" value="<%= item.spId %>">
+                            </div>
+                            <input class="btn" type="submit" value="Unsuspend">
+                        </form>
 					<% } %>
 
 					</td>
