@@ -75,7 +75,7 @@ function getServiceProviders($conn, $servtype){
 }
 
 function getBooking($conn, $userId){
-    $query = mysqli_prepare($conn, "SELECT * from booking where (bookingStatus = 'pending' or bookingStatus = 'ongoing') and custId = ? and (reserved_date > CURRENT_DATE or reserved_date = CURRENT_DATE)");
+    $query = mysqli_prepare($conn, "SELECT * from booking where (bookingStatus = 'pending' or bookingStatus = 'ongoing' or bookingStatus = 'accepted') and custId = ? and (reserved_date > CURRENT_DATE or reserved_date = CURRENT_DATE)");
     $query->bind_param('s',$userId);
     $query->execute();
     $result = $query->get_result();
