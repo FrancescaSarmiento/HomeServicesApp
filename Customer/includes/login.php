@@ -2,7 +2,7 @@
 require_once 'db_connect.php';
 
 if(!empty(filter_input(INPUT_POST, 'login'))){
-    $username = filter_input(INPUT_POST, 'username');
+    $username = filter_input(INPUT_POST, 'userName');
     $pass = filter_input(INPUT_POST, 'pass');
 
     $query = "SELECT * from user join customer on user.idNum=customer.custId WHERE userName = '$username' AND password = '$pass'";
@@ -13,19 +13,15 @@ if(!empty(filter_input(INPUT_POST, 'login'))){
     session_start();
 
     if($row == 1){
-        if($rows['status'] == 1){
-            $_SESSION['last_activity'] = time();
-            $_SESSION['expire_time'] = 30*60; //30min
-            $_SESSION['userID'] = $rows['idNum'];
-            $_SESSION['firstName'] = $rows['firstName'];
-            $_SESSION['lastName'] = $rows['lastName'];
-            header('Location: ../pages/main.php?page=home');
-        } else {
-            echo '<div class="alert alert-danger">Your account has not yet been validated.</div>';
-            echo '<script>window.location.assign(../login.php)</script>';
-        }
+        $_SESSION['last_activity'] = time();
+        $_SESSION['expire_time'] = 30*60; //30min
+        $_SESSION['userID'] = $rows['idNum'];
+        $_SESSION['firstName'] = $rows['firstName'];
+        $_SESSION['lastName'] = $rows['lastName'];
+        header('Location: ../pages/main.php?page=home');
+     
     } else {
-            echo '<div class="alert alert-danger">Username or password was incorrect, please try again.</div>';
+            echo '<div class="alert alert-danger">Your password was incorrect, please try again.</div>';
             echo '<script>window.location.assign(../login.php)</script>';
     }
     
