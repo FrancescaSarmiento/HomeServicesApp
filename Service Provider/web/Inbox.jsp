@@ -13,7 +13,7 @@
 <c:set var="user" scope="page" value="${sessionScope.user}"/>
 
 <c:if test="${user == null}">
-    <c:redirect url="NoSession.jsp"/>
+    <c:redirect url="fail.html"/>
 </c:if>
 
 <!DOCTYPE html>
@@ -31,7 +31,6 @@
     <body>
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
-        
         <div class="container-fluid">
             <div class="row-fluid">
               <div class="span2">
@@ -39,9 +38,9 @@
                     <a href="CreateMessage.jsp" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
                     <hr>
                     <ul class="nav nav-pills nav-stacked sidebar">
-                        <form action="SearchMessage" method="POST">
-                            <p>Filter Out By Name: 
-                                <input type="text" name="filteredName"><input type="submit" value="Search"></p>
+                        <form action="filerServlet" method="POST">
+                            <p>Filter Out By Name:<br>
+                                <input type="text" class="filterBox" name="filteredName"><input type="submit" value="Search"></p>
                         </form>
                         <li class="active"><a href="Inbox.jsp" role="presentation">Inbox </a>
                         </li>
@@ -61,15 +60,29 @@
         
                 <sql:query dataSource = "${snapshot}" var = "info">
                     <c:forEach var = "info_1" items = "${info1.rows}">
-                        SELECT customer.custId, CONCAT(customer.firstName,' ', customer.lastName) AS name, message.messageBody, message.timeSent FROM message INNER JOIN customer ON message.senderId=customer.custId WHERE message.receiverId='<c:out value = "${info_1.idNum}"/>';
+                        SELECT customer.firstName, customer.lastName, message.senderId, message.messageBody, message.timeSent FROM user INNER JOIN message ON user.idNum=message.receiverId INNER JOIN customer ON message.senderId=customer.custId WHERE message.receiverId='<c:out value = "${info_1.idNum}"/>';
                     </c:forEach>
                 </sql:query>
         
-                <div id="inbox" class="spanContent">
-                    <c:forEach var = "messages" items = "${info.rows}">
-                        <p><c:out value = "${messages.custId}"/> || <c:out value = "${messages.name}"/> || <c:out value = "${messages.messageBody}"/> || <c:out value = "${messages.timeSent}"/></p><br>
-                    </c:forEach>               
-                </div>    
+                <div id="inbox" class="tableContent">
+                    <table class="table table-striped table-hover test">
+                        <tr>
+                            <th>Name</th>
+                            <th>Sender ID</th>
+                            <th>Message</th>
+                            <th>Time Received</th>
+                            <th></th>
+                        </tr>
+                        <c:forEach var = "messages" items = "${info.rows}">
+                            <tr>
+                                <td><c:out value = "${messages.firstName}"/> <c:out value = "${messages.lastName}"/></td>
+                                <td><c:out value = "${messages.senderId}"/></td>
+                                <td><c:out value = "${messages.messageBody}"/></td>
+                                <td><c:out value = "${messages.timeSent}"/></td>
+                                <td><a href="CreateMessage.jsp">Reply</a></td>
+                        </c:forEach> 
+                    </table>
+                    </div>    
                 </div>
             </div>
         </div>    

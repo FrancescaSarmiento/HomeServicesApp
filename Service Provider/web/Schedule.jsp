@@ -36,31 +36,34 @@
             <div class="container-fluid">
                 <div class="schedContainer">
                 <form action="EditSchedule" method="POST">
-                    <p>Working Days:</p>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox1" name="sunday"> Sunday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox2" name="monday"> Monday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox3" name="tuesday"> Tuesday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox4" name="wednesday"> Wednesday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox5" name="thursday"> Thursday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox6" name="friday"> Friday
-                    </label>
-                    <label class="checkbox-inline"> 
-                        <input type="checkbox" id="inlineCheckbox7" name="saturday"> Saturday
-                    </label>
+                    <p>Working Days:</p>   
+                        <label class="checkbox-inline">                 
+                            <input type="checkbox" id="inlineCheckbox1" value="option1" name="sunday"> Sunday
+                        </label>
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox2" value="option2" name="monday"> Monday
+                        </label>
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox3" value="option3"name="tuesday"> Tuesday
+                        </label>
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox4" value="option4" name="wednesday"> Wednesday
+                        </label>    
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox5" value="option5" name="thursday"> Thursday
+                        </label>
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox6" value="option61" name="friday"> Friday
+                        </label>
+                        <label>
+                            <input type="checkbox" id="inlineCheckbox7" value="option7" name="saturday"> Saturday
+                        </label>
                     <p><input type="submit" class="btn btn-primary btn-lg btn-block" value="Save Changes"></p>
                 </form>
                 </div>
+            </div>
+            <div id="returnToHome">
+                <a href="Profile.jsp">Return to Main Page</a>
             </div>
     </body>
 </html>

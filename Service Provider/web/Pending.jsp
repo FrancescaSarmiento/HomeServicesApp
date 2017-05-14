@@ -25,7 +25,6 @@
     <body>
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
-        <h3 class="secondPageHeader">Pending requests</h3>
         <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
                            url = "jdbc:mysql://localhost:3306/handyzebdb"
                            user = "root" password = ""/>
@@ -34,24 +33,41 @@
         </sql:query>
         
         <div class="container-fluid">
-            <div class="serviceContainer">
-                <c:forEach var = "sche_dule" items = "${schedule.rows}">
-                    <div class="sched">
-                        <p class='date'><c:out value = "${sche_dule.reserved_date}"/></p>
-                        <p class='name'><c:out value = "${sche_dule.name}"/></p>
-                        <p class='addrss'><c:out value = "${sche_dule.address}"/></p>
-                        <p class='cntct'><c:out value = "${sche_dule.contactNumber}"/></p>
-                        
-                        <c:set var="book" scope="session" value="${sche_dule.bookingId}"/>
-                        <form action="AcceptServlet" method="POST">
-                            <input type="submit" value="Accept">
-                        </form>
-                        <form action="RejectServlet" method="POST">
-                            <input type="submit" value="Reject">
-                        </form>
+            <jsp:include page="WEB-INF/fragments/requestsnav.html"/>
+            <div class="span10">
+                <h3 class="secondPageHeader">Pending Requests</h3>
+                <div class="sched tableContent">
+                        <table class="table table-striped table-hover">
+                            <tr>
+                                <th class="date">Date Reserved</th>
+                                <th class="nameCol">Name</th>
+                                <th class="addrCol">Address</th>
+                                <th class="contactCol">Contact Number</th>
+                                <th class="submitCol"></th>
+                                <th class="rejectCol"></th>
+                            </tr>
+                            <c:forEach var = "sche_dule" items = "${schedule.rows}">        
+                            <tr>
+                                <td class='date'><c:out value = "${sche_dule.reserved_date}"/></td>
+                                <td class='name'><c:out value = "${sche_dule.name}"/></td>
+                                <td class='addrss'><c:out value = "${sche_dule.address}"/></td>
+                                <td class='cntct'><c:out value = "${sche_dule.contactNumber}"/></td>
+                                <td class="bookId"><c:set var="book" scope="session" value="${sche_dule.bookingId}"/></td>
+                                <td>
+                                    <form action="AcceptServlet" method="POST">
+                                        <input type="submit" value="Accept">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="RejectServlet" method="POST">
+                                        <input type="submit" value="Reject">
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </c:forEach>
-            </div>
+                        </div>
         </div>
     </body>
 </html>

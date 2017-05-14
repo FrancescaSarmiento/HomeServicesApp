@@ -38,31 +38,42 @@
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
         
-        <div class="container2">
-            <h2>Today is</h2>
-            <p id="timeStamp"><%= new Date() %></p>
-                    <h2>Hello, <b>
+        <div class="jumbotron">
+            <div class="container">
+                <h2>Hello, <b>
                 <c:forEach var = "first_name" items = "${firstName.rows}">
                     <c:out value = "${first_name.firstName}"/>
                 </c:forEach>
                 </b>!</h2>
-            <hr>
+                <h2>Today is</h2>
+                <p id="timeStamp"><%= new Date() %></p>
+            </div>
+        </div>
+            <div class="container2">
             <div id="schedule">
-            <h3>Schedule</h3>
+            <h3 class="secondPageHeader">Schedule</h3>
+              <table class="table table-striped table-hover">
+                <tr>
+                    <th>Date Reserved</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Contact Number</th>
+                    <th>Status</th>
+                </tr>
                 <c:forEach var = "sche_dule" items = "${schedule.rows}">
-                    <div class="sched">
-                        <p class='date'><c:out value = "${sche_dule.reserved_date}"/></p>
-                        <p class='name'><c:out value = "${sche_dule.name}"/></p>
-                        <p class='addrss'><c:out value = "${sche_dule.address}"/></p>
-                        <p class='cntct'><c:out value = "${sche_dule.contactNumber}"/></p>
-                        <p class='status'><c:out value = "${sche_dule.bookingStatus}"/></p>
-                    </div>
+                    <tr class="sched">
+                        <td class='date'><c:out value = "${sche_dule.reserved_date}"/></td>
+                        <td class='name'><c:out value = "${sche_dule.name}"/></td>
+                        <td class='addrss'><c:out value = "${sche_dule.address}"/></td>
+                        <td class='cntct'><c:out value = "${sche_dule.contactNumber}"/></td>
+                        <td class='status'><c:out value = "${sche_dule.bookingStatus}"/></td>
+                    </tr>
                 </c:forEach>
+               </table>
                 <div class="fullsched">
                     <a href="Profile.jsp">View latest job.</a>
                 </div>
             </div>
             </div>
-        </div>
     </body>
 </html>

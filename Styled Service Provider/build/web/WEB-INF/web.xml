@@ -22,12 +22,76 @@
         </welcome-file>
     </welcome-file-list>
     <servlet>
-        <servlet-name>EditProfile</servlet-name>
-        <servlet-class>edu.slu.scis.webtek.demo.servlets.EditProfile</servlet-class>
+        <servlet-name>EditSchedule</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.EditSchedule</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Services</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.Services</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MarkAsDone</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.MarkAsDone</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePass</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.ChangePass</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendMessage</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.SendMessage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StartJob</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.StartJob</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddService</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.AddService</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FinishTransaction</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.FinishTransaction</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddFixRate</servlet-name>
+        <servlet-class>edu.slu.scis.webtek.demo.servlets.AddFixRate</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>EditProfile</servlet-name>
-        <url-pattern>/EditProfile</url-pattern>
+        <servlet-name>EditSchedule</servlet-name>
+        <url-pattern>/EditSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Services</servlet-name>
+        <url-pattern>/Services</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MarkAsDone</servlet-name>
+        <url-pattern>/MarkAsDone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePass</servlet-name>
+        <url-pattern>/ChangePass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendMessage</servlet-name>
+        <url-pattern>/SendMessage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StartJob</servlet-name>
+        <url-pattern>/StartJob</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddService</servlet-name>
+        <url-pattern>/AddService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinishTransaction</servlet-name>
+        <url-pattern>/FinishTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFixRate</servlet-name>
+        <url-pattern>/AddFixRate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

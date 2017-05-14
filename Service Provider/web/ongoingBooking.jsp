@@ -1,6 +1,6 @@
 <%-- 
-    Document   : acceptedBooking
-    Created on : May 13, 2017, 3:06:42 AM
+    Document   : ongoingBooking
+    Created on : May 13, 2017, 3:23:35 AM
     Author     : Hiromi Uematsu
 --%>
 
@@ -20,7 +20,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Accepted Requests</title>
+        <title>Ongoing Requestst</title>
         <link rel="stylesheet" href="styles.css">
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -33,22 +33,9 @@
         <jsp:include page="WEB-INF/fragments/banner.html"/>
         <div class="container-fluid">
            <div class="row-fluid">
-                <div class="span2">
-                    <div class="col-sm-3 col-md-2">
-                        <ul class="nav nav-pills nav-stacked sidebar">
-                            <li><a href="Profile.jsp">Home</a></li>
-                            <li><a href="Pending.jsp">Pending Requests</a></li>
-                            <li class="active"><a href="acceptedBooking.jsp">Accepted Requests</a></li>
-                            <li><a href="ongoingBooking.jsp">Ongoing Requests</a></li>
-                            <li><a href="CancelRequests.jsp">Cancel Requests</a></li>
-                            <li><a href="rejectBooking.jsp">Reject Requests</a></li>
-                            <li><a href="ApproveTransaction.jsp">Approve Transactions</a></li>
-                       </ul>
-                    </div>
-                </div>
+                <jsp:include page="WEB-INF/fragments/requestsnav.html"/>
                 <div class="span10">
-                    <h3 class="secondPageHeader">Accepted Booking</h3>
-        
+                   <h3 class="secondPageHeader">On going requests</h3>
                     <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
                                        url = "jdbc:mysql://localhost:3306/handyzebdb"
                                        user = "root" password = ""/> 
@@ -59,12 +46,13 @@
 
                     <sql:query dataSource = "${snapshot}" var = "info">
                         <c:forEach var = "info_1" items = "${info1.rows}">
-                            SELECT customer.firstName, customer.lastName, booking.bookingStatus, booking.bookingId, booking.reserved_date, service.serviceType FROM booking NATURAL JOIN service NATURAL JOIN customer WHERE booking.spId='<c:out value = "${info_1.idNum}"/>' AND booking.bookingStatus='accepted' ORDER BY booking.bookingId DESC;
+                            SELECT customer.firstName, customer.lastName, booking.bookingId, booking.reserved_date, service.serviceType FROM booking NATURAL JOIN service NATURAL JOIN customer WHERE booking.spId='<c:out value = "${info_1.idNum}"/>' AND booking.bookingStatus='ongoing' ORDER BY booking.bookingId DESC;
                         </c:forEach>
                     </sql:query>
+                    
                     <div id="requests" class="tableContent">
-                        <form action="StartServlet" method="POST">
-                             <table class="table table-striped table-hover">
+                        <form action="FinishServlet" method="POST">
+                            <table class="table table-striped table-hover">
                                 <tr>
                                     <th class="bookIdCol"></th>
                                     <th class="nameCol">Name</th>
@@ -78,15 +66,14 @@
                                         <td><c:out value = "${requests.firstName}"/> <c:out value="${requests.lastName}"/></td>
                                         <td><c:out value="${requests.reserved_date}"/></td>
                                         <td><c:out value="${requests.serviceType}"/></td>
-                                        <td><input type="submit" class="btn btn-primary" name="start" value="Start"></td>
+                                        <td><input type="submit" class="btn btn-success" name="timeFinished" value="Finish"></td>
                                     </tr>
-                                    </c:forEach>
-                            </table>
+                            </c:forEach>
+                                </table>
                         </form>
                     </div>
-               </div>
+                </div>
             </div>
-       </div>   
+        </div>           
     </body>
 </html>
-

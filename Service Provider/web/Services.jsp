@@ -22,7 +22,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="styles.css">
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
@@ -50,10 +50,13 @@
                             </label>
                         </c:forEach>
                     </p>
-                    
-                    <p><input type="submit" value="Save Changes"></p>
-                </form>
+
+                    <p><input type="submit" class="btn btn-primary btn-lg btn-block" value="Save Changes"></p>
+                    </form>
              </div>
-         </div>       
+         </div>
+        <div id="returnToHome">
+           <a href="Profile.jsp">Return to Main Page</a>
+        </div>        
     </body>
 </html>

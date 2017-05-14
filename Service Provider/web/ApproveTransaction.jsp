@@ -20,44 +20,60 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Approve Transactiont</title>
+        <title>Approve Transaction</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
-        
-        <div class="nav">
-            <a href="sphome.jsp">Home</a>
-            <a href="Booking.jsp">Pending Requests</a>
-            <a href="acceptedBooking.jsp">Accepted Requests</a>
-            <a href="ongoingBooking.jsp">Ongoing Requests</a>
-            <a href="CancelRequests.jsp">Cancel Requests</a>
-            <a href="rejectBooking.jsp">Reject Requests</a>
-            <a href="ApproveTransaction.jsp">Approve Transactions</a>
-        </div>
-        
-        <h1>List of Finished Requests</h1>
-        
-        <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
+        <jsp:include page="WEB-INF/fragments/banner.html"/>
+        <div class="container-fluid">
+           <div class="row-fluid">
+                <jsp:include page="WEB-INF/fragments/requestsnav.html"/>
+                <div class="span10">
+                    <h3 class="secondPageHeader">Approved Transactions</h3>
+                    <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
                            url = "jdbc:mysql://localhost:3306/handyzebdb"
                            user = "root" password = ""/> 
         
-        <sql:query dataSource = "${snapshot}" var = "info1">
-            SELECT idNum FROM user WHERE userName='${user}'; 
-        </sql:query>
-            
-        <sql:query dataSource = "${snapshot}" var = "info">
-            <c:forEach var = "info_1" items = "${info1.rows}">
-                SELECT customer.firstName, customer.lastName, booking.bookingId, booking.reserved_date, service.serviceType FROM transaction NATURAL JOIN booking NATURAL JOIN service NATURAL JOIN customer WHERE booking.spId='<c:out value = "${info_1.idNum}"/>' AND booking.bookingStatus='done' AND transaction.spStatus='pending' ORDER BY booking.bookingId DESC;
-            </c:forEach>
-        </sql:query>
-        
-        <div id="requests">
-            <h2>Finished Requests:</h2>
-            <form action="ApproveServlet" method="POST">
-                <c:forEach var = "requests" items = "${info.rows}">
-                    <p><input type="hidden" name="bookingId" value=<c:out value = "${requests.bookingId}"/> readonly><c:out value = "${requests.firstName}"/> <c:out value="${requests.lastName}"/>: <c:out value="${requests.reserved_date}"/> <c:out value="${requests.serviceType}"/> <input type="submit" name="approve" value="Approve Transaction"></p>
-                </c:forEach>
-            </form>
-        </div>
-                
+                    <sql:query dataSource = "${snapshot}" var = "info1">
+                        SELECT idNum FROM user WHERE userName='${user}'; 
+                    </sql:query>
+
+                    <sql:query dataSource = "${snapshot}" var = "info">
+                        <c:forEach var = "info_1" items = "${info1.rows}">
+                            SELECT customer.firstName, customer.lastName, booking.bookingId, booking.reserved_date, service.serviceType FROM transaction NATURAL JOIN booking NATURAL JOIN service NATURAL JOIN customer WHERE booking.spId='<c:out value = "${info_1.idNum}"/>' AND booking.bookingStatus='done' AND transaction.spStatus='pending' ORDER BY booking.bookingId DESC;
+                        </c:forEach>
+                    </sql:query>
+                    
+                    <div id="requests" class="tableContent">
+                        <form action="ApproveServlet" method="POST">
+                            <table class="table table-striped table-hover test">
+                                <tr>
+                                    <th class="bookIdCol"></th>
+                                    <th class="nameCol">Name</th>
+                                    <th class="dateCol">Date Reserved</th>
+                                    <th class="typeCol">Type</th>
+                                    <th class="submitCol"></th>
+                                </tr>
+                                <c:forEach var = "requests" items = "${info.rows}">
+                                    <tr>
+                                        <td><input type="hidden" name="bookingId" value=<c:out value = "${requests.bookingId}"/> readonly></td>
+                                        <td><c:out value = "${requests.firstName}"/> <c:out value="${requests.lastName}"/></td>
+                                        <td><c:out value="${requests.reserved_date}"/></td>
+                                        <td><c:out value="${requests.serviceType}"/></td>
+                                        <td><input type="submit" class="btn btn-primary" name="approve" value="Approve Transaction"></td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+       </div>  
     </body>
 </html>
