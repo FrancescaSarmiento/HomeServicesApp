@@ -1,7 +1,8 @@
+
 <?php
 
 function checkCurrentMessages($conn, $userID){
-    $query = mysqli_prepare($conn,"SELECT DISTINCT sp.spId, sp.firstName, sp.lastName from message m join customer c on m.senderId = c.custId join service_provider sp on m.receiverId= sp.spId WHERE c.custId=?");
+    $query = mysqli_prepare($conn,"SELECT DISTINCT sp.spId, sp.firstName, sp.lastName from message m join customer c on m.receiverId = c.custId join service_provider sp on m.senderId= sp.spId WHERE c.custId=?");
     $query->bind_param('i', $userID);
     $query->execute();
     $result = $query->get_result();
@@ -42,9 +43,13 @@ function getMessages($conn, $spId, $userId){
 function reply($conn, $userID, $spID, $messageBody){
     $ct = date('Y-m-d H:i:s');
     $message = htmlspecialchars($messageBody);
-    $query = mysqli_prepare($conn, "INSERT INTO message (senderId, receiverId, messageBody, timeSent) VALUES (?,?,?,?)");
-    $query->bind_param('iiss', $userID,$spID,$message,$ct);
-    $query->execute();
+    $result = mysqli_query($conn, "INSERT INTO message (senderId, receiverId, messageBody, timeSent) VALUES ($userID,$spID,$message,$ct)") or die(mysqli_error($conn));
+
+    if($result){
+        echo "what";
+    } else {
+        echo "idk";
+    }
 }
 
 function getAcctInfo($conn, $userID){
