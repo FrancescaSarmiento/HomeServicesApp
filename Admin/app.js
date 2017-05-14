@@ -349,7 +349,7 @@ app.get('/users', function(req, res){
 app.get('/customers', function(req, res){
 	if(req.session.username){
 		var customers = [];
-		connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1'", function(err, rows){
+		connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status = '1' OR status='2'", function(err, rows){
 			if (err){ console.log("Error in query"); return; }
 
 
@@ -362,7 +362,8 @@ app.get('/customers', function(req, res){
 					lastName: item.lastName,
 					address: item.address,
 					email: item.email,
-					contactNumber: item.contactNumber
+					contactNumber: item.contactNumber,
+					status: item.status
 				});
 			});
 
@@ -581,6 +582,60 @@ app.post('/unsuspend', function(req, res){
 	});
 });
 
+app.post('/suspend-customer', function(req, res){
+	//DELETE FROM table_name [WHERE Clause]
+	connection.query("UPDATE user SET status = '2' WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+		if (err){ console.error(err); return}
+
+		connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+			if (err){ console.error(err); return}
+
+			var customerEmail = null;
+			rows.forEach(function(item){
+				customerEmail = item.email;
+			});
+
+			//console.log(customerEmail);
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: customerEmail,
+		   		subject: 'Account',
+				text: 'We are so sorry, but your account has been suspended by the administrator. Please contact a HandyZeb Admin for clarifications.'
+			});
+
+			res.redirect('/customers');
+		});
+	});
+});
+
+app.post('/unsuspend-customer', function(req, res){
+	//DELETE FROM table_name [WHERE Clause]
+	connection.query("UPDATE user SET status = '1' WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+		if (err){ console.error(err); return}
+
+		connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE idNum = '" + req.body.userId +"'", function(err, rows){
+			if (err){ console.error(err); return}
+
+			var customerEmail = null;
+			rows.forEach(function(item){
+				customerEmail = item.email;
+			});
+
+			//console.log(customerEmail);
+
+		  	transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: customerEmail,
+		   		subject: 'Account',
+				text: 'We are so sorry, but your account has been suspended by the administrator. Please contact a HandyZeb Admin for clarifications.'
+			});
+		});
+
+		res.redirect('/customers');
+	});
+});
+
 app.post('/search-customer', function(req, res){
 	var values = [req.body.searchItem];
 	var customers = [];
@@ -596,11 +651,51 @@ app.post('/search-customer', function(req, res){
 				lastName: item.lastName,
 				address: item.address,
 				email: item.email,
-				contactNumber: item.contactNumber
+				contactNumber: item.contactNumber,
+				status: item.status
 			});
 		});
 
 		res.render('customers', {customers: customers});
+	});
+});
+
+app.post('/search-cust-on-status', function(req, res){
+	var status = req.body.status;
+	var cust = [];
+
+	if(status == 'suspended'){
+		status = 2;
+	}else{
+		status = 1;
+	}
+
+	connection.query("SELECT * FROM customer JOIN user ON custId = idNum WHERE status=?",[[status]], function(err, rows){
+		if (err){ console.error(err); return }
+
+		rows.forEach(function(item){
+				var earnings = item.earnings;
+				var rating = item.rating;
+				if(item.earnings == null){
+					earnings = 0.00;
+				}
+				if(item.rating == null){
+					rating = 0;
+				}
+
+				cust.push({
+					custId: item.custId,
+					userName: item.userName,
+					firstName: item.firstName,
+					lastName: item.lastName,
+					email: item.email,
+					contactNumber: item.contactNumber,
+					address: item.address,
+					status: item.status
+				});
+			});
+
+		res.render('customers', {customers: cust});
 	});
 });
 

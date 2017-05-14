@@ -11,13 +11,28 @@
 		<% include partials/nav %>
         <div class="container">
 		<h2>Customers</h2>
-		<form class="form-inline" action="/search-customer" method="post">
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="First Name/Last Name" name="searchItem"><br></div>
-            <input class="btn" type="submit" value="Search">
-            </form>
-            <br>
-        
+		<div class=row>
+            <div class="col-md-5">
+				<form class="form-inline" action="/search-customer" method="post">
+		            <div class="form-group">
+		                <input class="form-control" type="text" placeholder="First Name/Last Name" name="searchItem"><br></div>
+		            <input class="btn" type="submit" value="Search">
+				</form>
+		            <br>
+		    </div>
+		    <div class="col-md-5">
+		        <form class="form-inline" action="/search-cust-on-status" method="post">
+					<div class="form-group">
+						<select class="form-control" name="status">
+							<option value="">Choose Account Status</option>
+							<option value="suspended">Suspended</option>
+							<option value="unsuspended">Unsuspended</option>
+						</select>
+					</div>
+					<input class="btn" type="submit" value="Search">
+				</form>
+			</div>
+		</div>
 		<table class="table table-hover">
 			<tr>
 				<th>First name</th>
@@ -26,6 +41,7 @@
 				<th>Email</th>
 				<th>Contact number</th>
 				<th>Address</th>
+				<td>Status</td>
 			</tr>
 
 			<% customers.forEach(function(item){ %>
@@ -36,6 +52,14 @@
 					<td><%= item.email %></td>
 					<td><%= item.contactNumber %></td>
 					<td><%= item.address %></td>
+					<td><%= item.status %></td>
+					<td>
+					<% if(item.status == '1'){ %>
+					<form action="/suspend-customer" method="post"><input hidden name="userId" type="text" value="<%= item.custId %>" ><input class="btn" type="submit" value="Suspend"></form>
+					<% }else{ %>
+					<form action="/unsuspend-customer" method="post"><input hidden name="userId" type="text" value="<%= item.custId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
+					<% } %>
+					</td>
 				</tr>
 			<% }) %>
 		</table>
