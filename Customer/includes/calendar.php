@@ -1,6 +1,6 @@
 <?php
 
-$servtype = $_GET['type'];
+$servtype = filter_input(INPUT_POST, 'type');
 
 class Calendar {     
     /**
@@ -117,8 +117,12 @@ class Calendar {
         }
              
 
-        $dateformat = '<a href="?page=services&dayis='.$this->currentDate.'&type='.$servtype.'" target="_top"><li id="li-'.$this->currentDate.'" class="'.($cellNumber%7==1?' start ':($cellNumber%7==0?' end ':' ')).
-                ($cellContent==null?'mask':'').'">'.$cellContent.'</li></a>';
+        $dateformat = '<li id="li-'.$this->currentDate.'" class="'.($cellNumber%7==1?' start ':($cellNumber%7==0?' end ':' ')).($cellContent==null?'mask':'').'">'
+                . '<form method="post" action=""> '
+                . '<input type="hidden" name="dayis" value='.$this->currentDate.'>'
+                . '<input type="hidden" name="type" value='.$servtype.'>'
+                . '<input class=" btn-link btn-lg" type="submit" value="'.$cellContent.'"></li>'
+                . '</form>';
         return $dateformat;
     }
      
@@ -126,7 +130,6 @@ class Calendar {
     * create navigation
     */
     private function _createNavi(){
-        global $servtype;
         $nextMonth = $this->currentMonth==12?1:intval($this->currentMonth)+1;
          
         $nextYear = $this->currentMonth==12?intval($this->currentYear)+1:$this->currentYear;
@@ -137,9 +140,9 @@ class Calendar {
          
         return
             '<div class="header">'.
-                '<a class="prev" href="'.$this->naviHref.'?month='.sprintf('%02d',$preMonth).'&year='.$preYear.'&type='.$servtype.'">Prev</a>'.
+                '<a class="prev" href="?page=services&month='.sprintf('%02d',$preMonth).'&year='.$preYear.'">Prev</a>'.
                     '<span class="title">'.date('Y M',strtotime($this->currentYear.'-'.$this->currentMonth.'-1')).'</span>'.
-                '<a class="next" href="'.$this->naviHref.'?month='.sprintf("%02d", $nextMonth).'&year='.$nextYear.'&type='.$servtype.'">Next</a>'.
+                '<a class="next" href="?page=services&month='.sprintf("%02d", $nextMonth).'&year='.$nextYear.'">Next</a>'.
             '</div>';
     }
          

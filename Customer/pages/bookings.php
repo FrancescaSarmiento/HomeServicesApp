@@ -18,9 +18,10 @@ if(filter_input(INPUT_POST, 'id') !== null){
             echo <<<frag
                 <div id="bookingDetails" style="float: right; margin-right: 5%;">
                     <div style='border-top: solid;'></div>
-                    <p>Service Provider: {$rows['firstName']} {$rows['lastName']}</p>
-                    <p>Service Type: {$rows['serviceType']}</p>
-                    <p>Status: $status</p>
+                        <p>Reserved Date: {$mD->format('m-d-Y')}</p>
+                        <p>Service Provider: {$rows['firstName']} {$rows['lastName']}</p>
+                        <p>Service Type: {$rows['serviceType']}</p>
+                        <p>Status: $status</p>
 frag;
                 if ($status == 'Pending'){
                     echo <<<frag

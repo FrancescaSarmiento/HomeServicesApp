@@ -31,6 +31,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="?page=transHist">Transaction History</a></li>
                         <li><a href="?page=acctInfo">Account Information</a></li>
+                        <li><a href="?page=changePass">Change Password</a></li>
                     </ul>
                 <li><a href="../includes/logout.php">Logout</a></li>
                 </li>

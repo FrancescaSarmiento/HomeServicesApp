@@ -54,7 +54,7 @@ function getAcctInfo($conn, $userID){
 }
 
 function getTransHist($conn, $userId){
-    $stmt = "select transactionId, timestamp from transaction t join booking b using(bookingId) join service_provider sp using(spId) where custId = ?";
+    $stmt = "select transactionId, timestamp from transaction t join booking b using(bookingId) join service_provider sp using(spId) where custId = ? and bookingStatus = 'done'";
     $query = mysqli_prepare($conn, $stmt);
     $query->bind_param('s', $userId);
     $query->execute();
@@ -149,29 +149,32 @@ function insertBooking($service, $userID, $spId,$bookdate, $conn){
         $serviceidresult=mysqli_query($conn, $serviceid) or die();
         $s = mysqli_fetch_assoc($serviceidresult);
     $sid = $s['serviceId'];
-    $insertquery = "INSERT INTO booking (bookingId, custId, spId, serviceId, bookingStatus, reserved_date, dateStarted, dateFinished) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysqli_stmt_init($conn);
-    
-    mysqli_stmt_prepare($stmt, $insertquery);
-    
-    $prep_stmt = mysqli_stmt_bind_param($stmt, 'ssssssss',$null, $userID, $spId, $sid, $pending, $bookdate, $null, $null);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-    return;
+    $insertquery = mysqli_prepare($conn, "INSERT INTO booking (bookingId, custId, spId, serviceId, bookingStatus, reserved_date, dateStarted, dateFinished) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $insertquery->bind_param('ssssssss',$null, $userID, $spId, $sid, $pending, $bookdate, $null, $null);
+    $insertquery->execute();
+    $res = $insertquery->get_result();
+
+    if($res){
+        return $res;
+    } else {
+        return $res;
+    }
 }
 
-function getUserProfile($spId, $conn){
-    $query1 = "SELECT spId, firstName, lastName, avg(rating) as rating from service_provider join feedback using(spId) group by 1, 2, 3";
+function getUserProfile($spId, $conn, $type){
+    $query1 = "SELECT spId, firstName, lastName, avg(rating) as rating from service_provider join feedback using(spId) where spId = $spId group by 1, 2, 3";
     $result1 = mysqli_query($conn, $query1) or die(mysqli_error($conn));
-    $query2 = "SELECT concat(firstName,' ',lastName) as name, servicetype from service_provider join sp_service using(spId) join service using(serviceId) where spId=$spId";
+    $res1 = mysqli_fetch_assoc($result1);
+    
+    $query2 = "select * from service_provider join sp_service using(spId) join service using(serviceId) where spId = $spId and serviceType = '$type'";
     $result2 = mysqli_query($conn, $query2) or die(mysqli_error($conn));
-
-    while($row = mysqli_fetch_assoc($result1)){
+    
+    while($row = mysqli_fetch_assoc($result2)){
         echo <<<sp
         <div>
-            <p> {$row['firstName']} {$row['lastName']}
-            </p>
-            <p> Rating: {$row['rating']}</p>
+            <p> {$row['firstName']} {$row['lastName']}</p>
+            <p> Asking Price: &#8369;{$row['fixedRate']}</p>
+            <p> Rating: {$res1['rating']}</p>
         </div>
 
 sp;
@@ -183,7 +186,7 @@ function getConfirm($conn, $userId){
     $query->bind_param('i', $userId);
     $query->execute();
     $result = $query->get_result();
-    if(!empty($result)){
+    if($result->num_rows > 0){
         echo "<h2>Transactions that needs confirmation:</h2>";
         return $result;
     } else {

@@ -11,7 +11,13 @@ $result = mysqli_query($conn, $query);
 
         while($row = mysqli_fetch_assoc($result)){
 	       foreach($row as $key => $value){
-		  echo "<a href='?page=services&type=$value'> $value </a><br>";
+                    echo <<<frag
+                        <form method="post" action="">
+                            <input type="hidden" name="type" value="$value">
+                            <input class="btn btn-link" type="submit" name="submit" value="$value">
+                        </form>
+frag;
+   //<a href='?page=services&type=$value'> $value </a><br>";
                   break;
 	       }
         }         

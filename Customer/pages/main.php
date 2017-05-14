@@ -49,6 +49,9 @@ switch ($page){
     case "notifications":
         require_once 'notifications.php';
         break;
+    case "changePass":
+        require_once 'changePassword.php';
+        break;
 }
 
 require '../includes/footer.php';

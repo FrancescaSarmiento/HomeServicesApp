@@ -2,35 +2,38 @@
 require '../includes/blockedPages.php';
 require '../includes/functions.php';
 
-if(isset($_GET['bookdate'])){
+if(!empty(filter_input(INPUT_POST, 'bookdate'))){
     
-$bookdate=$_GET['bookdate'];
-$spname=$_GET['sp'];
-$service=$_GET['type'];
-$spId=$_GET['spid'];
+$bookdate=filter_input(INPUT_POST, 'bookdate');
+$spname= filter_input(INPUT_POST, 'sp');
+$service= filter_input(INPUT_POST, 'type');
+$spId=filter_input(INPUT_POST, 'spid');
 echo "Booking date: $bookdate <br>";
 echo "Service Provider: $spname <br>";
-echo "Service: $service <br>";?>
-
-    <form action="" method="post">
+echo "Service: $service <br>";
+echo <<<frag
+    <form action="../includes/booksuccessful.php" method="post">
+        <input type="hidden" name="bookdate" value="$bookdate">
+        <input type="hidden" name="sp" value="$spname">
+        <input type="hidden" name="type" value="$service">
+        <input type="hidden" name="spid" value="$spId">
         <button type="submit" name="confirm">Confirm</button>
     </form>
         <a href="?page=services&type=<?php echo $service ?>" type="button">Cancel</a>
+frag;
 
-<?php
     #insertinto($bookdate, $spname, $service, $spId, $userID, $conn);
    
     #function insertinto($bookdate, $spname, $service, $spId, $userID, $conn){
-   if(isset( $_POST['confirm'])){
+   if(!empty(filter_input(INPUT_POST, 'bookdate'))){
         
-        insertBooking($service, $userID, $spId,$bookdate, $conn);
-        require_once 'booksuccessful.php';
+        if(insertBooking($service, $userID, $spId,$bookdate, $conn)){
+            echo "<script>alert(Booking request was sent to the service provider. You will be notified once the service provider responded to your request. Thank you.)</script>";
+            echo "<script>window.assign.location('main.php?page=service')</script>";
+        }
+        
     } else {
         echo "";
-    }
-
-    if(isset($_POST['cancel'])){
-        //header('Location: spservice.php?type='.$service.'' );
     }
 /*
 function insertbooking($date, $spname, $service, $userid, $spId, $conn){
