@@ -1,9 +1,10 @@
 <%-- 
-    Document   : CreateMessage
-    Created on : May 12, 2017, 10:17:16 PM
-    Author     : Hiromi Uematsu
+    Document   : FinishTransaction
+    Created on : May 14, 2017, 3:13:27 PM
+    Author     : Jerome
 --%>
 
+<%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
@@ -15,12 +16,12 @@
 <c:if test="${user == null}">
     <c:redirect url="NoSession.jsp"/>
 </c:if>
-
-<!DOCTYPE html>
-<html>
+    
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Messages</title>
+        <meta charset="UTF-8">
+        <title>Handy Zeb - SP Login Page</title>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="styles.css">
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -31,22 +32,23 @@
     <body>
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
-        <h3 class="pageHeader">Messages</h3>
         
-            <div id="createMessage">
-                
-                <form action="SendMessage" method="POST">
-                    
-                    <p>Customer ID:<br>
-                        <input type="number" name="cuName" required>
-                    </p>
-                    
-                    <textarea name="message" rows="4" cols="50" placeholder="Enter message here."></textarea>
-                    
-                    <p><input type="submit" value="Send Message"></p>
-                    
-                </form>
-                
-            </div>        
+        <h2>Finish Transaction</h2>
+        
+        <div class="loginArea">
+            <p>We're almost done, just let us know what you did:</p>
+            <form action="AddService" method="POST">
+                <p>Service Made:
+                    <input type="text" name="serv" class="form-control" placeholder="Service Name" aria-describedby="basic-addon1" required>
+                </p>
+                <p>Number of Hours for you to finish the job:
+                    <input type="number" step="0.1" name="hours" class="form-control" placeholder="200" aria-describedby="basic-addon1" required>
+                </p>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Add Service">
+            </form>
+        </div>
+        <div><p>Done then? Just click <a href='FinishTransaction'>here</a> to finish the transaction.
+                (Please wait until the client has approved of the things you've done.)
+            </p></div>
     </body>
 </html>

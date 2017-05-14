@@ -69,18 +69,6 @@
                         <input type="checkbox" name="sunday"> Sunday<br>
                     </p>
                     
-                    <p><b>Shift Starts At:</b><br>
-                        <c:forEach var = "shift_starts" items = "${info.rows}">
-                            <input type="time" name="shiftStart" value=<c:out value = "${shift_starts.shift_start}"/>>
-                        </c:forEach>
-                    </p>
-                    
-                    <p><b>Shift Ends At:</b><br>
-                        <c:forEach var = "shift_ends" items = "${info.rows}">
-                            <input type="time" name="shiftEnd" value=<c:out value = "${shift_ends.shift_end}"/>>
-                        </c:forEach>
-                    </p>
-                    
                     <sql:query dataSource = "${snapshot}" var = "serviceTypes">
                         SELECT serviceType FROM service;
                     </sql:query>

@@ -7,27 +7,8 @@
     margin: 0;
 }
 
-h2 {
-    margin: 0;
-    padding: 0 0 5px;
-}
-
-h3 {
-    background-color: navy;
-    color: yellow;
-    margin: 0 0 5px;
-    text-align: center;
-}
-
 input[type=submit] {
     padding: 1px 3px;
-}
-
-#schedule {
-    display: inline-block;
-    float: left;
-    margin-right: 1%;
-    width: 65%;
 }
 
 .product {
@@ -80,4 +61,97 @@ input[type=submit] {
 
 #cart form {
     display: inline-block;
+}
+
+#loginHeader{
+    text-align:center;
+}
+
+.loginArea{
+    padding-left:40%;
+    padding-right:40%;
+}
+
+.loginArea p{
+    font-size:25px;
+}
+
+#loginButton{
+    text-align:center;
+}
+
+.bannerSp{
+    align-content:center;
+    text-align:center;
+}
+
+.navbar-header p{
+    text-align:center;
+    color:white;
+}
+
+.navbar-header a{
+    padding-left:3%;
+}
+
+.nav a{
+    color:white;
+}
+
+#timeStamp{
+    font-size:15px;
+}
+
+.updateInfoSp{
+    padding-left:40%;
+    padding-right:40%;
+}
+
+.updateInfoSp p{
+    font-size:25px;
+}
+
+.responseMessage{
+    text-align:center;
+}
+
+.pageHeader{
+    padding-left:10%;
+}
+
+.secondPageHeader{
+    text-align:center;
+}
+
+.schedContainer{
+    text-align:center;
+    padding-right:2%;
+    padding-left:2%;
+    border:1px solid #baddff;
+}
+
+.schedContainer label{
+    padding-left:1%;
+    padding-right:1%;
+}
+
+.serviceContainer{
+    text-align:center;
+    padding-right:2%;
+    padding-left:2%;
+    border:1px solid #baddff;
+}
+
+.sidebar li{
+    background-color:gray;
+    color:white;
+}
+
+.spanContent{
+    background-color:lightgray;
+    align-content:right;
+}
+
+#returnToHome{
+    text-align:center;
 }

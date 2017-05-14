@@ -1,6 +1,6 @@
 <%-- 
-    Document   : Outbox
-    Created on : May 13, 2017, 1:13:12 AM
+    Document   : Inbox
+    Created on : May 12, 2017, 10:30:13 PM
     Author     : Hiromi Uematsu
 --%>
 
@@ -13,47 +13,65 @@
 <c:set var="user" scope="page" value="${sessionScope.user}"/>
 
 <c:if test="${user == null}">
-    <c:redirect url="fail.html"/>
+    <c:redirect url="NoSession.jsp"/>
 </c:if>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Inbox</title>
+        <title>Outbox</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
+        <jsp:include page="WEB-INF/fragments/banner.html"/>
         
-        <h1>Inbox</h1>
-        
-        <div id="filtering">
-            <form action="filerServlet" method="POST">
-                <p>Filter Out By Name: 
-                    <input type="text" name="filteredName"><input type="submit" value="Search"></p>
-            </form>
-        </div>
-        
-        <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
+        <div class="container-fluid">
+            <div class="row-fluid">
+              <div class="span2">
+                <div class="col-sm-3 col-md-2">
+                    <a href="CreateMessage.jsp" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
+                    <hr>
+                    <ul class="nav nav-pills nav-stacked sidebar">
+                        <form action="filerServlet" method="POST">
+                            <p>Filter Out By Name: 
+                                <input type="text" name="filteredName"><input type="submit" value="Search"></p>
+                        </form>
+                        <li class="active"><a href="Inbox.jsp" role="presentation">Inbox </a>
+                        </li>
+                        <li><a href="Outbox.jsp" role="presentation">Outbox</a></li>
+                        </ul>
+                </div>
+              </div>
+              <div class="span10">
+                <h1 class="pageHeader">Outbox</h1>
+                <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
                            url = "jdbc:mysql://localhost:3306/handyzebdb"
                            user = "root" password = ""/> 
         
-        <sql:query dataSource = "${snapshot}" var = "info1">
-            SELECT idNum FROM user WHERE userName='${user}'; 
-        </sql:query>
+                <sql:query dataSource = "${snapshot}" var = "info1">
+                    SELECT idNum FROM user WHERE userName='${user}'; 
+                </sql:query>
         
-        <sql:query dataSource = "${snapshot}" var = "info">
-            <c:forEach var = "info_1" items = "${info1.rows}">
-                SELECT customer.firstName, customer.lastName, message.senderId, message.messageBody, message.timeSent FROM user INNER JOIN message ON user.idNum=message.senderId INNER JOIN customer ON message.receiverId=customer.custId WHERE message.senderId='<c:out value = "${info_1.idNum}"/>';
-            </c:forEach>
-        </sql:query>
+                <sql:query dataSource = "${snapshot}" var = "info">
+                    <c:forEach var = "info_1" items = "${info1.rows}">
+                        SELECT customer.custId, CONCAT(customer.firstName,' ', customer.lastName) AS name, message.messageBody, message.timeSent FROM message INNER JOIN customer ON message.receiverId=customer.custId WHERE message.senderId='<c:out value = "${info_1.idNum}"/>';
+                    </c:forEach>
+                </sql:query>
         
-            <div id="inbox">
-                
-                <c:forEach var = "messages" items = "${info.rows}">
-                    <p><c:out value = "${messages.firstName}"/> <c:out value = "${messages.lastName}"/> || <c:out value = "${messages.senderId}"/> || <c:out value = "${messages.messageBody}"/> || <c:out value = "${messages.timeSent}"/></p><br> <a href="CreateMessage.jsp">Reply</a>
-                </c:forEach>
-                
-            </div>        
+                <div id="inbox" class="spanContent">
+                    <c:forEach var = "messages" items = "${info.rows}">
+                        <p><c:out value = "${messages.custId}"/> || <c:out value = "${messages.name}"/> ||  <c:out value = "${messages.messageBody}"/> || <c:out value = "${messages.timeSent}"/></p><br>
+                    </c:forEach>               
+                </div>    
+                </div>
+            </div>
+        </div>    
     </body>
 </html>
-

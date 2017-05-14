@@ -1,7 +1,7 @@
 <%-- 
-    Document   : CreateMessage
-    Created on : May 12, 2017, 10:17:16 PM
-    Author     : Hiromi Uematsu
+    Document   : Password
+    Created on : May 13, 2017, 6:03:55 PM
+    Author     : Jerome
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,8 +9,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
-<c:set var="user" scope="page" value="${sessionScope.user}"/>
 
 <c:if test="${user == null}">
     <c:redirect url="NoSession.jsp"/>
@@ -20,7 +18,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Messages</title>
+        <title>Handy Zeb - Schedule Page</title>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="styles.css">
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -31,22 +30,29 @@
     <body>
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
-        <h3 class="pageHeader">Messages</h3>
+        <h3 class="secondPageHeader">Change Password</h3>
+        <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
+                           url = "jdbc:mysql://localhost:3306/handyzebdb"
+                           user = "root" password = ""/> 
         
-            <div id="createMessage">
-                
-                <form action="SendMessage" method="POST">
-                    
-                    <p>Customer ID:<br>
-                        <input type="number" name="cuName" required>
+        <div class="container-fluid">
+            <div class="serviceContainer">
+                <form action="ChangePass" method="POST">
+                    <p>Type in your <b>old</b> Password: 
+                        <input type="password" name="old_pass">
                     </p>
-                    
-                    <textarea name="message" rows="4" cols="50" placeholder="Enter message here."></textarea>
-                    
-                    <p><input type="submit" value="Send Message"></p>
-                    
+
+                    <p>Type in your <b>new</b> Password: 
+                        <input type="password" name="new_pass">
+                    </p>
+
+                    <p>Retype your <b>new</b> Password: 
+                        <input type="password" name="new_passr">
+                    </p>
+
+                    <p><input type="submit" value="Save Changes"></p>
                 </form>
-                
-            </div>        
+            </div>
+        </div>
     </body>
 </html>

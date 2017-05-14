@@ -6,7 +6,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:set var="user" scope="page" value="${sessionScope.user}"/>
-<c:set var="spInfo" scope="page" value="${sessionScope.spInfo}"/>
 
 <c:if test="${user == null}">
     <c:redirect url="NoSession.jsp"/>

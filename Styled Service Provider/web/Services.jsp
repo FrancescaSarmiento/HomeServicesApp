@@ -75,8 +75,5 @@
                     </form>
              </div>
          </div>
-        <div id="returnToHome">
-           <a href="Profile.jsp">Return to Main Page</a>
-        </div>        
     </body>
 </html>

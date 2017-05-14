@@ -32,7 +32,7 @@
             SELECT service_provider.firstName FROM service_provider INNER JOIN user ON service_provider.spId = user.idNum WHERE user.userName="${user}";
         </sql:query>
         <sql:query dataSource = "${snapshot}" var = "schedule">
-            SELECT booking.bookingId, booking.reserved_date, CONCAT(customer.firstName,' ',customer.lastName) AS name, customer.address, customer.contactNumber, booking.bookingStatus FROM booking NATURAL JOIN customer WHERE booking.bookingStatus IN ("accepted", "ongoing") AND spId="12" ORDER BY 1 DESC LIMIT 1;
+            SELECT booking.bookingId, booking.reserved_date, CONCAT(customer.firstName,' ',customer.lastName) AS name, customer.address, customer.contactNumber, booking.bookingStatus FROM booking NATURAL JOIN customer WHERE booking.bookingStatus IN ("accepted", "ongoing") AND spId="12" ORDER BY 1 DESC;
         </sql:query>
         
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
@@ -56,18 +56,10 @@
                         <p class='addrss'><c:out value = "${sche_dule.address}"/></p>
                         <p class='cntct'><c:out value = "${sche_dule.contactNumber}"/></p>
                         <p class='status'><c:out value = "${sche_dule.bookingStatus}"/></p>
-
-                        <c:set var="bookID" scope="session" value="${sche_dule.bookingId}"/>
-                        <form action="StartJob" method="POST">
-                            <input type="submit" value="Start Job">
-                        </form>
-                        <form action="MarkAsDone" method="POST">
-                            <input type="submit" value="Mark As Done">
-                        </form>
                     </div>
                 </c:forEach>
                 <div class="fullsched">
-                    <a href="FullSchedule.jsp">View full schedule.</a>
+                    <a href="Profile.jsp">View latest job.</a>
                 </div>
             </div>
             </div>

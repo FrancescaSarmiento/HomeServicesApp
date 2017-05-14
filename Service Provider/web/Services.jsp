@@ -1,7 +1,7 @@
 <%-- 
-    Document   : CreateMessage
-    Created on : May 12, 2017, 10:17:16 PM
-    Author     : Hiromi Uematsu
+    Document   : Services
+    Created on : May 13, 2017, 4:30:40 AM
+    Author     : Jerome
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,8 +9,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
-<c:set var="user" scope="page" value="${sessionScope.user}"/>
 
 <c:if test="${user == null}">
     <c:redirect url="NoSession.jsp"/>
@@ -20,7 +18,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Messages</title>
+        <title>Handy Zeb - Schedule Page</title>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <link rel="stylesheet" href="styles.css">
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -31,22 +30,30 @@
     <body>
         <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
-        <h3 class="pageHeader">Messages</h3>
-        
-            <div id="createMessage">
-                
-                <form action="SendMessage" method="POST">
-                    
-                    <p>Customer ID:<br>
-                        <input type="number" name="cuName" required>
+        <h2 class="pageHeader">Update Services</h2>
+        <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
+                   url = "jdbc:mysql://localhost:3306/handyzebdb"
+                   user = "root" password = ""/>
+        <hr>
+        <h3 class="secondPageHeader">Update Informations</h3>
+        <div class="container-fluid">
+            <div class="serviceContainer">
+                <form action="Services" method="POST">
+                    <p>You still need to check your current services (If you still offer them).</p>
+                    <sql:query dataSource = "${snapshot}" var = "serviceTypes">
+                        SELECT serviceType FROM service;
+                    </sql:query>
+                    <p><b>Services:</b><br>
+                        <c:forEach var = "service_type" items = "${serviceTypes.rows}">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name=<c:out value = "${service_type.serviceType}"/>><c:out value = "${service_type.serviceType}"/><br>
+                            </label>
+                        </c:forEach>
                     </p>
                     
-                    <textarea name="message" rows="4" cols="50" placeholder="Enter message here."></textarea>
-                    
-                    <p><input type="submit" value="Send Message"></p>
-                    
+                    <p><input type="submit" value="Save Changes"></p>
                 </form>
-                
-            </div>        
+             </div>
+         </div>       
     </body>
 </html>

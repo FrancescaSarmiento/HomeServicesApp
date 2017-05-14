@@ -11,12 +11,18 @@
     <body>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
         
-        <h2>Login</h2>
+        <h2 id="loginHeader">Login</h2>
         
-        <form action="SpLogin" method="POST">
-            <p>Username:<br><input type="text" name="name" required></p>
-            <p>Password:<br><input type="password" name="pass" required></p>
-            <p><input type="submit" value="Login"></p>
-        </form>
+        <div class="loginArea">
+            <form action="SpLogin" method="POST">
+                <p>Username:
+                    <input type="text" name="name" class="form-control" placeholder="Username" aria-describedby="basic-addon1" required>
+                </p>
+                <p>Password:
+                    <input type="password" name="pass" class="form-control" placeholder="Password" aria-describedby="basic-addon1" required>
+                </p>
+                <input class="btn btn-primary btn-lg btn-block" type="submit" value="Login">
+            </form>
+        </div>
     </body>
 </html>
