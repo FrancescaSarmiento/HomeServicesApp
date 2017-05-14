@@ -29,44 +29,22 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="Profile.jsp">Home</a></li>
-                        <li><a href="Inbox.jsp">Messages</a></li>                 
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                ${spInfo.firstName()}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                                <li><a href="Schedule.jsp">Edit Your Schedule</a></li>
-                                <li><a href="Services.jsp">Add Services to Your Arsenal</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="Logout">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
+        <jsp:include page="WEB-INF/fragments/banner.html"/>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span2">
                     <div class="col-sm-3 col-md-2">
-                        <div class="btn-group">
                         <a href="CreateMessage.jsp" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
-                        <hr>
                         <hr>
                         <ul class="nav nav-pills nav-stacked sidebar">
                             <form action="filerServlet" method="POST">
-                                <p>Filter Out By Name: 
-                                    <input type="text" name="filteredName"><input type="submit" value="Search"></p>
+                                <p>Filter Out By Name:<br>
+                                    <input type="text" class="filterBox" name="filteredName"><input type="submit" value="Search"></p>
                             </form>
                             <li><a href="Inbox.jsp" role="presentation">Inbox </a></li>
                             <li class="active"><a href="Outbox.jsp" role="presentation">Outbox</a></li>
                         </ul>
-                        </div>
                     </div>
                 </div>
                 <div class="span10">
@@ -85,10 +63,23 @@
                         </c:forEach>
                     </sql:query>
 
-                   <div id="inbox" class="spanContent">
-
+                   <div id="inbox" class="tableContent">
+                        <table class="table table-striped table-hover test">
+                            <tr>
+                                <th>Name</th>
+                                <th>Sender ID</th>
+                                <th>Message</th>
+                                <th>Time sent</th>
+                                <th></th>
+                            </tr>
                         <c:forEach var = "messages" items = "${info.rows}">
-                            <p><c:out value = "${messages.firstName}"/> <c:out value = "${messages.lastName}"/> || <c:out value = "${messages.senderId}"/> || <c:out value = "${messages.messageBody}"/> || <c:out value = "${messages.timeSent}"/></p><br> <a href="CreateMessage.jsp">Reply</a>
+                            <tr>
+                                <td><c:out value = "${messages.firstName}"/> <c:out value = "${messages.lastName}"/></td>
+                                <td><c:out value = "${messages.senderId}"/></td>
+                                <td><c:out value = "${messages.messageBody}"/></td>
+                                <td><c:out value = "${messages.timeSent}"/></td>
+                                <td><a href="CreateMessage.jsp">Reply</a></td>
+                            </tr>
                         </c:forEach>
                     </div>   
                 </div>

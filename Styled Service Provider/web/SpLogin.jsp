@@ -17,7 +17,7 @@
         
         <div class="loginArea">
             <form action="SpLogin" method="POST">
-                <p>Username:
+                <p>Username: 
                     <input type="text" name="name" class="form-control" placeholder="Username" aria-describedby="basic-addon1" required>
                 </p>
                 <p>Password:

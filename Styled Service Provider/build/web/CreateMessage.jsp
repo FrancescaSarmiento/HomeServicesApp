@@ -29,53 +29,42 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="Profile.jsp">Home</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Messages <span class="caret"></span></a>                
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel0">
-                            <li><a href="Inbox.jsp" role="presentation">Inbox</a></li>
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
+        <jsp:include page="WEB-INF/fragments/banner.html"/>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span2">
+                    <div class="col-sm-3 col-md-2">
+                        <a href="CreateMessage.jsp" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
+                        <hr>
+                        <ul class="nav nav-pills nav-stacked sidebar">
+                            <form action="filerServlet" method="POST">
+                                <p>Filter Out By Name:<br>
+                                    <input type="text" class="filterBox" name="filteredName"><input type="submit" value="Search"></p>
+                            </form>
+                            <li><a href="Inbox.jsp" role="presentation">Inbox </a>
+                            </li>
                             <li><a href="Outbox.jsp" role="presentation">Outbox</a></li>
-                            <li><a href="CreateMessage.jsp" role="presentation">Create Message +</a></li>
                         </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                ${spInfo.firstName()}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                                <li><a href="Schedule.jsp">Edit Your Schedule</a></li>
-                                <li><a href="Services.jsp">Add Services to Your Arsenal</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="Logout">Logout</a></li>
-                    </ul>
+                    </div>
+                </div>
+                <div class="span10">
+                    <h1 class="pageHeader">Messages</h1>
+                    <div id="createMessage" class="tableContent">
+                        <form action="MessageServlet" method="POST">
+
+                            <p>
+                                Customer ID: <input type="number" name="customerID" required>
+                            </p>
+
+                            <textarea class="form-control" style="width:100%;" row="3" placeholder="Enter your message here."></textarea>
+
+                            <p><input type="submit" value="Send Message"></p>
+
+                        </form>
+                    </div>        
                 </div>
             </div>
-        </nav>
-        <h1 class="pageHeader">Messages</h1>
-        
-            <div id="createMessage">
-                
-                <form action="MessageServlet" method="POST">
-                    
-                    <p>Customer ID:<br>
-                        <input type="number" name="customerID" required>
-                    </p>
-                    
-                    <textarea rows="4" cols="50">
-                        Enter message here.
-                    </textarea>
-                    
-                    <p><input type="submit" value="Send Message"></p>
-                    
-                </form>
-                
-            </div>        
+        </div>
     </body>
 </html>

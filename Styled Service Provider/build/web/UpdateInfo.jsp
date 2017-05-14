@@ -27,26 +27,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="Profile.jsp">Home</a></li>
-                        <li><a href="Message.jsp">Messages</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                ${spInfo.firstName()}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                                <li><a href="UpdateInfo.jsp" role="presentation">Edit Your Profile</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="Logout">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <h1>Update Information</h1>
         <h2>Currently logged in as <b>${spInfo.firstName}</b></h2>
         

@@ -94,10 +94,6 @@ input[type=submit] {
     padding-left:3%;
 }
 
-.nav a{
-    color:white;
-}
-
 #timeStamp{
     font-size:15px;
 }
@@ -142,16 +138,63 @@ input[type=submit] {
     border:1px solid #baddff;
 }
 
-.sidebar li{
-    background-color:gray;
-    color:white;
+.sidebar{
+    background-color:#f4f4f4;
 }
 
 .spanContent{
     background-color:lightgray;
     align-content:right;
+    margin-left:16.5%;
 }
 
 #returnToHome{
     text-align:center;
+}
+
+.tableContent{
+    align-content:right;
+    margin-left:16.5%;
+    display:flex;
+}
+
+.table{
+    table-layout: fixed;
+}
+
+.table th, table td {
+    overflow: hidden; 
+}
+
+.bookIdCol{
+    width:5%;
+}
+
+.nameCol{
+    width:25%;
+}
+
+.dateCol{
+    width:25%;
+}
+
+.typeCol{
+    width:25%;
+}
+
+.submitCol{
+    width:15%;
+}
+
+.form-control{
+    resize: none;
+    width:100% !important;
+}
+
+.filterBox{
+    width:80%;
+}
+
+.scheduleProfile{
+    padding-left:10%;
 }

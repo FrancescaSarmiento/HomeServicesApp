@@ -28,27 +28,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.0.4/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container">
-                <div class="navbar-header navbar-right">
-                    <ul class="nav navbar-nav">
-                        <li><a href="Profile.jsp">Home</a></li>
-                        <li><a href="Inbox.jsp">Messages</a></li>                 
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                ${spInfo.firstName()}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                                <li><a href="Schedule.jsp">Edit Your Schedule</a></li>
-                                <li><a href="Services.jsp">Add Services to Your Arsenal</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="Logout">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="WEB-INF/fragments/navbar.jsp"/>
         <jsp:include page="WEB-INF/fragments/banner.html"/>
         <h2 class="pageHeader">Update Services</h2>
         <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
@@ -75,5 +55,8 @@
                     </form>
              </div>
          </div>
+        <div id="returnToHome">
+           <a href="Profile.jsp">Return to Main Page</a>
+        </div>        
     </body>
 </html>
