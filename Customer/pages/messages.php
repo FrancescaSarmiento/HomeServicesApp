@@ -21,22 +21,32 @@
             ?>
             
         </div>
-            
             <div id="reply">
-                <form class="form-inline send-message" method="post">
+                <form class="form-inline send-message" method="post" action="main.php?page=messages">
                     <div class="inputMessage">
-                        <textarea style="width: 300%; resize: none;" name="message" placeholder="Enter Your Message" required="require"></textarea>
-                        <input class="btn btn-primary" type="submit" name="submit" value="Send" />
+                        <input type="hidden" name="spId" value="<?php echo $spId ?>">
+                        <input type="hidden" name="spid" value="<?php echo $spId ?>">
+                        <input type="hidden" name="user" value="<?php echo $userID ?>">
+                        <textarea style="width: 300%; resize: none;" name="message" placeholder="Enter Your Message" required></textarea>
+                        <input class="btn btn-primary" type="submit" name="submit" value="Send" onclick="window.location.reload()"/>
                     </div>
-                    </div>
-                    </div>
-                        <?php 
-                            $message = filter_input(INPUT_POST, 'message');
-                            if(!empty($message)){   
-                                reply($conn, $userID, $spId, $message);
-                            }
-                        ?>
                 </form>
             </div>
+            <?php 
+                if(!empty(filter_input(INPUT_POST, 'message'))){   
+                    $ct = date('Y-m-d H:i:s');
+                    $messageBody = filter_input(INPUT_POST, 'message');
+                    $spID = filter_input(INPUT_POST, 'spid');
+                    $userID = filter_input(INPUT_POST, 'user');
+                    $message = htmlspecialchars($messageBody);
+                    $result = mysqli_query($conn, "INSERT INTO message (senderId, receiverId, messageBody, timeSent) VALUES ('$userID','$spID','$message','$ct')") or die(mysqli_error($conn));
+                
+                    unset($ct);
+                    unset($messageBody);
+                    unset($spID);
+                    unset($message);
+                }
+            ?>
     </div>
-    <?php }
+<?php 
+    }
