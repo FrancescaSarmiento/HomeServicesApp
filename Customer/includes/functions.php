@@ -173,7 +173,7 @@ function getUserProfile($spId, $conn, $type){
         echo <<<sp
         <div>
             <p> {$row['firstName']} {$row['lastName']}</p>
-            <p> Asking Price: &#8369;{$row['fixedRate']}</p>
+            <p> Asking Price: &#8369;{$row['fixedRate']}/hr</p>
             <p> Rating: {$res1['rating']}</p>
         </div>
 

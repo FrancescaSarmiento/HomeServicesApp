@@ -4,6 +4,7 @@ $availday = filter_input(INPUT_POST, 'dayis');
 $dayExtract = strtotime($availday);
 $dayOfWeek = date('D', $dayExtract);
 $servtype = filter_input(INPUT_POST, 'type');
+$user = $_SESSION['userID'];
 if(!empty($servtype)){
         require_once '../includes/calendar.php';
         $servtype = filter_input(INPUT_POST, 'type');
@@ -34,6 +35,7 @@ if (mysqli_num_rows($result)>0 && $availday != null){ ?>
                                 <input class="btn-link" type="submit" name="spinfo" value='{$row['name']}'>
                             </form>
                             <form method="post">
+                                <input type="hidden" name="userID" value="$user">
                                 <input type="hidden" name="bookdate" value="$availday">
                                 <input type="hidden" name="sp" value="$sp">
                                 <input type="hidden" name="type" value="$servtype">
@@ -48,7 +50,7 @@ frag;
             echo "Sorry, no available service provider for this date.<br> Please choose another date.";
         }
 
-require_once 'book.php';
+require 'book.php';
 
 if(!empty(filter_input(INPUT_POST, 'spId'))){
     $spId = filter_input(INPUT_POST, 'spId');
