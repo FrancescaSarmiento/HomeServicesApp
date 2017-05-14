@@ -17,7 +17,7 @@
 
 		<form action="/search-sp-on-status" method="post">
 			<select name="status">
-				<option value="">Choose Account Type</option>
+				<option value="">Choose Account Status</option>
 				<option value="suspended">Suspended</option>
 				<option value="unsuspended">Unsuspended</option>
 			</select>
@@ -28,6 +28,7 @@
 				<th>Username</th>
 				<th>First name</th>
 				<th>Last name</th>
+				<th>Email</th>
 				<th>Contact number</th>
 				<th>Shift start</th>
 				<th>Shift end</th>
@@ -40,6 +41,7 @@
 					<td><%= item.userName %></td>
 					<td><%= item.firstName %></td>
 					<td><%= item.lastName %></td>
+					<td><%= item.email %> <a href="/edit-sp?userName=<%= item.userName %>">Edit</a></td>
 					<td><%= item.contactNumber %></td>
 					<td><%= item.shiftStart %></td>
 					<td><%= item.shiftEnd %></td>
@@ -49,9 +51,9 @@
 					<td>
 
 					<% if(item.status == '1'){ %>
-					<form action="/suspend" method="post"><input name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Suspend"></form>
+					<form action="/suspend" method="post"><input hidden name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Suspend"></form>
 					<% }else{ %>
-					<form action="/unsuspend" method="post"><input name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
+					<form action="/unsuspend" method="post"><input hidden name="userId" type="text" value="<%= item.spId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
 					<% } %>
 
 					</td>

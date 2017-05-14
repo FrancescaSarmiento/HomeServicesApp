@@ -6,7 +6,7 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var generator = require('generate-password');
 var session = require('express-session');
-
+var nodemailer = require('nodemailer');
 
 var app = express();
 
@@ -24,9 +24,10 @@ app.listen(3000, function(){
 });
 
 var connection = mysql.createConnection({
-	host: '127.0.0.1',
-	user: 'root',
-	password: '',
+	host: 'localhost',
+	port: 3306,
+	user: 'handyzeb',
+	password: 'webtek2017',
 	database: 'handyzebdb'
 });
 
@@ -36,8 +37,16 @@ connection.connect(function(err){
 	console.log('Connection to database successful!');
 });
 
+var transport = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: 'handyzeb@gmail.com',
+		pass: 'handyzeb2017'
+	}
+});
+
 app.get('/', function(req, res){
-	res.render('index');
+	res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/main', function(req, res){
@@ -159,13 +168,14 @@ app.post('/login', function(req, res){
 		if (err) { console.error(err); return }
 
 		var valid = false;
+		console.log(rows);
 		rows.forEach(function(item){
 			if(item.userName == userName){
 				valid = true;
 				var userType = item.userType;
 
 				if(userType == "Customer"){
-					res.redirect('http://127.0.0.1:80/login.php?userName='+req.body.userName);
+					res.redirect('http://customer.handyzeb.org/login.php?userName='+req.body.userName);
 				}else if(userType == "Service Provider"){
 					res.redirect('http://127.0.0.1:8086/splogin.jsp?userName='+req.body.userName);
 				}else{
@@ -223,8 +233,8 @@ app.get('/spregister', function(req, res){
 });
 
 app.post('/register', function(req, res){
-	var userColumns = ['userName', 'password', 'userType', 'status']
-	var userValues = [req.body.userName, req.body.password, req.body.userType, 0];
+	var userColumns = ['userName', 'password', 'userType', 'status', 'balance']
+	var userValues = [req.body.userName, req.body.password, req.body.userType, 0, 0];
 	connection.query("INSERT INTO user (??) VALUES (?)", [userColumns, userValues], function(err, results){
 		if (err) { 
 			console.error(err);
@@ -259,8 +269,8 @@ app.post('/spregister', function(req, res){
 		length: 10,
 		numbers: true
 	});
-	var userColumns = ['userName', 'password', 'userType', 'status'];
-	var userValues = [req.body.userName, randomPassword, req.body.userType, 1];
+	var userColumns = ['userName', 'password', 'userType', 'status', 'balance'];
+	var userValues = [req.body.userName, randomPassword, req.body.userType, 1, 0.0];
 	connection.query("INSERT INTO user (??) VALUES (?)", [userColumns, userValues], function(err, results){
 		if (err) { 
 			console.error(err); 
@@ -280,15 +290,6 @@ app.post('/spregister', function(req, res){
 			if (err) { console.error(err); return }	
 
 			var spEmail = req.body.email;
-
-			var nodemailer = require('nodemailer')
-			var transport = nodemailer.createTransport({
-			  service: 'gmail',
-			  auth: {
-			    user: 'riovannkolodzik@gmail.com',
-			    pass: 'RV.Kolodzik25'
-			  }
-			});
 
 		  	transport.sendMail({
 		    	from: 'Handy Zeb!',
@@ -478,15 +479,6 @@ app.post('/accept', function(req, res){
 
 			//console.log(customerEmail);
 
-			var nodemailer = require('nodemailer')
-			var transport = nodemailer.createTransport({
-			  service: 'gmail',
-			  auth: {
-			    user: 'riovannkolodzik@gmail.com',
-			    pass: 'RV.Kolodzik25'
-			  }
-			});
-
 		  	transport.sendMail({
 		    	from: 'Handy Zeb!',
 		    	to: customerEmail,
@@ -502,41 +494,30 @@ app.post('/accept', function(req, res){
 });
 
 app.post('/reject', function(req, res){
-	//DELETE FROM table_name [WHERE Clause]
-	var values = [req.body.userId];
+	connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE idNum = '" + req.body.idNum +"'", function(err, rows){
+		if (err){ console.error(err); return}
+
+		var customerEmail = null;
+		rows.forEach(function(item){
+			customerEmail = item.email;
+		});
+
+		//console.log(customerEmail);
+
+	  	transport.sendMail({
+	    	from: 'Handy Zeb!',
+	    	to: customerEmail,
+	   		subject: 'Account',
+			text: 'We are so sorry, but your account has been rejected by the administrator. Please try again some other time.'
+		});
+	});
+
+	var values = [req.body.idNum];
 	connection.query("DELETE FROM customer WHERE custId = ?", [values], function(err, rows){
 		if (err){ console.error(err); return }
 
 		connection.query("DELETE FROM user WHERE idNum = ?", [values], function(err, rows1){
 			if (err){ console.error(err); return }
-
-			var customer = [];
-			connection.query("SELECT email FROM customer JOIN user ON idNum = custId WHERE userName = '" + req.body.userName +"'", function(err, rows){
-				if (err){ console.error(err); return}
-
-				var customerEmail = null;
-				rows.forEach(function(item){
-					customerEmail = item.email;
-				});
-
-				//console.log(customerEmail);
-
-				var nodemailer = require('nodemailer')
-				var transport = nodemailer.createTransport({
-				  service: 'gmail',
-				  auth: {
-				    user: 'riovannkolodzik@gmail.com',
-				    pass: 'RV.Kolodzik25'
-				  }
-				});
-
-			  	transport.sendMail({
-			    	from: 'Handy Zeb!',
-			    	to: customerEmail,
-			   		subject: 'Account',
-					text: 'We are so sorry, but your account has been rejected by the administrator. Please try again some other time.'
-				});
-			});
 
 			res.redirect('/main');
 		});
@@ -558,15 +539,6 @@ app.post('/suspend', function(req, res){
 			});
 
 			//console.log(customerEmail);
-
-			var nodemailer = require('nodemailer')
-			var transport = nodemailer.createTransport({
-			  service: 'gmail',
-			  auth: {
-			    user: 'riovannkolodzik@gmail.com',
-			    pass: 'RV.Kolodzik25'
-			  }
-			});
 
 		  	transport.sendMail({
 		    	from: 'Handy Zeb!',
@@ -594,15 +566,6 @@ app.post('/unsuspend', function(req, res){
 			});
 
 			//console.log(customerEmail);
-
-			var nodemailer = require('nodemailer')
-			var transport = nodemailer.createTransport({
-			  service: 'gmail',
-			  auth: {
-			    user: 'riovannkolodzik@gmail.com',
-			    pass: 'RV.Kolodzik25'
-			  }
-			});
 
 		  	transport.sendMail({
 		    	from: 'Handy Zeb!',
@@ -794,5 +757,69 @@ app.post('/search-transaction-on-status', function(req, res){
 		});
 
 		res.render('transactions', {transactions: trans});
+	});
+});
+
+app.get('/edit-sp', function(req, res){
+	var sp = [];
+	var values = [req.query.userName];
+	connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId WHERE userName=?", [values], function(err, rows){
+		if (err) {console.error(err); return }
+
+		rows.forEach(function(item){
+			sp.push({
+				idNum: item.idNum,
+				userName: req.query.userName,
+				firstName: item.firstName,
+				lastName: item.lastName,
+				email: item.email,
+				contactNumber: item.contactNumber,
+			});
+		});
+
+		res.render('edit-sp', {user: sp});
+	});
+});
+
+app.post('/edit-sp', function(req,res){
+	var columns = Object.keys(req.body);
+	var values = Object.values(req.body);
+	var where = [req.query.idnum];
+	console.log(req.query.idnum);
+
+	
+	connection.query("UPDATE service_provider SET ??=? WHERE spId=?", [columns, values, where], function(err, rows){
+		if (err){ console.error(err); return }
+		console.log(rows);
+		var sp = {};
+		connection.query("SELECT * FROM service_provider JOIN user ON idNum=spId WHERE spId=?",[where], function(err, rows){
+			if (err){ console.error(err); return; }
+
+			rows.forEach(function(item){
+				sp.spId = item.spId,
+				sp.userName = item.userName,
+				sp.password = item.password,
+				sp.firstName = item.firstName,
+				sp.lastName = item.lastName,
+				sp.email = item.email,
+				sp.contactNumber = item.contactNumber
+			});
+
+			transport.sendMail({
+		    	from: 'Handy Zeb!',
+		    	to: req.body.email,
+		   		subject: 'Account',
+				text: `
+Hello ${sp.firstName} ${sp.lastName}!
+
+You now have an account for Handy Zeb! 
+		Your User Name is:   ${sp.userName}
+		Your Password is:  ${sp.password}
+Try logging in to our site now! 
+		www.handyzeb.org`
+			});
+
+			res.redirect('/service-providers');	
+		});
 	});
 });

@@ -35,7 +35,7 @@
     					<td><%= item.address %></td>
     					<td><%= item.email %></td>
     					<td><%= item.contactNumber %></td>
-    					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input class="btn" type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userId" type="text" value=<%= item.custId %> hidden><input class="btn" type="submit" value="Reject"></form></td>
+    					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input class="btn" type="submit" value="Accept"></form><form action="/reject" method="post"><input name="idNum" type="text" value=<%= item.custId %> hidden><input class="btn" type="submit" value="Reject"></form></td>
     				</tr>
     			<% }) %>
             </table>
@@ -117,7 +117,7 @@
             <div class="col-md-3">
                 <h2>Total Company Earnings</h2>
                 <% sum.forEach(function(item){ %>
-                    <h3><s>P</s><%= item.sum %></h3>
+                    <h3>&#8369;<%= item.sum %></h3>
                 <% }) %>
             </div>
 
