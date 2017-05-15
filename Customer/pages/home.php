@@ -139,7 +139,7 @@ frag;
                         }
                     ?>
                 </th>
-                <th colspan=5 class="center"><?php echo "$monthName $year" ?></th>
+                <th colspan=5 class="center size"><strong><?php echo "$monthName $year" ?></strong></th>
                 <th class="center">
                     <?php
                         if (!isset($_GET['value']) || $_GET['value'] == 'current'){
@@ -195,7 +195,7 @@ frag;
             echo "<td style='background-color: #ff9b9b'>$i </td>";    
         } elseif (in_array($i, array_column($currentbooking,'day')) && $month == date('m', $date)) {
             echo <<<frag
-                <td style='background-color: yellow'>$i 
+                <td style='background-color: #f0e044'>$i 
                     <form method="post" action="">
                         <input type="hidden" name="month" value="$month">
                         <input type="hidden" name="id" value="$i">      
@@ -205,7 +205,7 @@ frag;
 frag;
         } elseif ($month !== date('m',$date) && in_array($i, array_column($nextbooking,'day'))){
             echo <<<frag
-                <td style='background-color: yellow'>$i 
+                <td style='background-color: #f0e044'>$i 
                     <form method="post" action="">
                         <input type="hidden" name="month" value="$month">
                         <input type="hidden" name="id" value="$i">      

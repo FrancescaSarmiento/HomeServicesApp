@@ -2,6 +2,7 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-top font">
     <div class="container-fluid">
+        <span class="logo"><strong>HandyZeb</strong></span>
         <div class="navbar-header navbar-right">
             <ul class="nav navbar-nav">
                 <li class="btn-group dropdown dropdown-notifications sw-open">

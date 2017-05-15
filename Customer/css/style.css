@@ -3,6 +3,11 @@
     src: url(Myriad.ttf);
 }
 
+@font-face{
+    font-family:Brand;
+    src: url(Oswald-Light.ttf);
+}
+
 .font{
     font-family: Myriad;
     font-size: 20px;
@@ -26,11 +31,11 @@ a{
     text-align: center;
 }
 
-
-#test{
-    font-size: 80px;
+.logo{
+  color: ghostwhite;
+    font-size: 43px;
+    font-family: Brand;
 }
-
 #bookingDetails {
     font-size: 17px;
 }
@@ -48,6 +53,9 @@ a{
 
 .left {
     float: left;
+}
+.size{
+    font-size: 45px;
 }
 p.left:before {
                 display: inline-block;
@@ -137,12 +145,6 @@ p.right:before
     text-align: center;
 }
 
-.home-calendar{
-    background-color: black; 
-    text-align: center;
-    color:white;
-}
-
 .about{
     height: 100vh;
     width: 100vw;
@@ -174,7 +176,7 @@ p.right:before
 }
 
 .home-calendar{
-    background-color: black; 
+    background-color: #c91717; 
     text-align: center;
     color:white;
 }
