@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Handy Zeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+		<% include partials/nav %>
+    <div class="container-fluid">
+        <div class="page-header">
+			<h1>Welcome, Handy Zeb Admin</h1>
+        </div>
+      
+        <% if(customerUsers.length != 0) {%>
+        <h2>Pending Customers</h2>
+		<table class="table table-hover">
+			<tr>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Address</th>
+				<th>E-mail</th>
+				<th>Contact Number</th>
+			</tr>
+			<% customerUsers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.userName %></td>
+					<td><%= item.firstName %></td>
+					<td><%= item.lastName %></td>
+					<td><%= item.address %></td>
+					<td><%= item.email %></td>
+					<td><%= item.contactNumber %></td>
+					<td> <form action="/accept" method="post"><input name="userName" type="text" value=<%= item.userName %> hidden><input class="btn" type="submit" value="Accept"></form><form action="/reject" method="post"><input name="userId" type="text" value=<%= item.custId %> hidden><input class="btn" type="submit" value="Reject"></form></td>
+				</tr>
+			<% }) %>
+        </table>
+        <% } %>
+           
+        <h1>Weekly Transactions</h1>
+        <table class="table table-hover">
+            <tr>
+                <th>Transaction Number</th>
+                <th>Customer Name</th>
+                <th>Service Provider Name</th>
+                <th>Service</th>
+                <th>Payment</th>
+                <th>Date Finished</th>
+            </tr>
+            <% transactions.forEach(function(item){ %>
+                <tr>
+                    <td><%= item.bookingId %></td>
+                    <td><%= item.customerName %></td>
+                    <td><%= item.spName %></td>
+                    <td><%= item.serviceType %></td>
+                    <td><%= item.amount %></td>
+                    <td><%= item.dateFinished %></td>
+                </tr>
+            <% }) %>
+        </table>
+
+        <div class="row">
+            <div class="col-md-3">
+                <h2>Top service providers</h2>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Username</th>
+                        <th>Service Provider Name</th>
+                        <th>Rating</th>
+                    </tr>
+                    <% topSp.forEach(function(item){ %>
+                        <tr>
+                            <td><%= item.userName %></td>
+                            <td><%= item.spName %></td>
+                            <td><%= item.rating %></td>
+                        </tr>
+                    <% }) %>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <h2>Most active customers</h2>
+                <table class="table table-hover">
+                	<tr>
+                		<th>Customer Name</th>
+                		<th>Number of Bookings</th>
+                	</tr>
+                	<% topCustomers.forEach(function(item){ %>
+        				<tr>
+        					<td><%= item.cName %></td>
+        					<td><%= item.bookCount %></td>
+        				</tr>
+        			<% }) %>
+                </table>
+            </div>
+            
+            <div class="col-md-3">
+                <h2>Top services booked</h2>
+                <table class="table table-hover">
+                	<tr>
+                		<th>Service</th>
+                		<th>Number of bookings</th>
+                	</tr>
+                	<% topServices.forEach(function(item){ %>
+        				<tr>
+        					<td><%= item.serviceType %></td>
+        					<td><%= item.serviceCount %></td>
+        				</tr>
+        			<% }) %>
+                </table>
+            </div>
+            
+            <div class="col-md-3">
+                <h2>Total Company Earnings</h2>
+                <% sum.forEach(function(item){ %>
+                    <h3><s>P</s><%= item.sum %></h3>
+                <% }) %>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

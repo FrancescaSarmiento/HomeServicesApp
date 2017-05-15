@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandyZeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+		<% include partials/nav %>
+        <div class="container">
+		<h2>Customers</h2>
+		<div class=row>
+            <div class="col-md-5">
+				<form class="form-inline" action="/search-customer" method="post">
+		            <div class="form-group">
+		                <input class="form-control" type="text" placeholder="First Name/Last Name" name="searchItem"><br></div>
+		            <input class="btn" type="submit" value="Search">
+				</form>
+		            <br>
+		    </div>
+		    <div class="col-md-5">
+		        <form class="form-inline" action="/search-cust-on-status" method="post">
+					<div class="form-group">
+						<select class="form-control" name="status">
+							<option value="">Choose Account Status</option>
+							<option value="suspended">Suspended</option>
+							<option value="unsuspended">Unsuspended</option>
+						</select>
+					</div>
+					<input class="btn" type="submit" value="Search">
+				</form>
+			</div>
+		</div>
+		<table class="table table-hover">
+			<tr>
+				<th>First name</th>
+				<th>Last name</th>
+				<th>User name
+				<th>Email</th>
+				<th>Contact number</th>
+				<th>Address</th>
+				<td>Status</td>
+			</tr>
+
+			<% customers.forEach(function(item){ %>
+				<tr>
+					<td><%= item.firstName %></td>
+					<td><%= item.lastName %></td>
+					<td><%= item.userName %></td>
+					<td><%= item.email %></td>
+					<td><%= item.contactNumber %></td>
+					<td><%= item.address %></td>
+					<td><%= item.status %></td>
+					<td>
+					<% if(item.status == '1'){ %>
+					<form action="/suspend-customer" method="post"><input hidden name="userId" type="text" value="<%= item.custId %>" ><input class="btn" type="submit" value="Suspend"></form>
+					<% }else{ %>
+					<form action="/unsuspend-customer" method="post"><input hidden name="userId" type="text" value="<%= item.custId %>" ><input class="btn" type="submit" value="Unsuspend"></form>
+					<% } %>
+					</td>
+				</tr>
+			<% }) %>
+		</table>
+        </div>
+        </body>
+</html>

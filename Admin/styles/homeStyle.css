@@ -1,0 +1,557 @@
+html, body{
+	font-family: "Circular", "Helvetica", sans-serif;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+/**all header things**/
+
+.headerContents img{
+	float: left;
+	width: 4em;
+}
+
+.site-header{
+	height: 3em;
+	background-color: #34495e;
+	position: relative;
+}
+
+.headerRow{
+	width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 960px;
+}
+
+.headerContents{
+	padding: 0.5em 0;
+	vertical-align: middle;
+	line-height: 2em;
+}
+
+header h1{
+	margin: 0px;
+	display: inline-block;
+	float: left;
+	color: white;
+}
+
+a{
+	text-decoration: none;
+	color: white;
+}
+
+.site-header li{
+	list-style-type: none;
+	display: inline;
+	font-size: 16px;
+	padding: 0 10px;
+}
+
+ul{
+	margin: 0;
+}
+
+.headerContainer{
+	height: 100%;
+	position: relative;
+	line-height: 2em;
+	display: inline-block;
+}
+
+
+.left{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
+/**first banner**/
+
+.firstBanner{
+	background-image: url("bg1.jpg");
+	height: 25em;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: right 50%;
+	position: relative;
+}
+
+.overlay{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.50);
+    z-index: 0;
+}
+
+.bannerHeader{
+	padding-left: 0.9375rem;
+    padding-right: 0.9375rem;
+    width: 97%;
+    float: left;
+    margin-top: 5em;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.bannerHeader h1{
+	font-size: 3em;
+}
+
+.bannerHeader p{
+	font-size: 2em;
+}
+
+.bannerButtons{
+	margin-top: 2em;
+	width: 97%;
+}
+
+.bigButton{
+	display: inline-block;
+    width: 100%;
+    max-width: 13.5em;
+    padding: 0.3em 0;
+    font-size: 1.125em;
+    text-align: center;
+    margin: auto;
+}
+
+.action {
+    font-size: 1.25em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    max-width: 12.5em;
+    border-radius: 5px;
+}
+
+.btn-secondary {
+    background-color: #34495e;
+    border: 1px solid #34495e;
+    color: #fff;
+}
+
+.one{
+	margin-left: 31%;
+
+}
+
+.two{
+	margin-left: 10px;
+}
+
+/**footer things**/
+
+.site-footer {
+	position: relative;
+	padding: 2em 0;
+	background-color: #1d1d1d;
+	color: #888;
+	overflow: hidden;
+}
+
+
+.column, .columns {
+    padding-left: 0.9375em;
+    padding-right: 0.9375em;
+    float: left;
+}
+
+.menu{
+	margin-bottom: 1em;
+}
+
+
+.row {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 960px;
+}
+
+.row ul{
+	display: block;
+    list-style-type: disc;
+    padding: 0;
+}
+
+.row li{
+	list-style-type: none;
+	font-size: 16px;
+	padding: 5px 10px;
+}
+
+#mainFooterLinks{
+	color: white;
+}
+
+.footerOne{
+	width: 35%;
+	padding-left: 0px !important;
+}
+
+.footerTwo{
+	width: 30%;
+}
+
+.footerThree{
+	width: 25%;
+}
+
+.footerHeader{
+	font-weight: 700;
+    text-transform: uppercase;
+    font-size: .9em;
+    color: #888;
+}
+
+.icon-link+.icon-link {
+    margin-left: 0.85em;
+}
+
+.socialMediaIcons .icon-link {
+    float: left;
+}
+
+.icon-link {
+    height: 2.5em;
+    width: 2.5em;
+    display: inline-block;
+    border-radius: 1.75em;
+    border: 1px solid #888;
+    line-height: 2.5em;
+    text-align: center;
+}
+
+.socialmed{
+	padding-top: 0.2em;
+	height: 2em;
+	width: 2em;
+
+}
+
+.pad-top {
+    padding-top: 1em;
+}
+
+.footerLast li{
+	list-style-type: none;
+	display: inline-block;
+}
+
+.footer-divider {
+	margin: 20px 0;
+    padding-left: 0.9375rem;
+    padding-right: 0.9375rem;
+    width: 100%;
+    float: left;
+    border-top: 1px solid #888;
+}
+
+/**main , contents**/
+
+.content{
+	padding-bottom: 3em;
+}
+
+.bannerTitle{
+	text-align: center;
+    font-weight: 700;
+    margin-bottom: 1em;
+    font-size: 1.5em;
+}
+
+.popService{
+	height: 17em;
+	width: 17em;
+	background-color: #34495e;
+	margin: 2em 0 0 2em;
+	float: left;
+	border-radius: 8px;
+}
+
+#popularServ{
+	overflow: hidden;
+}
+
+.service-title {
+    color: white;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 80%;
+}
+
+.bg2{
+	margin-top: 20em;
+
+
+    /* The image used */
+    background-image: url("bg2.jpg");
+   
+    /* Full height */
+    height: 1100px; 
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.aboutbanner h2{
+	color: white;
+}
+
+.aboutbanner p{
+	color: white;
+	font-size: 1.30em;
+	margin: 0 150px;
+	text-indent: 70px;
+	text-align: justify;
+	line-height: 1.70em;
+}
+
+/**services**/
+
+.sList{
+	width: 21%;
+	text-align: center;
+
+}
+
+.sHeader{
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 1.20em;
+
+}
+
+.serviceList li{
+	padding: 0.6em 0;
+
+}
+
+#help{
+	overflow: hidden;
+}
+
+.helppara{
+	text-align: justify;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+/**references, credits to
+
+social media icons - http://azmind.com/free-social-icons-biggest-list/	  	***/
+
+
+@media only screen and (max-width: 1024px){
+	.one{
+		margin-left: 25%;
+	}
+
+}
+
+@media only screen and (max-width: 768px){
+
+
+	.bannerHeader{
+		width: 95%;
+	}
+	.bg2{
+		height: 1400px;
+	}
+
+	.one{
+		margin-left: 15%;
+	}
+
+	.popService{
+		height: 13em;
+		width: 13em;	
+	}
+
+	.service-title{
+		font-size: 1.40em;
+		font-weight: 700;
+		margin-top: 70%;
+	}
+
+	.helppara{
+		padding: 0 5% 0 5%;
+	}
+
+	.navContainer{
+		padding-left: 0;
+	}
+
+}
+
+@media only screen and (max-width: 665px){
+
+	.bannerHeader{
+		width: 95%;
+	}
+
+	header h1{
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 635px){
+
+	.bannerHeader{
+		width: 92%;
+	}
+
+	.one{
+		margin-left: 28%;
+
+	}
+
+	.two{
+		margin-top: 5px;
+		margin-left: 28%;
+
+	}
+
+	.bannerButtons{
+		margin-top: 0;
+	}
+
+	.popService{
+		height: 12em;
+		width: 12em;
+		margin: 1em 0 0 1em;
+	}
+
+}
+
+@media only screen and (max-width: 425px){
+	.bg2{
+		height: 1100px;
+	}
+
+	.one{
+
+	}
+
+	.popService{
+		height: 8em;
+		width: 8em;
+		margin: 0.7em 0 0 0.7em;
+	}
+
+	.service-title{
+		font-size: 1em;
+		font-weight: 500;
+		margin-top: 50%;
+	}
+
+	.aboutbanner p{
+		margin: 0 20px;
+		font-size: 1.10em;
+		text-indent: 40px;
+		line-height: 1.50em;
+	}
+
+	.site-header{
+		display: hidden;
+	}
+
+	.bannerButtons{
+		margin-top: 1em;
+	}
+
+	.bannerHeader p{
+		font-size: 1.40em;
+	}
+	.one{
+		margin-left: 17%;
+
+	}
+
+	.two{
+		margin-top: 5px;
+		margin-left: 17%;
+
+	}
+
+	.bg2{
+		margin-top: 10em;
+	}
+
+	header h1{
+		display: none;
+	}
+
+	.navContainer{
+		padding-left: 0;
+	}
+
+	.site-header li{
+		padding: 0 5px;
+	}
+}
+
+@media only screen and (max-width: 375px){
+	.one{
+		margin-left: 12%;
+	}
+
+	.two{
+		margin-left: 12%;
+	}
+
+	.popService{
+		height: 2em; 
+		width: 97%;
+	}
+
+	.service-title{
+		margin-top: 2%;	
+	}
+
+	.bg2{
+		height: 1250px;
+	}
+
+	.sHeader{
+		font-weight: 400;
+		font-size: 1.70em;
+		text-decoration: underline;
+	}
+
+	.sList{
+		font-size: 0.50em;
+	}
+
+	.serviceList li{
+		font-size: 1.50em;
+
+	}
+
+}
+
+@media only screen and (max-width: 320px){
+	.bg2{
+		height: 1400px;
+	}
+}
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Handy Zeb Register</title>
+	<link rel="stylesheet" href="/styles/index.css">
+</head>
+<body>
+	<!-- probably an include statement here for the header of the  -->
+	<header class="site-header">
+		<div class="headerRow">
+			<div class="headerContents">
+				<h1>Handy Zeb</h1>
+
+				<div class="headerContainer left">
+					<ul class="navContainer">
+						<li><a href="/">Home</a></li>
+					</ul>
+				</div>
+				<div class="headerContainer right">
+					
+					<ul class="navContainer">
+							<li><a href="login">Log In</a></li>
+							<li><a href="register">Register</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</header>
+	
+	<div class="container">
+		<h1>Register</h1>
+		<form class="form-inline" action="/register" method="post">
+			<label for="userName">Username:</label>
+			<input type="text" name="userName" required><br>
+			<label for="password">Password:</label>
+			<input type="password" name="password" required><br>
+			<label for="firstName">First Name:</label>
+			<input type="text" name="firstName" required><br>
+			<label for="lastName">Last Name:</label>
+			<input type="text" name="lastName" required><br>
+			<label for="address">Address:</label>
+			<input type="text" name="address" required><br>
+			<label for="email">Email:</label>
+			<input type="email" name="email" required><br>
+			<label for="contactNumber" required>Contact Number:</label>
+			<input type="text" name="contactNumber"><br>
+			<input type="text" name="userType" value="Customer" hidden>
+			<input type="submit">
+		</form>
+	</div>
+
+	<footer class="site-footer">
+		<div class="row">
+			<nav class="footerOne columns">
+				<ul class="footerLink" id="mainFooterLinks">
+					<li>Home</li>
+					<li>Help</li>
+					<li>About</li>
+					<li>Services</li>
+					<li>Contact Us</li>
+				</ul>
+			</nav>
+
+			<nav class="footerTwo columns">
+				<p class="footerHeader">Locations</p>
+				<ul class="footerLink">
+					<li>Bahay mo</li>
+					<li>Yer Mum</li>
+					<li>Mars</li>
+					<li>Earth</li>
+					<li>Sa puso mo</li>
+					<li>kill me</li>
+				</ul>
+			</nav>
+
+			<nav class="footerThree columns">
+				<p class="footerHeader">Popular Services</p>
+				<ul class="footerLink">
+					<li>Cleaning</li>
+					<li>Handyman</li>
+					<li>Plumbing</li>
+					<li>Electrical</li>
+					<li>Moving Help</li>
+					<li>Painting</li>
+					<li>Furniture Assembly</li>
+					<li>See all services</li>
+				</ul>
+			</nav>
+		</div>
+
+		<div class="row">
+			<div class="socialMediaIcons">
+				<a class="icon-link"><img class="socialmed" src="styles/icons/fbicon.png" alt="icon"></a>
+				<a class="icon-link"><img class="socialmed" src="styles/icons/twittericon.png" alt="icon"></a>
+				<a class="icon-link"><img class="socialmed" src="styles/icons/igicon.png" alt="icon"></a>
+				<a class="icon-link">deez</a>
+				<a class="icon-link">nutz</a>
+			</div>
+			<div class="footer-divider"></div>
+		</div>
+
+		<div class="row pad-top">
+
+			<div class="left">
+				<ul class="footerLast">
+					<li>Privacy</li>
+					<li>Cookies</li>
+					<li>Terms</li>
+					<li>Policy</li>
+				
+				</ul>
+			</div>
+			<div class="right">© 2017 Handy Zeb. All rights reserved.</div>
+			
+		</div>
+	</footer>
+</body>
+</html>

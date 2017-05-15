@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandyZeb Admin</title>
+	<link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<% include partials/nav %>
+	<div class="container-fluid">
+		<h2>Transactions</h2>
+        <div class="row">
+        <div class="col-md-3">
+		<form class="form-inline" action="/search-transaction-on-name" method="post"><div class="form-group">
+            <input class="form-control" type="text" placeholder="Customers/SP" name="searchItem"></div>
+            <input class="btn" type="submit" value="Search">
+		</form>
+            </div>
+        <div class=col-md-3>
+		<form class="form-inline" action="/search-transaction-on-status" method="post">
+            <div class="form-group">
+			<select class="form-control" name="status">
+				<option value="">Choose Status</option>
+				<option value="done">Done</option>
+				<option value="ongoing">Ongoing</option>
+				<option value="pending">Pending</option>
+			</select>
+			<input class="btn" type="submit" value="Search">
+                </div>
+		</form>
+            </div>
+		<div class="col-md-5">
+		<form class="form-inline" action="/search-transaction-on-date" method="post"> <div class="form-group">
+			<label>From:</label>
+			<input class="form-control" type="date" name="from">
+			<label>To:</label>
+            <input class="form-control" type="date" name="to">
+            </div>
+            <input class="btn" type="submit" value="Search">
+		</form>
+        </div>
+        </div>
+        <br>
+	<% if (transactions.length !=0 ){ %>
+		<table class="table table-hover">
+			<tr>
+				<th>Transaction Number</th>
+				<th>Customer Name</th>
+				<th>Service Provider Name</th>
+				<th>Service</th>
+                <th>Status</th>
+                <th>Date Started</th>
+                <th>Date Finished</th>
+			</tr>
+
+			<% transactions.forEach(function(item){ %>
+				<tr>
+					<td><%= item.bookingId %></td>
+					<td><%= item.customerName %></td>
+					<td><%= item.spName %></td>
+					<td><%= item.serviceType %></td>
+                    <td><%= item.bookingStatus %></td>
+                    <td><%= item.dateStarted %></td>
+                    <td><%= item.dateFinished %></td>
+				</tr>
+			<%	}) %>
+		</table>
+	<% }else{ %>
+		<p>No Transactions yet</p>
+	<% } %>
+	</div>
+</body>
+</html>
