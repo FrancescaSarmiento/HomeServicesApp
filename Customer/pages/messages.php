@@ -2,8 +2,9 @@
     require '../includes/blockedPages.php';
     require '../includes/functions.php';
 ?>
-<h1>Messages</h1>
+<h1 class="center"><strong>M E S S A G E S</strong></h1>
     <div id="left-side">
+        <span class="center">INBOX</span><br><br>
         <div class="btn-group-vertical">
             <?php checkCurrentMessages($conn, $userID);?>
         </div>
@@ -23,9 +24,11 @@
             
             <div id="reply">
                 <form class="form-inline send-message" method="post">
-                    <div class="">
+                    <div class="inputMessage">
                         <textarea style="width: 300%; resize: none;" name="message" placeholder="Enter Your Message" required="require"></textarea>
                         <input class="btn btn-primary" type="submit" name="submit" value="Send" />
+                    </div>
+                    </div>
                     </div>
                         <?php 
                             $message = filter_input(INPUT_POST, 'message');

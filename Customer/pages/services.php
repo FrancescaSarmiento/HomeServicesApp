@@ -21,5 +21,6 @@ frag;
    //<a href='?page=services&type=$value'> $value </a><br>";
                   break;
 	       }
-        }         
+        }
+ echo "</tr></table>";
 require 'spService.php';

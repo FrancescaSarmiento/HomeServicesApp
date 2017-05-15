@@ -3,7 +3,7 @@
     require '../includes/functions.php';
 ?>
 
-<h1>Transaction History</h1>
+<h1 class="center"><strong>T R A N S A C T I O N &nbsp; H I S T O R Y</strong></h1>
 
 <?php 
     $transHist = getTransHist($conn, $userID);

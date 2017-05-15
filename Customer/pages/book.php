@@ -21,7 +21,7 @@ echo <<<frag
         <input type="hidden" name="spId" value="$sId">
         <button class="btn-primary" type="submit" name="confirm">Confirm</button>
     </form>
-        <a href="?page=services&type=$serviceT" type="button">Cancel</a>
+        <a href="?page=services&type=<?php echo $serviceT ?>" type="button">Cancel</a>
 frag;
 
     #insertinto($bookdate, $spname, $service, $spId, $userID, $conn);
