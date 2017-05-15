@@ -17,6 +17,10 @@ body {
     overflow-x: hidden;
 }
 
+a{
+    text-decoration: none;
+}
+
 #homeName{
     font-size: 40px;
     text-align: center;

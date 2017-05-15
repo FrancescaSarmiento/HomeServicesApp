@@ -5,11 +5,11 @@ $query = "SELECT serviceType from service";
 $result = mysqli_query($conn, $query);
 ?>
 
-		<h1><strong> Services </strong></h1>
+		<h1 class="center"><strong> S E R V I C E S </strong></h1>
 	
 <?php
-        echo "<table>";
-        echo "<tr style='background-color:#f0e044'>";
+        echo "<table style='background-color:#f0e044'>";
+        echo "<tr style='font-size:35px'>";
         while($row = mysqli_fetch_assoc($result)){
 	       foreach($row as $key => $value){
                     echo <<<frag
