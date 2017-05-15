@@ -206,3 +206,7 @@ p.right:before
     font-family: Myriad;
     background-color: darkviolet;
 }
+
+.servicesList{
+    font-size: 20px;
+}
